@@ -2,10 +2,10 @@
 # LE: 21 Nov 2022
 # https://realpython.com/beautiful-soup-web-scraper-python/
 import requests
-from bs4 import BeautifulSoup
+from beautifulsoup4 import BeautifulSoup
 import feedparser
 import pandas as pd # for data frame
-from itertools import compress # for compress function
+#from itertools import compress # for compress function
 
 '''
 Everything but the abstract and authors are in the RSS feed, so to simplify
@@ -50,14 +50,14 @@ Date = choose(Date, Use)
 Now we need the abstract and authors. For that, we have to individually
 navigate to each link.
 '''
-def get_abstract(url):
+#def get_abstract(url):
     #read url
     #extract entire container "div.page-content". Necessary since each container
     #is different
     #parse text,
     #split by "\n" marker
     #grab third element
-def get_author(url):
+#def get_author(url):
     #read url
     #extract entire container "div.page-content". Necessary since each container
     #is different
