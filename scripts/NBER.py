@@ -8,34 +8,32 @@ import json
 import pandas as pd
 from lxml import html
 
-url = 'https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100'
-response = requests.get(url)
-data = json.loads(response.text)
+# Define the URL for the NBER working papers API
+URL = 'https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100'
 
-titles = [paper['title'] for paper in data['results']]
-authors_htmls = [paper['authors'] for paper in data['results']]
-authors = [[re.sub('<[^>]+>', '', author) for author in authors_html] for authors_html in authors_htmls]
-published_dates = [paper['displaydate'] for paper in data['results']]
-abstracts = [paper['abstract'] for paper in data['results']]
-urls = ["https://www.nber.org" + paper['url'] for paper in data['results']]
-numbers = [url.split('/papers/w')[1] for url in urls]
+# Make a GET request to the NBER API and parse the JSON response into a Python dictionary
+data = json.loads(requests.get(URL).text)['results']
 
-long_abstracts = []
-for url in urls:
-    page = requests.get(url)
-    tree = html.fromstring(page.content)
-    long_abstract = tree.xpath('/html/body/div[2]/main/div[2]/div[2]/div/p/text()')[0].strip()
-    long_abstracts.append(long_abstract)
-
+# Create a Pandas DataFrame from the extracted data, with the "Long Abstract" extracted from the paper's URL using XPath
 df = pd.DataFrame({
-    'Title': titles,
-    'Authors': authors,
-    'Published Date': published_dates,
-    'Abstract': abstracts,
-    'URL': urls,
-    'Number': numbers,
-    'Long Abstract': long_abstracts
-})
+    'Title': [d['title'] for d in data],
+    'Link': ['https://www.nber.org' + d['url'] for d in data],
+    'Date': [d['displaydate'] for d in data],
+    'Abstract': [html.fromstring(requests.get('https://www.nber.org' + d['url']).content)
+                      .xpath('/html/body/div[2]/main/div[2]/div[2]/div/p/text()')[0].strip()
+                      for d in data],    
+    'Author': [[re.sub('<[^>]+>', '', author) for author in d['authors']] for d in data],
+    'Number': [d['url'].split('/papers/w')[1] for d in data]
+}).sort_values(by='Number')
 
-df = df.sort_values(by=['Number'])
-print(df)
+# Save the DataFrame to a JSON file
+df.to_json('../processed_data/NBER.json')
+print("df saved to json")
+
+# load the data frame from the JSON file
+df_loaded = pd.read_json('../processed_data/NBER.json')
+print("df_loaded loaded from json")
+
+# Print the DataFrame to the console
+print(df_loaded)
+
