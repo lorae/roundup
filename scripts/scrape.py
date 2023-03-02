@@ -9,7 +9,6 @@ import feedparser
 import pandas as pd
 
 # Define functions
-# Define functions
 def get_soup(url):
     page = requests.get(url) # Get the HTML content of the page at the current link
     soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
@@ -26,21 +25,18 @@ def get_abstracts(df):
     return [get_element(df, link, 2) for link in df['Link']]
 
 def get_authors(df):
-    return [get_element(df, link, 1) for link in df['Link']]
-
-'''
-Note to self: I can make this third function cleaner by trying to leverage the fact it is almost the same
-as get_element
-'''
-def get_numbers(df):
-    return [get_soup(link) # Get the HTML content of the page at the current link and parse it using BeautifulSoup
-            .find('div', {'class': 'page-content'})  # Find the 'div' tag with class 'page-content'
-            .text # Extract the text of the 'div' tag
+    return [get_element(df, link, 1)[0]
+            .replace("By", "") # remove unnecessary text
+            .replace("[", "") # remove unnecessary brackets
+            .replace("]", "") # remove unnecessary brackets
             .strip() # Remove any leading/trailing whitespace from the text
-            .split('\n')[0] # Split the text by newline character '\n' and return the third element (the abstract)
+            for link in df["Link"]]
+
+def get_numbers(df):
+    return [get_element(df, link, 0)[0]
             .replace("Staff Working Paper No. ", "") # remove unnecessary text
             .replace(",", "") # remove unnecessary commas
-            for link in df["Link"]]  # Iterate over each link in the dataframe
+            for link in df["Link"]]
 
 # Main code
 URL = "https://www.bankofengland.co.uk/rss/publications"
