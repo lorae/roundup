@@ -1,6 +1,6 @@
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 27 Feb 2023
+# LE: 2 Mar 2023
 # https://realpython.com/beautiful-soup-web-scraper-python/
 
 import requests
@@ -58,6 +58,11 @@ df["Author"] = get_authors(df)
 df["Number"] = get_numbers(df)
 
 print(df)
-# This line is buggy and doesn't output properly. But within Python, the output is good.
-df.to_csv('throughput/BOE.csv', index=False)
 
+# save the data frame to a JSON file
+df.to_json('data.json', orient='records')
+print("df saved to json")
+
+# load the data frame from the JSON file
+df_loaded = pd.read_json('data.json')
+print("df_loaded loaded from json")
