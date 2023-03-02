@@ -60,9 +60,9 @@ df["Number"] = get_numbers(df)
 print(df)
 
 # save the data frame to a JSON file
-df.to_json('data.json', orient='records')
+df.to_json('../processed_data/BOE.json', orient='records')
 print("df saved to json")
 
 # load the data frame from the JSON file
-df_loaded = pd.read_json('data.json')
+df_loaded = pd.read_json('../processed_data/BOE.json')
 print("df_loaded loaded from json")
