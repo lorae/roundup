@@ -1,12 +1,9 @@
 ### IMF.py ###
-# The purpose of this script is to scrape metadata from the most recent IMF working papers
-# on the IMF website.
-# This paper uses the IMF RSS feed.
+# The purpose of this script is to scrape metadata from the most recent IMF working papers. This script uses
+# the IMF RSS feed.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
 # Created: 2 Mar 2023
-
-### this code needs a lot of work.
 
 import requests
 from bs4 import BeautifulSoup
