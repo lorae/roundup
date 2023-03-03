@@ -12,36 +12,32 @@ import requests
 from bs4 import BeautifulSoup
 import feedparser
 import pandas as pd
+from lxml import html
 
 # Define functions
-def get_soup(url):
-    page = requests.get(url) # Get the HTML content of the page at the current link
-    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
-    return soup
+def get_element_text(url, xpath):
+    response = requests.get(url)
+    tree = html.fromstring(response.content)
+    elems = tree.xpath(xpath)
+    if isinstance(elems, list):
+        return ''.join([elem.text_content().strip() for elem in elems])
+    elif elems is not None:
+        return elems.text.strip()
+    else:
+        return None
 
-def get_element(df, link, index):
-    return [get_soup(link) # Get the HTML content of the page at the current link and parse it using BeautifulSoup
-            .find('div', {'class': 'page-content'})  # Find the 'div' tag with class 'page-content'
-            .text # Extract the text of the 'div' tag
-            .strip() # Remove any leading/trailing whitespace from the text
-            .split('\n')[index]] # Split the text by newline character '\n' and return the third element (the abstract)
 
 def get_abstracts(df):
-    return [get_element(df, link, 2) for link in df['Link']]
+    return [get_element_text(link, '/html/body/div[3]/main/article/div[1]/div/section[1]/p[8]/text()')
+            for link in df['Link']]
 
 def get_authors(df):
-    return [get_element(df, link, 1)[0]
-            .replace("By", "") # remove unnecessary text
-            .replace("[", "") # remove unnecessary brackets
-            .replace("]", "") # remove unnecessary brackets
-            .strip() # Remove any leading/trailing whitespace from the text
-            for link in df["Link"]]
+    return [[author.text for author in BeautifulSoup(requests.get(link).content, 'html.parser').select_one('p.pub-desc.hide').find_all('a')]
+            for link in df['Link']]
 
 def get_numbers(df):
-    return [get_element(df, link, 0)[0]
-            .replace("Staff Working Paper No. ", "") # remove unnecessary text
-            .replace(",", "") # remove unnecessary commas
-            for link in df["Link"]]
+    return [get_element_text(link, '/html/body/div[3]/main/article/div[1]/div/section[3]/div/p[6]')
+            for link in df['Link']]
 
 # Main code
 URL = "https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers"
@@ -49,12 +45,11 @@ f = feedparser.parse(URL)
 
 data = [(entry.title,
          entry.link,
-         entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
+         entry.published) # creates a tuple containing the title, link, publication date, and summary for the current entry
         for entry in f.entries]
 
 df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
 
-'''
 df["Abstract"] = get_abstracts(df)
 df["Author"] = get_authors(df)
 df["Number"] = get_numbers(df)
@@ -62,11 +57,9 @@ df["Number"] = get_numbers(df)
 print(df)
 
 # save the data frame to a JSON file
-df.to_json('../processed_data/BOE.json', orient='records')
+df.to_json('../processed_data/IMF.json', orient='records')
 print("df saved to json")
 
 # load the data frame from the JSON file
-df_loaded = pd.read_json('../processed_data/BOE.json')
+df_loaded = pd.read_json('../processed_data/IMF.json')
 print("df_loaded loaded from json")
-
-'''
