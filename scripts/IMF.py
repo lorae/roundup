@@ -1,6 +1,6 @@
 ### IMF.py ###
 # The purpose of this script is to scrape metadata from the most recent IMF working papers
-# from the IMF website.
+# on the IMF website.
 # This paper uses the IMF RSS feed.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
@@ -15,70 +15,47 @@ import pandas as pd
 from lxml import html
 import re
 
-def get_element(df, x):
-    # Define an empty list to hold the elements
+
+# Define functions
+
+# NOTE: The purpose of defining the function get_element (rather than just using get_abstracts, get_authors,
+# and get_numbers) is to parse the HTML for each webpage only once, rather than 3 times. This significantly
+# reduces the run time of this script.
+
+def get_element(df):
     elements = []
-    # Iterate over each link in the input DataFrame
+    # Iterate over each link in the input df
     for link in df['Link']:
         # Make an HTTP request to the link and parse the HTML content
         response = requests.get(link)
         tree = html.fromstring(response.content)
-        # Extract the element from the HTML content and append it to the list
-        element = tree.xpath(x)
-    # Return the list of elements
+        # Append the HTML tree to the list of elements
+        elements.append(tree)
+    # Return the list of elements (which is a list of HTML trees)
     return elements
 
-    
-def get_abstracts(df):
-    # Define an empty list to hold the abstracts
-    abstracts = []
-    # Iterate over each link in the input DataFrame
-    for link in df['Link']:
-        # Make an HTTP request to the link and parse the HTML content
-        response = requests.get(link)
-        tree = html.fromstring(response.content)
-        # Extract the abstract from the HTML content and append it to the list of abstracts
-        abstract = tree.xpath('/html/body/div[3]/main/article/div[1]/div/section[1]/p[8]/text()')[0]
-        abstracts.append(abstract)
-    # Return the list of abstracts
-    return abstracts
+def get_abstracts(elements):
+    # Use list comprehension to extract the abstracts from the HTML trees using XPath
+    return [tree.xpath('/html/body/div[3]/main/article/div[1]/div/section[1]/p[8]/text()')[0]
+            for tree in elements]
 
 
-def get_authors(df):
-    # Define an empty list to hold the list of authors for each link
-    authors_list = []
-    # Iterate over each link in the input DataFrame
-    for link in df['Link']:
-        # Make an HTTP request to the link and parse the HTML content
-        response = requests.get(link)
-        tree = html.fromstring(response.content)
-        # Extract the list of author elements from the HTML content
-        author_elems = tree.xpath('/html/body/div[3]/main/article/div[1]/div/section[1]/p[2]')
-        # Clean up the author names and separate them with commas
-        authors = [re.sub(r'\s+', ' ', author.text_content()) for author in author_elems]
-        authors_comma_sep = [re.sub(r'\s*;\s*', ', ', author) for author in authors]
-        # Append the list of cleaned up and comma-separated author names to the authors_list
-        authors_list.append(authors_comma_sep)
-    # Return the list of authors for each link
-    return authors_list
+def get_authors(elements):
+    # Use list comprehension to extract the authors from the HTML trees using XPath
+    # Clean up the author names and separate them with commas using regular expressions
+    return [
+        [
+            re.sub(r'\s*;\s*', ', ', author.text_content().strip()) 
+            for author in tree.xpath('/html/body/div[3]/main/article/div[1]/div/section[1]/p[2]')
+        ] for tree in elements
+    ]
 
-
-def get_numbers(df):
-    # Define an empty list to hold the numbers
-    numbers = []
-    # Iterate over each link in the input DataFrame
-    for link in df['Link']:
-        # Make an HTTP request to the link and parse the HTML content
-        response = requests.get(link)
-        tree = html.fromstring(response.content)
-        # Extract the numbers element from the HTML content
-        numbers_elem = tree.xpath('/html/body/div[3]/main/article/div[1]/div/section[3]/div/p[6]')[0]
-        # Extract the text content of the numbers element and remove any leading/trailing whitespace
-        numbers_text = numbers_elem.text_content().strip()
-        # Append the cleaned up numbers to the numbers list
-        numbers.append(numbers_text)
-    # Return the list of numbers
-    return numbers
+def get_numbers(elements):
+    # Use list comprehension to extract the numbers from the HTML trees using XPath
+    # Remove leading/trailing whitespace using the .strip() method
+    return [tree.xpath('/html/body/div[3]/main/article/div[1]/div/section[3]/div/p[6]')[0]
+            .text_content().strip()
+            for tree in elements]
 
 # Main code
 URL = "https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers"
@@ -89,18 +66,21 @@ data = [(entry.title,
          entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
         for entry in f.entries]
 
+# Create a pandas data frame from the extracted data
 df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
 print("IMF titles, links, and dates have been gathered.")
 
+# Extract the HTML content for each link in the data frame using the get_element() function
+elements = get_element(df)
 
-df["Abstract"] = get_abstracts(df)
+# Extract the abstracts, authors, and numbers for each HTML tree using get_abstracts, get_authors,
+# and get_numbers
+df["Abstract"] = get_abstracts(elements)
 print("... abstracts have been gathered.")
-df["Author"] = get_authors(df)
+df["Author"] = get_authors(elements)
 print("... authors have been gathered.")
-df["Number"] = get_numbers(df)
+df["Number"] = get_numbers(elements)
 print("... numbers have been gathered.")
-
-print(df)
 
 # save the data frame to a JSON file
 df.to_json('../processed_data/IMF.json', orient='records')
