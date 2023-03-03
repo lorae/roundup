@@ -1,55 +1,72 @@
+### IMF.py ###
+# The purpose of this script is to scrape metadata from the most recent IMF working papers
+# from the IMF website.
+# This paper uses the IMF RSS feed.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 2 Mar 2023
-
+# Created: 2 Mar 2023
 
 ### this code needs a lot of work.
 
 import requests
 from bs4 import BeautifulSoup
-import re
+import feedparser
+import pandas as pd
 
 # Define functions
-def get_abstract(url):
-    page = requests.get(url)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    return soup.select_one("#issueDisclaimer~ .pub-desc").text.strip().replace("\n", "")
+def get_soup(url):
+    page = requests.get(url) # Get the HTML content of the page at the current link
+    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
+    return soup
 
-def get_data(url):
-    page = requests.get(url)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    nodes = soup.select(".pub-row")
+def get_element(df, link, index):
+    return [get_soup(link) # Get the HTML content of the page at the current link and parse it using BeautifulSoup
+            .find('div', {'class': 'page-content'})  # Find the 'div' tag with class 'page-content'
+            .text # Extract the text of the 'div' tag
+            .strip() # Remove any leading/trailing whitespace from the text
+            .split('\n')[index]] # Split the text by newline character '\n' and return the third element (the abstract)
 
-    titles = [node.select_one("h6 a").text.strip() for node in nodes]
-    authors = [re.sub("Author:|\r\n", "", node.select_one(".author").text).strip().replace("; ", ";") for node in nodes]
-    dates = [re.sub("Date: ", "", node.select_one("p:nth-child(4)").text.strip()) for node in nodes]
-    links = ["https://www.imf.org" + node.select_one("h6 a")["href"] for node in nodes]
+def get_abstracts(df):
+    return [get_element(df, link, 2) for link in df['Link']]
 
-    return {
-        "Title": titles,
-        "Authors": authors,
-        "Date": dates,
-        "Link": links
-    }
+def get_authors(df):
+    return [get_element(df, link, 1)[0]
+            .replace("By", "") # remove unnecessary text
+            .replace("[", "") # remove unnecessary brackets
+            .replace("]", "") # remove unnecessary brackets
+            .strip() # Remove any leading/trailing whitespace from the text
+            for link in df["Link"]]
+
+def get_numbers(df):
+    return [get_element(df, link, 0)[0]
+            .replace("Staff Working Paper No. ", "") # remove unnecessary text
+            .replace(",", "") # remove unnecessary commas
+            for link in df["Link"]]
 
 # Main code
-##this should be the main link:
-#https://www.imf.org/en/Publications/Search?#sort=relevancy&numberOfResults=50&f:series=[WRKNGPPRS]
-url = 'https://www.imf.org/en/publications/search?when=After&series=IMF+Working+Papers'
-imf_urls = [f"{url}&page={page_num}" for page_num in range(1, 6)]
-imf_htmls = [requests.get(url).content for url in imf_urls]
+URL = "https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers"
+f = feedparser.parse(URL)
 
-abstracts = [get_abstract(url) for url in imf_urls]
-data = [get_data(url) for url in imf_urls]
+data = [(entry.title,
+         entry.link,
+         entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
+        for entry in f.entries]
 
-# Combine data and abstracts into a single list of dictionaries
-for i in range(len(data)):
-    for j in range(len(data[i]["Title"])):
-        data[i][j]["Abstract"] = abstracts[i][j]
+df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
 
-# Convert list of dictionaries to pandas DataFrame
-import pandas as pd
-df = pd.concat([pd.DataFrame(d) for d in data], ignore_index=True)
+'''
+df["Abstract"] = get_abstracts(df)
+df["Author"] = get_authors(df)
+df["Number"] = get_numbers(df)
 
-# Save DataFrame to JSON file
-df.to_json("processed_data/IMF.json")
+print(df)
+
+# save the data frame to a JSON file
+df.to_json('../processed_data/BOE.json', orient='records')
+print("df saved to json")
+
+# load the data frame from the JSON file
+df_loaded = pd.read_json('../processed_data/BOE.json')
+print("df_loaded loaded from json")
+
+'''
