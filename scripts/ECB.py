@@ -5,13 +5,6 @@
 # Special thanks to ChatGPT for coding assistance in this project.
 # Created: 3 Mar 2023
 
-# NOTE: THIS SCRIPT IS NOT COMPLETE. It still needs the "Author" column.
-# Unfortunately the solution is not straightforward. Either this code needs to be scrapped, and everything
-# grabbed from the main working papers page
-# https://www.ecb.europa.eu/pub/research/working-papers/html/index.en.html
-# Or I can go for the author names as they appear in the PDF versions of the working paper. Unfortunately,
-# they do not have landing pages for each paper, like I had hoped.
-
 import feedparser
 import pandas as pd
 import requests
