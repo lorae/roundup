@@ -13,52 +13,50 @@ url = "https://bfi.uchicago.edu/working-papers/"
 page = requests.get(url)
 soup = BeautifulSoup(page.content, 'html.parser')
 
-# Initialize the lists
-titles = []
-links = []
-dates = []
+# Get titles, links, dates, and authors from the main website. Note that
+# BFI papers are not numbered, so "numbers" is populated with NA.
+titles = [element.select('h2.teaser__title')[0].text.strip()
+          for element in soup.select('div.teaser.teaser--working-paper')]
+
+links = [element.select('h2.teaser__title a')[0]['href']
+         for element in soup.select('div.teaser.teaser--working-paper')]
+
+dates = [element.select('span.meta__date')[0].text.strip()
+         for element in soup.select('div.teaser.teaser--working-paper')]
+
+authors = [element.select('div.teaser__names')[0].text.strip()
+           for element in soup.select('div.teaser.teaser--working-paper')]
+
+numbers = ['NA'
+           for element in soup.select('div.teaser.teaser--working-paper')]
+
+# Initalize "abstracts" list
 abstracts = []
-authors = []
-numbers = []
-
-# Get titles, links, dates, and authors from the main website. Note
-# that BFI papers are not numbered, so "numbers" will be populated
-# with NA.
-for element in soup.select('div.teaser.teaser--working-paper'):
-    title = element.select('h2.teaser__title')[0].text.strip()
-    titles.append(title)
-    
-    link = element.select('h2.teaser__title a')[0]['href']
-    links.append(link)
-    
-    date = element.select('span.meta__date')[0].text.strip()
-    dates.append(date)
-    
-    author = element.select('div.teaser__names')[0].text.strip()
-    authors.append(author)
-    
-    number = 'NA' #BFI doesn't number their working papers
-    numbers.append(number)
-
-# Navigate to each page's link to get the abstracts
+# Navigate to each page's link to get the abstracts. (I could have used list
+# comprehension here, but I felt like the classic "for" loop is easier to read).
 for link in links:
     page = requests.get(link)
     soup = BeautifulSoup(page.content, 'html.parser')
     abstract = soup.select('div.textblock')[0].text.strip()
     abstracts.append(abstract)
 
-# create a dictionary of the six lists, where the keys are the column names
-data = {'Title': titles, 'Link': links, 'Date': dates, 'Author': authors, 'Number': numbers, 'Abstract': abstracts}
+# Create a dictionary of the six lists, where the keys are the column names.
+data = {'Title': titles,
+        'Link': links,
+        'Date': dates,
+        'Author': authors,
+        'Number': numbers,
+        'Abstract': abstracts}
 
-# create a DataFrame from the dictionary
+# Create a DataFrame from the dictionary.
 df = pd.DataFrame(data)
 
-# save the data frame to a JSON file
+# Save the DataFrame to a JSON file.
 df.to_json('../processed_data/BFI.json', orient='records')
 print("df saved to json")
 
-# load the data frame from the JSON file
-df_loaded = pd.read_json('../processed_data/BFI.json')
+# Load the DataFrame from the JSON file.
+df_loaded = pd.read_json('../processed_data/BFI.json', orient='records')
 print("df_loaded loaded from json")
-    
+
     
