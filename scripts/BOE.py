@@ -9,12 +9,6 @@ import feedparser
 import pandas as pd
 
 # Define functions
-'''
-def get_soup(url):
-    page = requests.get(url) # Get the HTML content of the page at the current link
-    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
-    return soup
-    '''
 def get_soup(url):
     # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
