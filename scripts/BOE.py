@@ -1,6 +1,6 @@
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 2 Mar 2023
+# LE: 20 Jun 2023
 # https://realpython.com/beautiful-soup-web-scraper-python/
 
 import requests
@@ -9,10 +9,19 @@ import feedparser
 import pandas as pd
 
 # Define functions
+'''
 def get_soup(url):
     page = requests.get(url) # Get the HTML content of the page at the current link
     soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
     return soup
+    '''
+def get_soup(url):
+    # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
+    page = requests.get(url, headers=headers) # Include headers in request
+    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
+    return soup
+
 
 def get_element(df, link, index):
     return [get_soup(link) # Get the HTML content of the page at the current link and parse it using BeautifulSoup
@@ -21,9 +30,29 @@ def get_element(df, link, index):
             .strip() # Remove any leading/trailing whitespace from the text
             .split('\n')[index]] # Split the text by newline character '\n' and return the third element (the abstract)
 
+def get_abstract(df, link):
+    soup = get_soup(link)
+    abstract_tags = soup.find('div', {'class': 'page-content'}).find_all(['p', 'div'], recursive=False)
+
+    potential_abstracts = []
+    for tag in abstract_tags:
+        # Check if this is the download button. The abstract always appears before the download button on the webpage
+        if tag.find('a', {'class': 'btn btn-pubs btn-has-img btn-lg'}):
+            break
+        potential_abstracts.append(tag.text.strip())
+    
+    # Choose the longest potential abstract
+    abstract = max(potential_abstracts, key=len) if potential_abstracts else None
+    return [abstract]
+
+
+def get_abstracts(df):
+    return [get_abstract(df, link) for link in df['Link']]
+
+'''
 def get_abstracts(df):
     return [get_element(df, link, 2) for link in df['Link']]
-
+'''
 def get_authors(df):
     return [get_element(df, link, 1)[0]
             .replace("By", "") # remove unnecessary text
@@ -62,3 +91,8 @@ print("df saved to json")
 # load the data frame from the JSON file
 df_loaded = pd.read_json('../processed_data/BOE.json')
 print("df_loaded loaded from json")
+
+''' Only un-comment this line for troubleshooting purposes
+# load to a CSV to check if it looks good
+df_loaded.to_csv('../output.csv')
+'''
