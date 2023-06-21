@@ -74,16 +74,20 @@ df["Abstract"] = get_abstracts(df)
 df = df[['Title', 'Author', 'Abstract', 'Link', 'Number', 'Date']]
 
 # save the data frame to a JSON file
-df.to_json('../processed_data/Chicago.json', orient='records')
+df.to_json('processed_data/Chicago.json', orient='records')
 print("df saved to json")
 
 # load the data frame from the JSON file
-df_loaded = pd.read_json('../processed_data/Chicago.json')
+df_loaded = pd.read_json('processed_data/Chicago.json')
 print("df_loaded loaded from json")
 
 # Only un-comment this line for troubleshooting purposes
 # load to a CSV to check if it looks good
-df_loaded.to_csv('../output.csv')
+df_loaded.to_csv('output.csv')
 
+# Only un-comment this line to print df in long format. Otherwise will print in short format
+'''
 with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
     print(df)
+'''
+print(df)
