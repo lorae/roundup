@@ -1,6 +1,6 @@
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 20 Jun 2023
+# LE: 21 Jun 2023
 
 # https://www.chicagofed.org/publications/publication-listing?filter_series=18
 # series = 18 indicates workind papers
@@ -31,18 +31,6 @@ def get_abstract(link):
         return abstract_tags.text.strip()  # return the text
     else:
         return None  # return None if the tag is not found
-'''
-    potential_abstracts = []
-    for tag in abstract_tags:
-        # Check if this is the download button. The abstract always appears before the download button on the webpage
-        if tag.find('a', {'class': 'btn btn-pubs btn-has-img btn-lg'}):
-            break
-        potential_abstracts.append(tag.text.strip())
-    
-    # Choose the longest potential abstract
-    abstract = max(potential_abstracts, key=len) if potential_abstracts else None
-    return [abstract]
-    '''
 
 def get_abstracts(df):
     return [get_abstract(link) for link in df['Link']]
@@ -74,11 +62,9 @@ for element in elements:
     date = month + " " + year
 
     # Combine this all together
-    data.append((title, author, link, number, date))
+    data.append((title, link, date, author, number))
 
 df = pd.DataFrame(data, columns=["Title", "Link", "Date", "Author", "Number"])
-with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
-    print(df)
 
 
 # Next pass where we add abstracts to the df
@@ -86,5 +72,18 @@ df["Abstract"] = get_abstracts(df)
 
 # Reorder the data frame
 df = df[['Title', 'Author', 'Abstract', 'Link', 'Number', 'Date']]
+
+# save the data frame to a JSON file
+df.to_json('../processed_data/Chicago.json', orient='records')
+print("df saved to json")
+
+# load the data frame from the JSON file
+df_loaded = pd.read_json('../processed_data/Chicago.json')
+print("df_loaded loaded from json")
+
+# Only un-comment this line for troubleshooting purposes
+# load to a CSV to check if it looks good
+df_loaded.to_csv('../output.csv')
+
 with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
     print(df)
