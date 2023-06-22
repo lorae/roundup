@@ -10,6 +10,9 @@ from bs4 import BeautifulSoup
 import feedparser
 import pandas as pd
 
+# First, print a progress message
+print("Running Chicago.py")
+
 # Define functions
 def get_soup(url): # Used to get the initial soup from the main URL that lists all the papers
     # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
@@ -90,4 +93,8 @@ df_loaded.to_csv('output.csv')
 with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
     print(df)
 '''
-print(df)
+print(df_loaded)
+
+# Finally, print a progress message
+print("Chicago.py has finished running")
+

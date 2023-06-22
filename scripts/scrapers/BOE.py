@@ -1,12 +1,15 @@
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 20 Jun 2023
+# LE: 21 Jun 2023
 # https://realpython.com/beautiful-soup-web-scraper-python/
 
 import requests
 from bs4 import BeautifulSoup
 import feedparser
 import pandas as pd
+
+# First, print a progress message
+print("Running BOE.py")
 
 # Define functions
 def get_soup(url):
@@ -90,3 +93,7 @@ print("df_loaded loaded from json")
 # load to a CSV to check if it looks good
 df_loaded.to_csv('output.csv')
 '''
+
+# Finally, print a progress message
+print("BOE.py has finished running")
+

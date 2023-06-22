@@ -1,12 +1,15 @@
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 2 Mar 2023
+# LE: 21 Jun 2023
 
 import requests
 import re
 import json
 import pandas as pd
 from lxml import html
+
+# First, print a progress message
+print("Running NBER.py")
 
 # Define the URL for the NBER working papers API
 URL = 'https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100'
@@ -27,13 +30,21 @@ df = pd.DataFrame({
 }).sort_values(by='Number')
 
 # Save the DataFrame to a JSON file
-df.to_json('../processed_data/NBER.json')
+df.to_json('processed_data/NBER.json')
 print("df saved to json")
 
 # load the data frame from the JSON file
-df_loaded = pd.read_json('../processed_data/NBER.json')
+df_loaded = pd.read_json('processed_data/NBER.json')
 print("df_loaded loaded from json")
 
 # Print the DataFrame to the console
+# Only un-comment this line to print df in long format. Otherwise will print in short format
+'''
+with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
+    print(df)
+'''
+
 print(df_loaded)
 
+# Finally, print a progress message
+print("NBER.py has finished running")
