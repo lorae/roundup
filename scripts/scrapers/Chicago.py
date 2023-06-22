@@ -86,7 +86,9 @@ print("df_loaded loaded from json")
 
 # Only un-comment this line for troubleshooting purposes
 # load to a CSV to check if it looks good
+'''
 df_loaded.to_csv('output.csv')
+'''
 
 # Only un-comment this line to print df in long format. Otherwise will print in short format
 '''
@@ -94,6 +96,10 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'd
     print(df)
 '''
 print(df_loaded)
+
+# Make a historical file by taking just the less recent entries and saving
+pseudo_hist = df_loaded.tail(8)
+pseudo_hist.to_json('historic_data/Chicago.json', orient='records')
 
 # Finally, print a progress message
 print("Chicago.py has finished running")

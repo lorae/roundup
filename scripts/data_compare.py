@@ -1,16 +1,16 @@
 # data_compare.py
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 21 Jun 2023
+# LE: 22 Jun 2023
 
 import pandas as pd
 import os
 
-def compare_new_data(source, data):
-    hist_path = os.path.join(source + "_hist.json")
-    recent_path = os.path.join(data)
-
-    # Ensure the provided files exist
+# hist_path is an argument representing where the historical comparison data is
+# located. recent_path is an argument representing where the newest data is
+# located. Both must be .json files for the code to work.
+def compare_new_data(hist_path, recent_path):
+    # Ensure the historical and recent files exist
     if not os.path.exists(hist_path) or not os.path.exists(recent_path):
         print(f"One or both of the files {hist_path}, {recent_path} do not exist")
         return
@@ -34,5 +34,5 @@ def compare_new_data(source, data):
         raise ValueError("Both 'Number' and 'Link' are missing for some entries in the new data")
 
     # Save new data to a json file
-    new_df.to_json(source + "_new.json", orient='records')
-    print(f"New data saved to {source}_new.json")
+    new_df.to_json("new_data/test_new.json", orient='records')
+    print(f"New data saved to test_new.json")
