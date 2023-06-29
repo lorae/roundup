@@ -94,9 +94,11 @@ print("df_loaded loaded from json")
 df_loaded.to_csv('output.csv')
 '''
 
+'''
 # Make a historical file by taking just the less recent entries and saving
 historic_BOE = df_loaded.tail(11)
 historic_BOE.to_json('historic_data/BOE.json', orient='records')
+'''
 
 # Finally, print a progress message
 print("BOE.py has finished running")

@@ -46,5 +46,13 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'd
 
 print(df_loaded)
 
+# Only un-comment this line for troubleshooting purposes
+# load to a CSV to check if it looks good
+df_loaded.to_csv('output.csv')
+
+# Make a historical file by taking just the less recent entries and saving
+historic_NBER = df_loaded.head(60)
+historic_NBER.to_json('historic_data/NBER.json', orient='records')
+
 # Finally, print a progress message
 print("NBER.py has finished running")
