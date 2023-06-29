@@ -29,9 +29,10 @@ processed_paths = [f"processed_data/{script}.json" for script in scripts]
 
 # note to self: add error if historic paths length does not equal processed
 # paths length
-for i, script in enumerate(scripts, start=1):
+for i, script in enumerate(scripts, start=0):
+    print(f"{script}")
     compare_new_data(historic_paths[i], processed_paths[i])
-    print("Compared data for {script}")
+    print(f"Compared data for {script}")
 
 print("done.")
 
