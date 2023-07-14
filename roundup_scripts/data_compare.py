@@ -26,8 +26,11 @@ def compare_new_data(hist_path, recent_path):
             return
 
     # Identify new data
-    merged_df = pd.merge(hist_df, recent_df, how='outer', indicator=True)
-    new_df = merged_df.loc[merged_df._merge == 'right_only', :]
+    # merged_df = pd.merge(hist_df, recent_df, right_on = "Number", left_on = "Number", how='outer', axis = 1, indicator=True)
+    merged_df = pd.concat([hist_df, recent_df])
+    merged_df = merged_df[~merged_df["Number"].duplicated()] # get rid of duplicate rows
+    # new_df = merged_df.loc[merged_df._merge == 'right_only', :]
+    new_df = merged_df
 
     # If "Number" and "Link" are missing in the new data, raise an error
     if new_df[["Number", "Link"]].isnull().all(axis=1).any():
