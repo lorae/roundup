@@ -8,11 +8,12 @@ import os
 
 # hist_path is an argument representing where the historical comparison data is
 # located. recent_path is an argument representing where the newest data is
-# located. Both must be .json files for the code to work.
-def compare_new_data(hist_path, recent_path):
+# located. new_path is what the new file will be valled. All must be .json
+# files for the code to work.
+def compare_new_data(hist_path, recent_path, new_path):
     # Ensure the historical and recent files exist
     if not os.path.exists(hist_path) or not os.path.exists(recent_path):
-        print(f"One or both of the files {hist_path}, {recent_path} do not exist")
+        print(f"One or both of the files {hist_path}, {recent_path} do not exist. Process exited.")
         return
 
     # Load historical and recent data
@@ -22,7 +23,7 @@ def compare_new_data(hist_path, recent_path):
     # Ensure the necessary columns exist
     for column in ["Number", "Link"]:
         if column not in hist_df.columns or column not in recent_df.columns:
-            print(f"The column {column} is not in one or both of the dataframes")
+            print(f"The column {column} is not in one or both of the dataframes. Process exited.")
             return
 
     # Identify new data
@@ -37,5 +38,5 @@ def compare_new_data(hist_path, recent_path):
         raise ValueError("Both 'Number' and 'Link' are missing for some entries in the new data")
 
     # Save new data to a json file
-    new_df.to_json("new_data/test_new.json", orient='records')
-    print(f"New data saved to test_new.json")
+    new_df.to_json(new_path, orient='records')
+    print(f"New data saved to {new_path}")
