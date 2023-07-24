@@ -76,6 +76,15 @@ df["Abstract"] = get_abstracts(df)
 # Reorder the data frame
 df = df[['Title', 'Author', 'Abstract', 'Link', 'Number', 'Date']]
 
+# Instead of the data frame having row names (indices) equalling 1, 2, etc,
+# we set them to be an identifier that is unique. In the case of Chicago, we combine
+# Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+# is completely unique across all papers scraped.
+df.index = "CHICAGO" + df['Number'].astype(str)
+df.index.name = None
+
+print(df)
+
 # save the data frame to a JSON file
 df.to_json('processed_data/Chicago.json', orient='records')
 print("df saved to json")
@@ -95,7 +104,6 @@ df_loaded.to_csv('output.csv')
 with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
     print(df)
 '''
-print(df_loaded)
 
 # Make a historical file by taking just the less recent entries and saving
 pseudo_hist = df_loaded.tail(8)

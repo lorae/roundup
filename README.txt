@@ -8,6 +8,7 @@ data is scraped. It is processed data.
 Data is cross-referenced with historic 
 
 data
-- raw scrape
-- new scrape
-- historic
+- raw scrape_07.11.2023
+- new scrape_07.11.2023
+- historic_07.11.2023
+

@@ -29,6 +29,13 @@ df = pd.DataFrame({
     'Number': [d['url'].split('/papers/w')[1] for d in data]
 }).sort_values(by='Number')
 
+# Instead of the data frame having row names (indices) equalling 1, 2, etc,
+# we set them to be an identifier that is unique. In the case of NBER, we combine
+# NBER with the number of the paper (eg. 999) to get an identifier NBER999 that
+# is completely unique across all papers scraped.
+df.index = "NBER" + df['Number'].astype(str)
+df.index.name = None
+
 # Save the DataFrame to a JSON file
 df.to_json('processed_data/NBER.json')
 print("df saved to json")
@@ -48,7 +55,7 @@ print(df_loaded)
 
 # Only un-comment this line for troubleshooting purposes
 # load to a CSV to check if it looks good
-df_loaded.to_csv('output.csv')
+# df_loaded.to_csv('output.csv')
 
 # Make a historical file by taking just the less recent entries and saving
 historic_NBER = df_loaded.head(60)

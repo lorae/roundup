@@ -79,6 +79,14 @@ df["Abstract"] = get_abstracts(df)
 df["Author"] = get_authors(df)
 df["Number"] = get_numbers(df)
 
+# Instead of the data frame having row names (indices) equalling 1, 2, etc,
+# we set them to be an identifier that is unique. In the case of BOE, we combine
+# BOE with the number of the paper (eg. 999) to get an identifier BOE999 that
+# is completely unique across all papers scraped.
+df.index = "BOE" + df['Number'].astype(str)
+df.index.name = None
+
+
 print(df)
 
 # save the data frame to a JSON file
