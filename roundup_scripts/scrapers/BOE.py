@@ -8,10 +8,7 @@ from bs4 import BeautifulSoup
 import feedparser
 import pandas as pd
 
-# First, print a progress message
-print("Running BOE.py")
 
-# Define functions
 def get_soup(url):
     # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
@@ -119,7 +116,4 @@ df_loaded.to_csv('output.csv')
 historic_BOE = df_loaded.tail(11)
 historic_BOE.to_json('historic_data/BOE.json', orient='records')
 '''
-
-# Finally, print a progress message
-print("BOE.py has finished running")
 

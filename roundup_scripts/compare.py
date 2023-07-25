@@ -7,19 +7,32 @@ import pandas as pd
 import os
 import ast
 
-'''
-with open('test-delete-me-later.txt','w') as f:
-   f.write(str({"CHICAGO2023-15", "BOE1024"}))  # set of numbers & a tuple
-'''
+from datetime import datetime
+
+
 def compare_historic(df):
-    # First we open "papers-we-have-seen.txt", a file which contains the unique 
-    # indices of all the papers we have seen so far.
+    # Create filepath for output files
+    current_date = datetime.now().strftime('%Y-%m-%d-%H%M')
+    filepath = f'historic/weekly_data/{current_date}'
+    
+    # Open "papers-we-have-seen.txt" which contains the unique indices of all papers observed to date
     with open('historic/papers-we-have-seen.txt','r') as f:
-        historic_set = ast.literal_eval(f.read()) # save entries into historic_set
-    print(historic_set)
-    
-    # Now we insert the indices of the scraped papers from df into recent_set
+        # save entries as historic_set
+        historic_set = ast.literal_eval(f.read()) 
+    # Use the indices from df to create recent_set
     recent_set = set(df.index)
-    print(recent_set)
     
+    # Generate the novel set
+    novel_set = recent_set - historic_set
+    
+    # Save novel data txt
+    with open(f'{filepath}.txt','w') as f:
+        f.write(str(novel_set))
+    # Convert the set to a list and get the relevant rows from the df. Then
+    # save as csv using filepath
+    df.loc[list(novel_set)].to_csv(f'{filepath}.csv')
+    
+    # Overwrite the historical with the new data
+    with open('historic/papers-we-have-seen.txt','w') as f:
+        f.write(str(historic_set | recent_set))  # union of the two sets  
   

@@ -8,8 +8,6 @@ import json
 import pandas as pd
 from lxml import html
 
-# First, print a progress message
-print("Running NBER.py")
 
 def scrape():
     # Define the URL for the NBER working papers API
@@ -68,6 +66,3 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'd
 historic_NBER = df_loaded.head(60)
 historic_NBER.to_json('historic_data/NBER.json', orient='records')
 '''
-
-# Finally, print a progress message
-print("NBER.py has finished running")
