@@ -64,38 +64,50 @@ def get_numbers(df):
             .replace(",", "") # remove unnecessary commas
             for link in df["Link"]]
 
-# Main code
-URL = "https://www.bankofengland.co.uk/rss/publications"
-f = feedparser.parse(URL)
+# I define the function "scrape" in every webscraper. That way, in runall.py, it is easy to call BOE.scrape()
+# or NBER.scrape(), for instance, knowing that they all do the same thing - namely, navigate to their respective 
+# websites and extract the data.
+def scrape():
+    # Let's start by going to the RSS feed and extracting the data
+    URL = "https://www.bankofengland.co.uk/rss/publications"
+    f = feedparser.parse(URL)
 
-data = [(entry.title,
-         entry.link,
-         entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
-        for entry in f.entries #introduce a loop that iterates over each entry in the RSS feed (f.entries)
-        if "working paper" in entry.summary] #filters the entries based on whether the phrase "working paper" appears in the summary
+    # Now we grab the data that's easy to get directly from the RSS feed
+    data = [(entry.title,
+             entry.link,
+             entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
+            for entry in f.entries #introduce a loop that iterates over each entry in the RSS feed (f.entries)
+            if "working paper" in entry.summary] #filters the entries based on whether the phrase "working paper" appears in the summary
 
-df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
-df["Abstract"] = get_abstracts(df)
-df["Author"] = get_authors(df)
-df["Number"] = get_numbers(df)
+    # The trickier operations are conducted using functions defined above
+    df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
+    df["Abstract"] = get_abstracts(df)
+    df["Author"] = get_authors(df)
+    df["Number"] = get_numbers(df)
 
-# Instead of the data frame having row names (indices) equalling 1, 2, etc,
-# we set them to be an identifier that is unique. In the case of BOE, we combine
-# BOE with the number of the paper (eg. 999) to get an identifier BOE999 that
-# is completely unique across all papers scraped.
-df.index = "BOE" + df['Number'].astype(str)
-df.index.name = None
-
-
-print(df)
+    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # we set them to be an identifier that is unique. In the case of BOE, we combine
+    # BOE with the number of the paper (eg. 999) to get an identifier BOE999 that
+    # is completely unique across all papers scraped.
+    df.index = "BOE" + df['Number'].astype(str)
+    df.index.name = None
+    
+    print(df)
+    return(df)
 
 # save the data frame to a JSON file
+# not doing this anymore
+'''
 df.to_json('processed_data/BOE.json', orient='records')
 print("df saved to json")
+'''
 
 # load the data frame from the JSON file
+# not doing this anymore
+'''
 df_loaded = pd.read_json('processed_data/BOE.json')
 print("df_loaded loaded from json")
+'''
 
 ''' Only un-comment this line for troubleshooting purposes
 # load to a CSV to check if it looks good

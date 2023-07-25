@@ -39,52 +39,58 @@ def get_abstracts(df):
     return [get_abstract(link) for link in df['Link']]
 
 
-URL = "https://www.chicagofed.org/publications/publication-listing?filter_series=18"
-elements = get_elements(URL)
+# I define the function "scrape" in every webscraper. That way, in runall.py, it is easy to call BOE.scrape()
+# or NBER.scrape(), for instance, knowing that they all do the same thing - namely, navigate to their respective 
+# websites and extract the data.
+def scrape():
+    URL = "https://www.chicagofed.org/publications/publication-listing?filter_series=18"
+    elements = get_elements(URL)
+    
+    # First pass where we get the list of elements from the URL and extract relevant information
+    data = []
+    for element in elements:
+        # The name of the tag we use to get the title and link
+        title_link_tag = element.find('a', {'class': 'cfedPublicationListing--title'})
+    
+        # Get the title
+        title = title_link_tag.text.strip()
+        # Get the link
+        link = "https://www.chicagofed.org" + title_link_tag['href']
+        # Get the number
+        number = link.split("/")[-1]
+        # Get the author
+        author = element.find('div', {'class': 'cfedPublicationListing--info'}).text.strip().split("|")[0].strip()
+        # Here, we're assuming that the year and month are always at index 1 and 4, respectively, in the info_text list.
+        # Also, we're assuming that these strings can be safely stripped of whitespace and turned into integers.
+        info_text = element.find('div', {'class': 'cfedPublicationListing--info'}).text.strip().split("|")
+        author = info_text[0].strip()
+        year = str(info_text[1].strip())
+        month = info_text[4].strip()
+        date = month + " " + year
+    
+        # Combine this all together
+        data.append((title, link, date, author, number))
+    
+    df = pd.DataFrame(data, columns=["Title", "Link", "Date", "Author", "Number"])
+    
+    
+    # Next pass where we add abstracts to the df
+    df["Abstract"] = get_abstracts(df)
+    
+    # Reorder the data frame
+    df = df[['Title', 'Author', 'Abstract', 'Link', 'Number', 'Date']]
+    
+    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # we set them to be an identifier that is unique. In the case of Chicago, we combine
+    # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+    # is completely unique across all papers scraped.
+    df.index = "CHICAGO" + df['Number'].astype(str)
+    df.index.name = None
+    
+    print(df)
+    return(df)
 
-# First pass where we get the list of elements from the URL and extract relevant information
-data = []
-for element in elements:
-    # The name of the tag we use to get the title and link
-    title_link_tag = element.find('a', {'class': 'cfedPublicationListing--title'})
-
-    # Get the title
-    title = title_link_tag.text.strip()
-    # Get the link
-    link = "https://www.chicagofed.org" + title_link_tag['href']
-    # Get the number
-    number = link.split("/")[-1]
-    # Get the author
-    author = element.find('div', {'class': 'cfedPublicationListing--info'}).text.strip().split("|")[0].strip()
-    # Here, we're assuming that the year and month are always at index 1 and 4, respectively, in the info_text list.
-    # Also, we're assuming that these strings can be safely stripped of whitespace and turned into integers.
-    info_text = element.find('div', {'class': 'cfedPublicationListing--info'}).text.strip().split("|")
-    author = info_text[0].strip()
-    year = str(info_text[1].strip())
-    month = info_text[4].strip()
-    date = month + " " + year
-
-    # Combine this all together
-    data.append((title, link, date, author, number))
-
-df = pd.DataFrame(data, columns=["Title", "Link", "Date", "Author", "Number"])
-
-
-# Next pass where we add abstracts to the df
-df["Abstract"] = get_abstracts(df)
-
-# Reorder the data frame
-df = df[['Title', 'Author', 'Abstract', 'Link', 'Number', 'Date']]
-
-# Instead of the data frame having row names (indices) equalling 1, 2, etc,
-# we set them to be an identifier that is unique. In the case of Chicago, we combine
-# Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
-# is completely unique across all papers scraped.
-df.index = "CHICAGO" + df['Number'].astype(str)
-df.index.name = None
-
-print(df)
-
+'''
 # save the data frame to a JSON file
 df.to_json('processed_data/Chicago.json', orient='records')
 print("df saved to json")
@@ -92,6 +98,7 @@ print("df saved to json")
 # load the data frame from the JSON file
 df_loaded = pd.read_json('processed_data/Chicago.json')
 print("df_loaded loaded from json")
+'''
 
 # Only un-comment this line for troubleshooting purposes
 # load to a CSV to check if it looks good
@@ -105,9 +112,11 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'd
     print(df)
 '''
 
+'''
 # Make a historical file by taking just the less recent entries and saving
 pseudo_hist = df_loaded.tail(8)
 pseudo_hist.to_json('historic_data/Chicago.json', orient='records')
+'''
 
 # Finally, print a progress message
 print("Chicago.py has finished running")
