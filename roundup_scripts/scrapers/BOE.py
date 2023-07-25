@@ -92,28 +92,3 @@ def scrape():
     print(df)
     return(df)
 
-# save the data frame to a JSON file
-# not doing this anymore
-'''
-df.to_json('processed_data/BOE.json', orient='records')
-print("df saved to json")
-'''
-
-# load the data frame from the JSON file
-# not doing this anymore
-'''
-df_loaded = pd.read_json('processed_data/BOE.json')
-print("df_loaded loaded from json")
-'''
-
-''' Only un-comment this line for troubleshooting purposes
-# load to a CSV to check if it looks good
-df_loaded.to_csv('output.csv')
-'''
-
-'''
-# Make a historical file by taking just the less recent entries and saving
-historic_BOE = df_loaded.tail(11)
-historic_BOE.to_json('historic_data/BOE.json', orient='records')
-'''
-

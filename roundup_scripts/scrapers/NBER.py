@@ -37,32 +37,3 @@ def scrape():
     
     print(df)
     return(df)
-
-'''
-# Save the DataFrame to a JSON file
-df.to_json('processed_data/NBER.json')
-print("df saved to json")
-
-# load the data frame from the JSON file
-df_loaded = pd.read_json('processed_data/NBER.json')
-print("df_loaded loaded from json")
-'''
-
-# Print the DataFrame to the console
-# Only un-comment this line to print df in long format. Otherwise will print in short format
-'''
-with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
-    print(df)
-'''
-
-#print(df_loaded)
-
-# Only un-comment this line for troubleshooting purposes
-# load to a CSV to check if it looks good
-# df_loaded.to_csv('output.csv')
-
-'''
-# Make a historical file by taking just the less recent entries and saving
-historic_NBER = df_loaded.head(60)
-historic_NBER.to_json('historic_data/NBER.json', orient='records')
-'''
