@@ -14,6 +14,7 @@ sys.path.append('roundup_scripts/scrapers')
 import BOE
 import Chicago
 import NBER
+import BIS
 
 
 print(os.getcwd())
@@ -23,7 +24,7 @@ venv_python_path = "C:/Users/LStojanovic/Downloads/roundup/venv/Scripts/python.e
 #venv_python_path = "/Users/dr.work/Dropbox/Code_Dropbox/Brookings/lorae_roundup/roundup/proj_env/bin/python"
 
 # Make a dictionary of roundup_scripts used in the scraper.
-roundup_scripts = {"BOE": BOE, "Chicago": Chicago, "NBER": NBER}
+roundup_scripts = {"BOE": BOE, "Chicago": Chicago, "NBER": NBER, "BIS": BIS}
 #scraper_paths = [f"roundup_scripts/scrapers/{script}.py" for script in roundup_scripts]
 
 # Part 1: Scraping Data
