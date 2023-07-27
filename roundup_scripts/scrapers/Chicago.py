@@ -3,7 +3,7 @@
 # LE: 21 Jun 2023
 
 # https://www.chicagofed.org/publications/publication-listing?filter_series=18
-# series = 18 indicates workind papers
+# series = 18 indicates working papers
 
 import requests
 from bs4 import BeautifulSoup
@@ -86,31 +86,3 @@ def scrape():
     
     print(df)
     return(df)
-
-'''
-# save the data frame to a JSON file
-df.to_json('processed_data/Chicago.json', orient='records')
-print("df saved to json")
-
-# load the data frame from the JSON file
-df_loaded = pd.read_json('processed_data/Chicago.json')
-print("df_loaded loaded from json")
-'''
-
-# Only un-comment this line for troubleshooting purposes
-# load to a CSV to check if it looks good
-'''
-df_loaded.to_csv('output.csv')
-'''
-
-# Only un-comment this line to print df in long format. Otherwise will print in short format
-'''
-with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.expand_frame_repr', False, 'display.max_colwidth', -1):
-    print(df)
-'''
-
-'''
-# Make a historical file by taking just the less recent entries and saving
-pseudo_hist = df_loaded.tail(8)
-pseudo_hist.to_json('historic_data/Chicago.json', orient='records')
-'''

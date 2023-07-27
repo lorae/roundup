@@ -3,7 +3,7 @@
 # the IMF RSS feed.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# Created: 2 Mar 2023
+# LE: 27 Jul 2023
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,9 +11,6 @@ import feedparser
 import pandas as pd
 from lxml import html
 import re
-
-
-# Define functions
 
 # NOTE: The purpose of defining the function get_element (rather than just using get_abstracts, get_authors,
 # and get_numbers) is to parse the HTML for each webpage only once, rather than 3 times. This significantly
@@ -54,35 +51,41 @@ def get_numbers(elements):
             .text_content().strip()
             for tree in elements]
 
-# Main code
-URL = "https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers"
-f = feedparser.parse(URL)
+# I define the function "scrape" in every webscraper. That way, in runall.py, it is easy to call BOE.scrape()
+# or NBER.scrape(), for instance, knowing that they all do the same thing - namely, navigate to their respective 
+# websites and extract the data.
+def scrape():
+    URL = "https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers"
+    f = feedparser.parse(URL)
 
-data = [(entry.title,
-         entry.link,
-         entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
-        for entry in f.entries]
+    data = [(entry.title,
+             entry.link,
+             entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
+            for entry in f.entries]
 
-# Create a pandas data frame from the extracted data
-df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
-print("IMF titles, links, and dates have been gathered.")
+    # Create a pandas data frame from the extracted data
+    df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
+    print("IMF titles, links, and dates have been gathered.")
 
-# Extract the HTML content for each link in the data frame using the get_element() function
-elements = get_element(df)
+    # Extract the HTML content for each link in the data frame using the get_element() function
+    elements = get_element(df)
 
-# Extract the abstracts, authors, and numbers for each HTML tree using get_abstracts, get_authors,
-# and get_numbers
-df["Abstract"] = get_abstracts(elements)
-print("... abstracts have been gathered.")
-df["Author"] = get_authors(elements)
-print("... authors have been gathered.")
-df["Number"] = get_numbers(elements)
-print("... numbers have been gathered.")
+    # Extract the abstracts, authors, and numbers for each HTML tree using get_abstracts, get_authors,
+    # and get_numbers
+    df["Abstract"] = get_abstracts(elements)
+    print("... abstracts have been gathered.")
+    df["Author"] = get_authors(elements)
+    print("... authors have been gathered.")
+    df["Number"] = get_numbers(elements)
+    print("... numbers have been gathered.")
 
-# save the data frame to a JSON file
-df.to_json('../processed_data/IMF.json', orient='records')
-print("df saved to json")
+    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # we set them to be an identifier that is unique. In the case of Chicago, we combine
+    # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+    # is completely unique across all papers scraped.
+    df.index = "IMF" + df['Number'].astype(str)
+    df.index.name = None
 
-# load the data frame from the JSON file
-df_loaded = pd.read_json('../processed_data/IMF.json')
-print("df_loaded loaded from json")
+    print(df)
+    return(df)
+
