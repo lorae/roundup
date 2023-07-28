@@ -65,7 +65,7 @@ def scrape():
 
     # Create a pandas data frame from the extracted data
     df = pd.DataFrame(data, columns=["Title", "Link", "Date"])
-    print("IMF titles, links, and dates have been gathered.")
+    #print("IMF titles, links, and dates have been gathered.")
 
     # Extract the HTML content for each link in the data frame using the get_element() function
     elements = get_element(df)
@@ -73,11 +73,11 @@ def scrape():
     # Extract the abstracts, authors, and numbers for each HTML tree using get_abstracts, get_authors,
     # and get_numbers
     df["Abstract"] = get_abstracts(elements)
-    print("... abstracts have been gathered.")
+    #print("... abstracts have been gathered.")
     df["Author"] = get_authors(elements)
-    print("... authors have been gathered.")
+    #print("... authors have been gathered.")
     df["Number"] = get_numbers(elements)
-    print("... numbers have been gathered.")
+    #print("... numbers have been gathered.")
 
     # Instead of the data frame having row names (indices) equalling 1, 2, etc,
     # we set them to be an identifier that is unique. In the case of Chicago, we combine

@@ -1,7 +1,7 @@
 # runall.py
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 21 Jun 2023
+# LE: 27 Jul 2023
 
 import os
 import subprocess
@@ -16,6 +16,7 @@ import Chicago
 import NBER
 import BIS
 import IMF
+import ECB
 
 
 print(os.getcwd())
@@ -25,7 +26,7 @@ venv_python_path = "C:/Users/LStojanovic/Downloads/roundup/venv/Scripts/python.e
 #venv_python_path = "/Users/dr.work/Dropbox/Code_Dropbox/Brookings/lorae_roundup/roundup/proj_env/bin/python"
 
 # Make a dictionary of roundup_scripts used in the scraper.
-roundup_scripts = {"BOE": BOE, "Chicago": Chicago, "NBER": NBER, "BIS": BIS, "IMF": IMF}
+roundup_scripts = {"BOE": BOE, "Chicago": Chicago, "NBER": NBER, "BIS": BIS, "IMF": IMF, "ECB": ECB}
 
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")

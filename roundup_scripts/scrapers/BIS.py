@@ -8,6 +8,9 @@
 import feedparser
 import pandas as pd
 
+# I define the function "scrape" in every webscraper. That way, in runall.py, it is easy to call BOE.scrape()
+# or NBER.scrape(), for instance, knowing that they all do the same thing - namely, navigate to their respective 
+# websites and extract the data.
 def scrape():
      # Let's start by going to the RSS feed and extracting the data
     URL = 'https://www.bis.org/doclist/wppubls.rss?from=&till=&objid=wppubls&page=&paging_length=10&sort_list=date_desc&theme=wppubls&ml=false&mlurl=&emptylisttext='
@@ -34,7 +37,7 @@ def scrape():
 
     # Create a pandas data frame from the extracted data
     df = pd.DataFrame(data, columns=["Title", "Link", "Date", "Abstract", "Author", "Number"])
-    print("BIS titles, links, dates, abstracts, authors, and numbers have been gathered.")
+    #print("BIS titles, links, dates, abstracts, authors, and numbers have been gathered.")
 
     # Instead of the data frame having row names (indices) equalling 1, 2, etc,
     # we set them to be an identifier that is unique. In the case of BOE, we combine
