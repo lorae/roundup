@@ -3,7 +3,7 @@
 # the IMF RSS feed.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 27 Jul 2023
+# LE: 30 Jul 2023
 
 import requests
 from bs4 import BeautifulSoup
@@ -37,11 +37,12 @@ def get_abstracts(elements):
 def get_authors(elements):
     # Use list comprehension to extract the authors from the HTML trees using XPath
     # Clean up the author names and separate them with commas using regular expressions
+    # Then join them into a single string
     return [
-        [
+        ', '.join([
             re.sub(r'\s*;\s*', ', ', author.text_content().strip()) 
             for author in tree.xpath('/html/body/div[3]/main/article/div[1]/div/section[1]/p[2]')
-        ] for tree in elements
+        ]) for tree in elements
     ]
 
 def get_numbers(elements):

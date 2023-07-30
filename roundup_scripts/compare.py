@@ -29,8 +29,9 @@ def compare_historic(df):
     with open(f'{filepath}.txt','w') as f:
         f.write(str(novel_set))
     # Convert the set to a list and get the relevant rows from the df. Then
-    # save as csv using filepath
-    df.loc[list(novel_set)].to_csv(f'{filepath}.csv')
+    # save as csv using filepath. And use utf-8 encoding to ensure special 
+    # characters are captured.
+    df.loc[list(novel_set)].to_csv(f'{filepath}.csv', encoding='utf-8')
     
     # Overwrite the historical with the new data
     with open('historic/papers-we-have-seen.txt','w') as f:

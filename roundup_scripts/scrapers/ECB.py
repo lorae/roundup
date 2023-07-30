@@ -3,7 +3,7 @@
 # the ECB RSS feed.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# Created: 3 Mar 2023
+# LE: 30 July 2023
 
 import feedparser
 import pandas as pd
@@ -66,6 +66,13 @@ def scrape():
 
     # Rearrange the columns of the DataFrame
     df = df[["Title", "Link", "Date", "Abstract", "Author", "Number"]]
+    
+    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # we set them to be an identifier that is unique. In the case of NBER, we combine
+    # NBER with the number of the paper (eg. 999) to get an identifier NBER999 that
+    # is completely unique across all papers scraped.
+    df.index = "ECB" + df['Number'].astype(str)
+    df.index.name = None
 
     print(df)
     return(df)

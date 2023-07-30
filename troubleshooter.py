@@ -14,6 +14,6 @@ from roundup_scripts.compare import compare_historic # User-defined
 # Here, we import all the scripts from roundup_scripts/scrapers
 import sys
 sys.path.append('roundup_scripts/scrapers')
-import ECB
+import BEA
 
-print(ECB.scrape())
+print(BEA.scrape())
