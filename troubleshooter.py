@@ -16,4 +16,8 @@ import sys
 sys.path.append('roundup_scripts/scrapers')
 import BEA
 
-print(BEA.scrape())
+#print(BEA.scrape())
+
+import subprocess
+subprocess.run(["python", "roundup_scripts/scrapers/BEA.py"])
+
