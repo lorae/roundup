@@ -1,9 +1,9 @@
 ### BFI.py ###
 # The purpose of this script is to scrape metadata from the most recent BFI working papers. This script uses
-# the BFI RSS feed.
+# the BFI RSS feed. Numbers are found on the specific landing pages corresponding to each individual paper.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# Created: 6 Mar 2023
+# LE: 30 Jul 2023
 
 import requests
 from bs4 import BeautifulSoup

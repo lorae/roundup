@@ -1,6 +1,6 @@
 ### BEA.py ###
 # The purpose of this script is to scrape metadata from the most recent BEA working papers. This script uses
-# the BEA research papers landing page (given by the URL below). Abstracts are found on the specific landing
+# the BEA research papers landing page (given by the URL below). Numbers are found on the specific landing
 # pages corresponding to each individual paper.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
