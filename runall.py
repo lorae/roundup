@@ -12,6 +12,7 @@ from roundup_scripts.compare import compare_historic # User-defined
 import sys
 sys.path.append('roundup_scripts/scrapers')
 import BEA
+import BFI
 import BIS
 import BOE
 import Chicago
@@ -28,6 +29,7 @@ venv_python_path = "C:/Users/LStojanovic/Downloads/roundup/venv/Scripts/python.e
 # Make a dictionary of roundup_scripts used in the scraper.
 roundup_scripts = {
     "BEA": BEA, 
+    "BFI": BFI,
     "BIS": BIS, 
     "BOE": BOE, 
     "Chicago": Chicago, 
