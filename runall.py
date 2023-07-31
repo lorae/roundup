@@ -14,6 +14,7 @@ sys.path.append('roundup_scripts/scrapers')
 import BEA
 import BFI
 import BIS
+import Board
 import BOE
 import Chicago
 import ECB
@@ -30,7 +31,8 @@ venv_python_path = "C:/Users/LStojanovic/Downloads/roundup/venv/Scripts/python.e
 roundup_scripts = {
     "BEA": BEA, 
     "BFI": BFI,
-    "BIS": BIS, 
+    "BIS": BIS,
+    "Board": Board,
     "BOE": BOE, 
     "Chicago": Chicago, 
     "ECB": ECB, 

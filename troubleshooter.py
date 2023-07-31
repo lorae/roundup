@@ -31,10 +31,10 @@ venv_python_path = "C:/Users/stoja/roundup/venv/Scripts/python.exe"
 
 
 sys.path.append('roundup_scripts/scrapers')
-import BFI
+import Board
 
 #print(BEA.scrape())
 
 import subprocess
-subprocess.run([venv_python_path, "roundup_scripts/scrapers/BFI.py"])
+subprocess.run([venv_python_path, "roundup_scripts/scrapers/Board.py"])
 
