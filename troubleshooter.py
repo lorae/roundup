@@ -36,5 +36,5 @@ import BFI
 #print(BEA.scrape())
 
 import subprocess
-subprocess.run([venv_python_path, "BFI.py"])
+subprocess.run([venv_python_path, "roundup_scripts/scrapers/BFI.py"])
 
