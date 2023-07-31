@@ -15,9 +15,26 @@ from roundup_scripts.compare import compare_historic # User-defined
 import sys
 sys.path.append('roundup_scripts/scrapers')
 import BEA
+import BIS
+import BOE
+import Chicago
+import ECB
+import IMF
+import NBER
+
+print(os.getcwd())
+
+# Path to venv python
+venv_python_path = "C:/Users/stoja/roundup/venv/Scripts/python.exe"
+#venv_python_path = "C:/Users/LStojanovic/Downloads/roundup/venv/Scripts/python.exe" #maybe?
+#venv_python_path = "/Users/dr.work/Dropbox/Code_Dropbox/Brookings/lorae_roundup/roundup/proj_env/bin/python"
+
+
+sys.path.append('roundup_scripts/scrapers')
+import BFI
 
 #print(BEA.scrape())
 
 import subprocess
-subprocess.run(["python", "roundup_scripts/scrapers/BEA.py"])
+subprocess.run([venv_python_path, "BFI.py"])
 

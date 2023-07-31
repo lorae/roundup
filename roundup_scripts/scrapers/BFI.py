@@ -10,53 +10,38 @@ from bs4 import BeautifulSoup
 import pandas as pd
 
 url = "https://bfi.uchicago.edu/working-papers/"
-page = requests.get(url)
-soup = BeautifulSoup(page.content, 'html.parser')
+soup = BeautifulSoup(requests.get(url).content, 'html.parser')
 
-# Get titles, links, dates, and authors from the main website. Note that
-# BFI papers are not numbered, so "numbers" is populated with NA.
-titles = [element.select('h2.teaser__title')[0].text.strip()
-          for element in soup.select('div.teaser.teaser--working-paper')]
+elements = soup.select('div.teaser.teaser--working-paper')
 
-links = [element.select('h2.teaser__title a')[0]['href']
-         for element in soup.select('div.teaser.teaser--working-paper')]
+# Get titles, links, dates, and authors from the main website
+Titles = [el.select('h2.teaser__title')[0].text.strip() for el in elements]
+Links = [el.select('h2.teaser__title a')[0]['href'] for el in elements]
+Dates = [el.select('span.meta__date')[0].text.strip() for el in elements]
+Authors = [el.select('div.teaser__names')[0].text.strip() for el in elements]
+Numbers = ['NA' for _ in elements]
 
-dates = [element.select('span.meta__date')[0].text.strip()
-         for element in soup.select('div.teaser.teaser--working-paper')]
-
-authors = [element.select('div.teaser__names')[0].text.strip()
-           for element in soup.select('div.teaser.teaser--working-paper')]
-
-numbers = ['NA'
-           for element in soup.select('div.teaser.teaser--working-paper')]
-
-# Initalize "abstracts" list
-abstracts = []
-# Navigate to each page's link to get the abstracts. (I could have used list
-# comprehension here, but I felt like the classic "for" loop is easier to read).
-for link in links:
-    page = requests.get(link)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    abstract = soup.select('div.textblock')[0].text.strip()
-    abstracts.append(abstract)
+# Get the abstracts
+Abstracts = [BeautifulSoup(requests.get(link).content, 'html.parser').select('div.textblock')[0].text.strip() for link in Links]
 
 # Create a dictionary of the six lists, where the keys are the column names.
-data = {'Title': titles,
-        'Link': links,
-        'Date': dates,
-        'Author': authors,
-        'Number': numbers,
-        'Abstract': abstracts}
+data = {'Title': Titles,
+        'Link': Links,
+        'Date': Dates,
+        'Author': Authors,
+        'Number': Numbers,
+        'Abstract': Abstracts}
 
 # Create a DataFrame from the dictionary.
 df = pd.DataFrame(data)
 
-# Save the DataFrame to a JSON file.
-df.to_json('../processed_data/BFI.json', orient='records')
-print("df saved to json")
-
-# Load the DataFrame from the JSON file.
-df_loaded = pd.read_json('../processed_data/BFI.json', orient='records')
-print("df_loaded loaded from json")
+'''
+print(df)
+print(df["Titles"])
+print(df["Links"])
+print(df["Dates"])
+print(df["Authors"])
+print(df["Numbers"])
+'''
 
     
