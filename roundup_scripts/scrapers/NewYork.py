@@ -7,6 +7,8 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from requests_html import HTMLSession
+import pandas as pd
 
 # Function to check if a URL exists by checking the HTTP status code
 def url_exists(url):
@@ -51,67 +53,77 @@ def url_conditional(before, after):
     return(url)
 
 
-url_list = url_conditional(before = "https://www.newyorkfed.org/research/staff_reports/index.html#", after = "")
-from requests_html import HTMLSession
-from bs4 import BeautifulSoup
 
-session = HTMLSession()
+def scrape():
+    # This page is java rendered, so we are using the requests_html package.
+    session = HTMLSession()
 
-# Your url_list logic goes here...
-url_list = ["https://www.newyorkfed.org/research/staff_reports/index.html#2023"]
+    url_list = url_conditional(before = "https://www.newyorkfed.org/research/staff_reports/index.html#", after = "")
 
-for url in url_list:
-    print(url)
-
-    # Send a GET request and render the JavaScript
-    r = session.get(url)
-    r.html.render(sleep=2, keep_page=True, scrolldown=1)
-
-    # Then you can use BeautifulSoup as before to parse the page
-    soup = BeautifulSoup(r.html.html, 'html.parser')
-    elements = soup.select('tr > td > p')
-
-    # Filter elements based on the presence of 'a' tag
-    elements = [el for el in elements if el.select_one('a')]
-    
-    # Get titles, links, dates, and authors from the main website. Format them as a dictionary.
-    data = {
-        #'Title': [el.select('a').text.strip() for el in elements]
-        #'Link': ["https://www.federalreserve.gov" + el.select_one('h5 > a')['href'] for el in elements],
-        #'Number': [el.select_one('span.badge').text.strip().replace('FEDS ', '') for el in elements],
-        #'Author': [el.select_one('div.authors').text.strip() for el in elements],
-        #'Abstract': [el.select_one('div.collapse > p').text.strip().replace('Abstract: ', '') for el in elements],
-        #'Date': [el.select_one('time')['datetime'] for el in elements]
-    }
-    Title = [el.select_one('a').text.strip() for el in elements]
-    print(Title)
-    Link = ["https://www.newyorkfed.org" + el.select_one('a')['href'] for el in elements]
-    print(Link)
-    Number = [el.select_one('a')['href'].split("/sr")[1].replace('.html', '') for el in elements]
-    print(Number)
-    Author = [list(el.stripped_strings)[1] for el in elements]
-    print(Author)
-    
-    # Date is slightly more complicated, so I've moved it out of the list comprehension to show it more step-by-step.
+    # Initialize lists
+    Title = []
+    Link = []
+    Number = []
+    Author = []
     Date = []
-    for el in elements:
-        date_raw = el.select_one('span.paraNotes').get_text().split('\xa0')
-        month = date_raw[1].strip()[4:]
-        year = date_raw[2].strip()
-        Date.append(month + " " + year)
-    print(Date)
-    
-    # Abstracts need to visit a separate hyperlink to be scraped.
     Abstract = []
-    for link in Link:
-        response = requests.get(link)
-        content = response.content
-        soup = BeautifulSoup(content, 'html.parser')
-        
-        # Get the abstracts
-        abstract = soup.select('div.ts-article-text')[1].text.strip().replace('\n', ' ')
-        Abstract.append(abstract)
-        
-    print(Abstract)
 
+    for url in url_list:
+        print(f"Scraping {url}")
 
+        # Send a GET request and render the JavaScript
+        r = session.get(url)
+        r.html.render(sleep=2, keep_page=True, scrolldown=1)
+
+        # Use BeautifulSoup to parse the page
+        soup = BeautifulSoup(r.html.html, 'html.parser')
+        elements = soup.select('tr > td > p')
+
+        # Filter elements based on the presence of 'a' tag (to avoid the 7 unnecessary p elements)
+        elements = [el for el in elements if el.select_one('a')]
+
+        # Append data to Title, Link, Number, Author lists
+        Title += [el.select_one('a').text.strip() for el in elements]
+        Link += ["https://www.newyorkfed.org" + el.select_one('a')['href'] for el in elements]
+        Number += [el.select_one('a')['href'].split("/sr")[1].replace('.html', '') for el in elements]
+        Author += [list(el.stripped_strings)[1] for el in elements]
+
+        # Append to Date list. Date is slightly more complicated, so I've moved it out of the list 
+        # comprehension to show it more step-by-step.
+        for el in elements:
+            date_raw = el.select_one('span.paraNotes').get_text().split('\xa0')
+            month = date_raw[1].strip()[4:]
+            year = date_raw[2].strip()
+            Date.append(month + " " + year)
+
+        # Append to Abstract list. They are located on a separate url found in Link.
+        for link in Link:
+            response = requests.get(link)
+            content = response.content
+            soup = BeautifulSoup(content, 'html.parser')
+
+            # Get the abstracts
+            abstract = soup.select('div.ts-article-text')[1].text.strip().replace('\n', ' ')
+            Abstract.append(abstract)
+
+         
+    # Create a dictionary of the six lists, where the keys are the column names.
+    data = {'Title': Title,
+            'Link': Link,
+            'Date': Date,
+            'Author': Author,
+            'Number': Number,
+            'Abstract': Abstract}
+
+    # Create a DataFrame from the dictionary.
+    df = pd.DataFrame(data)
+
+    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # we set them to be an identifier that is unique. In the case of Chicago, we combine
+    # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+    # is completely unique across all papers scraped.
+    df.index = "NEWYORK" + df['Number'].astype(str)
+    df.index.name = None
+
+    print(df)
+    return(df)

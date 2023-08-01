@@ -20,14 +20,16 @@ import Chicago
 import ECB
 import IMF
 import NBER
+import NewYork
 
 print(os.getcwd())
 
 # Path to venv python
-venv_python_path = "venv/Scripts/python.exe" #maybe?
+venv_python_path = "venv/Scripts/python.exe"
 #venv_python_path = "/Users/dr.work/Dropbox/Code_Dropbox/Brookings/lorae_roundup/roundup/proj_env/bin/python"
 
 # Make a dictionary of roundup_scripts used in the scraper.
+
 roundup_scripts = {
     "BEA": BEA, 
     "BFI": BFI,
@@ -37,7 +39,8 @@ roundup_scripts = {
     "Chicago": Chicago, 
     "ECB": ECB, 
     "IMF": IMF, 
-    "NBER": NBER
+    "NBER": NBER,
+    "NewYork": NewYork 
 }
 
 
