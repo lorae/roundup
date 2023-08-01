@@ -5,6 +5,7 @@
 # LE: 1 Aug 2023
 
 import requests
+from bs4 import BeautifulSoup
 from datetime import datetime
 
 # Function to check if a URL exists by checking the HTTP status code
@@ -47,8 +48,44 @@ def url_conditional(before, after):
         # Add a URL for the current year to the list
         url.append(f"{before}{current_year}{after}")
 
-    # Print out the list of URLs
-    print(url)
     return(url)
 
-url_conditional(before = "https://www.newyorkfed.org/research/staff_reports/index.html#", after = "")
+
+url_list = url_conditional(before = "https://www.newyorkfed.org/research/staff_reports/index.html#", after = "")
+from requests_html import HTMLSession
+from bs4 import BeautifulSoup
+
+session = HTMLSession()
+
+# Your url_list logic goes here...
+url_list = ["https://www.newyorkfed.org/research/staff_reports/index.html#2023"]
+
+for url in url_list:
+    print(url)
+
+    # Send a GET request and render the JavaScript
+    r = session.get(url)
+    r.html.render(sleep=2, keep_page=True, scrolldown=1)
+
+    # Then you can use BeautifulSoup as before to parse the page
+    soup = BeautifulSoup(r.html.html, 'html.parser')
+    elements = soup.select('tr > td > p')
+    print(elements)
+    
+    # Get titles, links, dates, and authors from the main website. Format them as a dictionary.
+    data = {
+        #'Title': [el.select('a').text.strip() for el in elements]
+        #'Link': ["https://www.federalreserve.gov" + el.select_one('h5 > a')['href'] for el in elements],
+        #'Number': [el.select_one('span.badge').text.strip().replace('FEDS ', '') for el in elements],
+        #'Author': [el.select_one('div.authors').text.strip() for el in elements],
+        #'Abstract': [el.select_one('div.collapse > p').text.strip().replace('Abstract: ', '') for el in elements],
+        #'Date': [el.select_one('time')['datetime'] for el in elements]
+    }
+    Title =  [el.select_one('a').text.strip() for el in elements]
+    print(Title)
+    Link = ["https://www.newyorkfed.org" + el.select_one('a')['href'] for el in elements]
+    print(Link)
+    Number = [el.select_one('a')['href'].split("/sr")[1].replace('.html', '') for el in elements]
+    print(Number)
+    Author = [list(el.stripped_strings)[1] for el in elements]
+    print(Author)
