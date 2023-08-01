@@ -1,0 +1,4 @@
+# Ignoring everything in this directory except for the gitignore file itself. This ensures that future users will be able to clone this repo
+# and have this directory in it without worrying about duplicating all the contents (processed data).
+*
+!.gitignore
