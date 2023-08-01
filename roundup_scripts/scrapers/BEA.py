@@ -82,7 +82,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of Chicago, we combine
     # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
     # is completely unique across all papers scraped.
-    df.index = "BEA" + df['Number'].astype(str)
+    df["Source"] = "BEA"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
 
     print(df)

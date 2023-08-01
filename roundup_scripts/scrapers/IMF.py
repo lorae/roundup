@@ -61,7 +61,7 @@ def scrape():
 
     data = [(entry.title,
              entry.link,
-             entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
+             entry.published[:-14]) #creates a tuple containing the title, link, publication date, and summary for the current entry
             for entry in f.entries]
 
     # Create a pandas data frame from the extracted data
@@ -84,7 +84,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of Chicago, we combine
     # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
     # is completely unique across all papers scraped.
-    df.index = "IMF" + df['Number'].astype(str)
+    df["Source"] = "IMF"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
 
     print(df)

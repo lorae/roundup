@@ -21,7 +21,7 @@ def scrape():
              # Link
              entry.link,
              # Date
-             entry.date,
+             entry.date.split("T")[0],
              # Abstract: "description" element contains both author and abstract, so grab the first element
              # after splitting the text by the line break ("<br />")
              entry.description.split("<br />")[1],
@@ -43,7 +43,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of BOE, we combine
     # BOE with the number of the paper (eg. 999) to get an identifier BOE999 that
     # is completely unique across all papers scraped.
-    df.index = "BIS" + df['Number'].astype(str)
+    df["Source"] = "BIS"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
     
     print(df)

@@ -14,13 +14,13 @@ sys.path.append('roundup_scripts/scrapers')
 import BEA
 import BFI
 import BIS
-import Board
 import BOE
-import Chicago
 import ECB
+import Fed_Board
+import Fed_Chicago
+import Fed_NewYork
 import IMF
 import NBER
-import NewYork
 
 print(os.getcwd())
 
@@ -34,17 +34,16 @@ roundup_scripts = {
     "BEA": BEA, 
     "BFI": BFI,
     "BIS": BIS,
-    "Board": Board,
     "BOE": BOE, 
-    "Chicago": Chicago, 
     "ECB": ECB, 
+    "Fed_Board": Fed_Board,
+    "Fed_Chicago": Fed_Chicago, 
+    "Fed_NewYork": Fed_NewYork,
     "IMF": IMF, 
-    "NBER": NBER,
-    "NewYork": NewYork 
+    "NBER": NBER
 }
-
 roundup_scripts = {
-    "BOE": BOE 
+    "ECB": ECB
 }
 
 # Part 1: Scraping Data

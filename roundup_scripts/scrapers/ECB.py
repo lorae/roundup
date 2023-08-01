@@ -25,7 +25,7 @@ def scrape():
              # Link: note that this is for the PDF version, not the landing page
              entry.link,
              # Date
-             entry.published,
+             entry.published[:-15],
              # Abstract
              entry.description,
              # Number: The paper number is contained in the "link" element. Spilt the url by the tilde ("~")
@@ -71,7 +71,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of NBER, we combine
     # NBER with the number of the paper (eg. 999) to get an identifier NBER999 that
     # is completely unique across all papers scraped.
-    df.index = "ECB" + df['Number'].astype(str)
+    df["Source"] = "ECB"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
 
     print(df)

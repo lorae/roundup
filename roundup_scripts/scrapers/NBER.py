@@ -23,8 +23,10 @@ def scrape():
         'Date': [d['displaydate'] for d in data],
         'Abstract': [html.fromstring(requests.get('https://www.nber.org' + d['url']).content)
                           .xpath('/html/body/div[2]/main/div[2]/div[2]/div/p/text()')[0].strip()
-                          for d in data],    
-        'Author': [[re.sub('<[^>]+>', '', author) for author in d['authors']] for d in data],
+                          for d in data], 
+        # Authors come in a list, so they must be looped through and then joined into a string using
+        # the ",".join([Jane Doe, John Doe]) function, which would make a string "Jane Doe, John Doe".
+        'Author': [", ".join([re.sub('<[^>]+>', '', author) for author in d['authors']]) for d in data],
         'Number': [d['url'].split('/papers/w')[1] for d in data]
     }).sort_values(by='Number')
 
@@ -32,7 +34,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of NBER, we combine
     # NBER with the number of the paper (eg. 999) to get an identifier NBER999 that
     # is completely unique across all papers scraped.
-    df.index = "NBER" + df['Number'].astype(str)
+    df["Source"] = "NBER"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
     
     print(df)

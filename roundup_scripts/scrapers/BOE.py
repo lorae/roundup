@@ -87,7 +87,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of BOE, we combine
     # BOE with the number of the paper (eg. 999) to get an identifier BOE999 that
     # is completely unique across all papers scraped.
-    df.index = "BOE" + df['Number'].astype(str)
+    df["Source"] = "BOE"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
     
     print(df)

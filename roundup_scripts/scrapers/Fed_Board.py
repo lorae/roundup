@@ -1,4 +1,4 @@
-### Board.py ###
+### Fed-Board.py ###
 # The purpose of this script is to scrape metadata from the most recent Fed Board working papers. This script uses
 # the Federal Reserve Board of Governors working paper landing page. 
 # Lorae Stojanovic
@@ -37,7 +37,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of Chicago, we combine
     # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
     # is completely unique across all papers scraped.
-    df.index = "BOARD" + df['Number'].astype(str)
+    df["Source"] = "FED-BOARD"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
 
     print(df)

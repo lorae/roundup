@@ -1,3 +1,4 @@
+# Fed-NewYork.py
 # The purpose of this script is to scrape metadata from the most recent New York Fed working papers. This script uses
 # the New York Fed "Staff Reports" landing page and also clicks on individual links to procure XX and YY. 
 # Lorae Stojanovic
@@ -122,7 +123,8 @@ def scrape():
     # we set them to be an identifier that is unique. In the case of Chicago, we combine
     # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
     # is completely unique across all papers scraped.
-    df.index = "NEWYORK" + df['Number'].astype(str)
+    df["Source"] = "FED-NEWYORK"
+    df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
 
     print(df)
