@@ -28,11 +28,26 @@ def compare_historic(df):
     # Save novel data txt
     with open(f'{filepath}.txt','w') as f:
         f.write(str(novel_set))
+        
     # Convert the set to a list and get the relevant rows from the df. Then
     # save as csv using filepath. And use utf-8 encoding to ensure special 
     # characters are captured.
-    df.loc[list(novel_set)].to_csv(f'{filepath}.csv', encoding='utf-8')
+    df_novel = df.loc[list(novel_set)]
+    df_novel.to_csv(f'{filepath}.csv', encoding='utf-8')
     
+    # Adjust the DataFrame before converting it to HTML
+    df_novel = df_novel.reset_index(drop=True)  # Reset the index and drop the old index
+    # Add hyperlinks to the titles
+    df_novel['Title'] = df_novel.apply(lambda row: f'<a href="{row["Link"]}">{row["Title"]}</a>', axis=1)
+    # Drop the 'Link' and 'Number' columns
+    df_novel = df_novel.drop(['Link', 'Number'], axis=1)
+    # Convert to HTML, set escape=False to prevent HTML syntax from being escaped
+    html = df_novel.to_html(escape=False)
+    # Save the HTML representation to a file
+    with open(f'{filepath}.html', 'w', encoding='utf-8') as f:
+        f.write(html)
+
+        
     # Overwrite the historical with the new data
     with open('historic/papers-we-have-seen.txt','w') as f:
         f.write(str(historic_set | recent_set))  # union of the two sets  

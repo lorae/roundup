@@ -43,6 +43,9 @@ roundup_scripts = {
     "NewYork": NewYork 
 }
 
+roundup_scripts = {
+    "BOE": BOE 
+}
 
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")

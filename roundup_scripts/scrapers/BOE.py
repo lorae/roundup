@@ -35,9 +35,10 @@ def get_abstract(df, link):
             break
         potential_abstracts.append(tag.text.strip())
     
-    # Choose the longest potential abstract
+    # Choose the longest potential abstract and remove the leading and trailing character (which is a [ and ])
     abstract = max(potential_abstracts, key=len) if potential_abstracts else None
-    return [abstract]
+
+    return abstract
 
 
 def get_abstracts(df):
@@ -72,7 +73,7 @@ def scrape():
     # Now we grab the data that's easy to get directly from the RSS feed
     data = [(entry.title,
              entry.link,
-             entry.published) #creates a tuple containing the title, link, publication date, and summary for the current entry
+             entry.published[:-14]) #creates a tuple containing the title, link, publication date, and summary for the current entry
             for entry in f.entries #introduce a loop that iterates over each entry in the RSS feed (f.entries)
             if "working paper" in entry.summary] #filters the entries based on whether the phrase "working paper" appears in the summary
 
