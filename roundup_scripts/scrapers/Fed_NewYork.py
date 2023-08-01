@@ -1,6 +1,6 @@
 # Fed-NewYork.py
 # The purpose of this script is to scrape metadata from the most recent New York Fed working papers. This script uses
-# the New York Fed "Staff Reports" landing page and also clicks on individual links to procure XX and YY. 
+# the New York Fed "Staff Reports" landing page and also clicks on individual links to procure abstracts. 
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
 # LE: 1 Aug 2023

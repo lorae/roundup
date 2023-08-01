@@ -14,13 +14,7 @@ from roundup_scripts.compare import compare_historic # User-defined
 # Here, we import all the scripts from roundup_scripts/scrapers
 import sys
 sys.path.append('roundup_scripts/scrapers')
-import BEA
-import BIS
-import BOE
-import Chicago
-import ECB
-import IMF
-import NBER
+
 
 print(os.getcwd())
 
@@ -31,10 +25,10 @@ venv_python_path = "C:/Users/stoja/roundup/venv/Scripts/python.exe"
 
 
 sys.path.append('roundup_scripts/scrapers')
-import NewYork
+import Fed_Atlanta
 
 #print(BEA.scrape())
 
 import subprocess
-subprocess.run([venv_python_path, "roundup_scripts/scrapers/NewYork.py"])
+subprocess.run([venv_python_path, "roundup_scripts/scrapers/Fed_Atlanta.py"])
 

@@ -16,6 +16,7 @@ import BFI
 import BIS
 import BOE
 import ECB
+import Fed_Atlanta
 import Fed_Board
 import Fed_Chicago
 import Fed_NewYork
@@ -36,14 +37,12 @@ roundup_scripts = {
     "BIS": BIS,
     "BOE": BOE, 
     "ECB": ECB, 
+    "Fed_Atlanta": Fed_Atlanta,
     "Fed_Board": Fed_Board,
     "Fed_Chicago": Fed_Chicago, 
     "Fed_NewYork": Fed_NewYork,
     "IMF": IMF, 
     "NBER": NBER
-}
-roundup_scripts = {
-    "ECB": ECB
 }
 
 # Part 1: Scraping Data
