@@ -9,6 +9,7 @@ import pandas as pd
 from roundup_scripts.compare import compare_historic # User-defined
 
 # Here, we import all the scripts from roundup_scripts/scrapers
+'''
 import sys
 sys.path.append('roundup_scripts/scrapers')
 import BEA
@@ -22,6 +23,8 @@ import Fed_Chicago
 import Fed_NewYork
 import IMF
 import NBER
+'''
+from roundup_scripts.scrapers import *
 
 print(os.getcwd())
 
