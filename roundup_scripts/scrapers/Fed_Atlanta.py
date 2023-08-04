@@ -1,4 +1,4 @@
-# Fed-Atlanta.py
+# Fed_Atlanta.py
 # The purpose of this script is to scrape metadata from the most recent Atlanta Fed working papers. This script uses
 # the Atlanta Fed's RSS feed. 
 # Lorae Stojanovic

@@ -1,4 +1,4 @@
-### Fed-Board.py ###
+### Fed_Board.py ###
 # The purpose of this script is to scrape metadata from the most recent Fed Board working papers. This script uses
 # the Federal Reserve Board of Governors working paper landing page. 
 # Lorae Stojanovic
