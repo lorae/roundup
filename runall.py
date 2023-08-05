@@ -1,7 +1,7 @@
 # runall.py
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 27 Jul 2023
+# LE: 4 Aug 2023
 
 import os
 import subprocess
@@ -42,7 +42,8 @@ roundup_scripts = {
     "ECB": ECB, 
     "Fed_Atlanta": Fed_Atlanta,
     "Fed_Board": Fed_Board,
-    "Fed_Chicago": Fed_Chicago, 
+    "Fed_Chicago": Fed_Chicago,
+    "Fed_Cleveland": Fed_Cleveland,
     "Fed_NewYork": Fed_NewYork,
     "IMF": IMF, 
     "NBER": NBER
