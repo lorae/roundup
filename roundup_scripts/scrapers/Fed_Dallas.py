@@ -2,17 +2,23 @@
 # The purpose of this script is to scrape metadata from the most recent Cleveland Fed working papers. This script uses
 # the Cleveland Fed's Working Paper landing page.
 #
-# This code is still buggy. It doesn't always get a clean cut of the abstract or the authors for entries where there is
-# only one p tag (typically it is a revision of a previous paper).
+# This code is not clean. It works, but it is the worst code in this project so far. 
+# In the future, the best way to improve it may be to extract the abstract from the PDF, instead of from the webpage.
+# Because of the irregular formatting of elements (elements corresponding with the same working paper are rarely parent-children
+# and sometimes aren't even siblings), the data is very difficult to scrape. 
+# The dates are extracted from a PDF. But sometimes it reads unnecessary line breaks or spaces, which foil the regex
+# formula designed to recognize dates.
 #
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 4 Aug 2023
+# LE: 7 Aug 2023
 
 import requests
 from bs4 import BeautifulSoup, Comment
 import pandas as pd
 import re
+import PyPDF2
+import io
 
 def get_soup(url): # Used to get the initial soup from the main URL that lists all the papers
     # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
@@ -26,6 +32,20 @@ def get_soup(url): # Used to get the initial soup from the main URL that lists a
     for comment in comments:
         comment.extract()
     return soup
+    
+def extract_date(text):
+    # Remove line breaks
+    cleaned_text = text.replace('\n', ' ')
+
+    # Regex pattern to find the date
+    date_pattern = re.compile(r'(?P<month>January|February|March|April|May|June|July|August|September|October|November|December)( \d{1,2},)? \d{4}')
+    match = date_pattern.search(cleaned_text)
+
+    if match:
+        return match.group()
+    else:
+        return None
+
 
 url = "https://www.dallasfed.org/research/papers"
 
@@ -34,6 +54,103 @@ soup = get_soup(url)
 # First, find all the h3 tags
 h3_tags = soup.find_all('h3')
 
+Title = []
+Link = []
+Date = []
+Abstract = []
+Number = []
+Author = []
+
+count = 0
+for h3 in h3_tags:
+    # Stop processing if we have already processed 20 entries
+    if count >= 30:
+        break
+    
+    # Get the number from the h3 tag
+    number = h3.text
+    # Check if 'Globalization Institute' is in the number string. Replace with "GI"
+    if 'Globalization Institute' in number:
+        number = number.replace('Globalization Institute No. ', 'GI')
+    print(number)
+    Number.append(number)
+    
+    # get the title from the next p tag
+    next_p = h3.find_next_sibling('p')
+    title = next_p.find('strong').text if next_p.find('strong') else None
+    print(title)
+    Title.append(title)
+    # Get the link.
+    # This is a link to the pdf. There are inconsistent landing pages.
+    link = "https://www.dallasfed.org" + next_p.find('a')['href']
+    print(link)
+    Link.append(link)
+    
+    # get the author. It's complicated.
+    # 1. Convert the p tag's contents to a string and find the location where "Abstract:" appears.
+    abstract_location = str(next_p).find('Abstract:')
+    # 2. Extract the substring that precedes "Abstract:".
+    html_before_abstract = str(next_p)[:abstract_location]
+    # 3. Parse the extracted substring using BeautifulSoup.
+    soup_fragment = BeautifulSoup(html_before_abstract, 'html.parser')
+    # 4. Find the last a tag within this fragment.
+    last_a_tag = soup_fragment.find_all('a')[-1]
+    # 5. In the original p tag, find the <br> tag right after the last a tag.
+    br_tag_after_last_a = last_a_tag.find_next('br')
+    # 6. Find the <strong> tag right after the <br> tag.
+    author_tag = br_tag_after_last_a.find_next('strong')
+    # 7. Extract the text.
+    author = author_tag.text
+    print(author)
+    Author.append(author)
+    
+    print(" ")
+    # get the abstract. It's complicated. And with this method, we only get the part of the abstract
+    # that appears in the first p tag.
+    # Find the position where "Abstract:" appears in next_p's contents.
+    abstract_start = str(next_p).find('Abstract:') + len('Abstract:')
+    # Get the substring starting from "Abstract:".
+    substring_after_abstract = str(next_p)[abstract_start:]
+    # Find the position of the first line break (either <br>, <br/>, or </br>) after "Abstract:" in the substring.
+    match = re.search(r'<br ?/?>|</br>', substring_after_abstract)
+    if match:
+        abstract_end = match.start()
+    else:
+        abstract_end = len(substring_after_abstract)  # if no match found, use the full length
+    #abstract_end = substring_after_abstract.find('<br>')
+    # Extract the desired abstract text.
+    abstract_html = substring_after_abstract[:abstract_end].strip()
+    abstract_soup = BeautifulSoup(abstract_html, 'html.parser')
+    abstract = abstract_soup.get_text()
+    print(abstract)
+    Abstract.append(abstract)
+    
+    print(".....")
+    print(" ")
+    count += 1
+    
+# get the date frim PDF file. Complicated.
+#Link = ["https://www.dallasfed.org/-/media/documents/research/papers/2023/wp2305.pdf"]
+# The extract_date function doesn't always work because sometimes the text has weird spaces and line breaks
+# that mess up the regex (e.g. "M ay 5, 2023" instead of "May 5, 2023"). I'd like to also extract the abstract
+# from the PDF but I need to learn how to remove the unnecessary line breaks and spaces first. The above link
+# is an example of a PDF that produces this error.
+for link in Link:
+    # Get the PDF content for the current row
+    pdf_content = requests.get(link).content
+    pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
+    
+    # Extract the text from the second page
+    text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
+    #print(text)
+    date = extract_date(text)
+    print(date)
+    
+
+    
+
+
+'''
 count = 0
 for h3 in h3_tags:
     # Stop processing if we have already processed 20 entries
@@ -56,8 +173,12 @@ for h3 in h3_tags:
     # easiest strategy in this situation.
     abstract = next_p.text.split("Abstract:")[1].strip() #everything appearing after "Abstract:" is the abstract
     abstract = abstract.split("DOI")[0].strip() # cut off anything containing a DOI
-    print(abstract)
-    print(":)")
+    
+    # Remove all the links that follow the abstract
+    for link in next_p.find_all('a'):
+        abstract = abstract.replace(link.text, '').strip()
+        print(abstract)
+        print(":)")
     # The authors always appear after the title and before the "Abstract: " string. But sometimes,
     # there is also an "Appendix" string that has to be stripped away.
     author = next_p.text.split("Abstract:")[0].replace(title, "")
@@ -91,7 +212,7 @@ for h3 in h3_tags:
     print(" ")
         
     count += 1
-
+'''
 
 '''
         print(title)

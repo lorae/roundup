@@ -22,8 +22,18 @@ def compare_historic(df):
     # Use the indices from df to create recent_set
     recent_set = set(df.index)
     
+    '''
+    # MAintenance scripts
+    # Open "papers-we-have-seen.txt" which contains the unique indices of all papers observed to date
+    with open('historic/papers-we-have-seen-test-version.txt','r') as f:
+        # save entries as historic_set
+        temp_set = ast.literal_eval(f.read()) 
+    
     # Generate the novel set
+    #novel_set = recent_set - historic_set
+    historic_set = recent_set - temp_set
     novel_set = recent_set - historic_set
+    '''
     
     # Save novel data txt
     with open(f'{filepath}.txt','w') as f:
