@@ -42,6 +42,7 @@ roundup_scripts = {
     "ECB": ECB, 
     "Fed_Atlanta": Fed_Atlanta,
     "Fed_Board": Fed_Board,
+    "Fed_Board_Notes": Fed_Board_Notes,
     "Fed_Chicago": Fed_Chicago,
     "Fed_Cleveland": Fed_Cleveland,
     "Fed_Dallas": Fed_Dallas,
@@ -49,7 +50,6 @@ roundup_scripts = {
     "IMF": IMF, 
     "NBER": NBER
 }
-
 
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")
