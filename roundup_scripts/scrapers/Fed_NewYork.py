@@ -107,7 +107,7 @@ def scrape():
             abstract = soup.select('div.ts-article-text')[1].text.strip().replace('\n', ' ')
             Abstract.append(abstract)
 
-         
+          
     # Create a dictionary of the six lists, where the keys are the column names.
     data = {'Title': Title,
             'Link': Link,
@@ -127,5 +127,12 @@ def scrape():
     df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
 
+
+    # Convert the set to a list and get the relevant rows from the df. Then
+    # save as csv using filepath. And use utf-8 encoding to ensure special 
+    # characters are captured.
+    df.to_csv('test-pleasedelete.csv', encoding='utf-8')
+        
+        
     print(df)
     return(df)
