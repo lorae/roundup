@@ -1,9 +1,9 @@
 # Fed_Board_Notes.py
 # The purpose of this script is to scrape metadata from the most recent Fed Board "Feds Notes". This script uses
-# the Cleveland Fed's Working Paper landing page.
+# the Federal Reserve Board of Governors "Fed Notes" landing page.
 # Lorae Stojanovic
 #
-# Important note: this script only grabs from the current year right now. It also has to grab from the prebious year.
+# Note: this will scrape from the current year and the year prior if the month == January 
 #
 # Special thanks to ChatGPT for coding assistance in this project.
 # LE: 11 Aug 2023
