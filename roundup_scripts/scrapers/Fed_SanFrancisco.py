@@ -4,7 +4,7 @@
 # Lorae Stojanovic
 #
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 14 Aug 2023
+# LE: 15 Aug 2023
 
 from bs4 import BeautifulSoup
 import time
