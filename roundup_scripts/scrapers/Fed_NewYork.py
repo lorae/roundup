@@ -74,7 +74,7 @@ def scrape():
 
         # Send a GET request and render the JavaScript
         r = session.get(url)
-        r.html.render(sleep=2, keep_page=True, scrolldown=1)
+        r.html.render(sleep=5, keep_page=True, scrolldown=1)
 
         # Use BeautifulSoup to parse the page
         soup = BeautifulSoup(r.html.html, 'html.parser')

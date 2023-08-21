@@ -28,7 +28,7 @@ def get_soup(url):
     # Go to the page
     driver.get(url)
     
-    time.sleep(5)
+    time.sleep(10)
 
     # Get the page source and parse it
     soup = BeautifulSoup(driver.page_source, 'html.parser')
