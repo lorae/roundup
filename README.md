@@ -1,6 +1,6 @@
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics ('Working papers', also known as 'pre-print' papers, present research that has not yet been peer reviewed.) This provides insight into what topics are currently being studied in economics.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present research that has not yet been peer reviewed.) This provides insight into what topics are currently being studied in economics.
 
 The scripts in this project gather six pieces of information on the most recent working papers:
 - Title
