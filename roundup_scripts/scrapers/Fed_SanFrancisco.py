@@ -4,33 +4,36 @@
 # Lorae Stojanovic
 #
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 15 Aug 2023
+# LE: 21 Aug 2023
+
 
 from bs4 import BeautifulSoup
 import time
+import requests
+from requests_html import HTMLSession
 from selenium import webdriver
 import pandas as pd
 
-def get_soup(url): 
-    # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox()
-    # Go to the page
-    driver.get(url)
-    time.sleep(5)
-    # Get the page source and parse it
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    # Don't forget to close the driver
-    driver.quit()
+# Function to check if a URL exists by checking the HTTP status code
+def url_exists(url):
+    response = requests.get(url)
+    return response.status_code == 200
 
-    return soup
 
 def scrape():
     url = "https://www.frbsf.org/economic-research/publications/working-papers/"
+    
+    # This page is java rendered, so we are using the requests_html package.
+    session = HTMLSession()
+    
+    print(f"Scraping {url}")
 
-    # Get the soup
-    soup = get_soup(url)
+    # Send a GET request and render the JavaScript
+    r = session.get(url)
+    r.html.render(sleep=5, keep_page=True, scrolldown=1)
 
-    #print(soup)
+    # Use BeautifulSoup to parse the page
+    soup = BeautifulSoup(r.html.html, 'html.parser')
 
     # We only need the most recent 40 or so working papers... no need to get them all the way back from 2001.
     elements = soup.find_all('article', {'class': 'cf'})[1:30]

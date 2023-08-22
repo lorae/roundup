@@ -53,7 +53,7 @@ roundup_scripts = {
 }
 
 roundup_scripts = {
-    "Fed_SanFrancisco-alt": Fed_SanFrancisco_alt
+    "Fed_SanFrancisco": Fed_SanFrancisco
 }
 
 # Part 1: Scraping Data
