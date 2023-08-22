@@ -1,6 +1,6 @@
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics ('Working papers' are more commonly known as 'pre-print' papers in other professions. They are early in the publication process and are not yet peer reviewed.) This provides insight into what topics are currently being studied in economics.
+The purpose of this project is regularly track and present the most recent working papers in economics ('Working papers', also known as 'pre-print' papers, present research that has not yet been peer reviewed.) This provides insight into what topics are currently being studied in economics.
 
 The scripts in this project gather six pieces of information on the most recent working papers:
 - Title
@@ -33,10 +33,9 @@ Websites that are scraped for data, as of August 2023, are:
 | [International Monetary Fund](https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers)                                      | roundup_scripts/scrapers/IMF.py         | Scrapes RSS feed using Feedparser. Scrapes each individual WP's landing page using Requests and BeautifulSoup            |
 | [National Bureau of Economic Research](https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100)                             | roundup_scripts/scrapers/NBER.py        | Interacts with NBER API and uses requests to parse the results  |
 
-This web scraper was originally developed for use at the Brookings Institution Hutchins Center on Fiscal and Monetary Policy. The center publishes a weekly newsletter called the Hutchins Roundup which summarizes three new economics papers, as well as featuring a chart and recent quote from a famous macroeconomist. 
 
 # Getting Started
-See below for instructions on how to run the project for the first time and any subsequent time. If any step is confusing, please consult 'Python Tutorial v2.docx' for more detailed information.
+See below for instructions on how to run the project for the first time and any subsequent time.
 
 ### If running for the first time:
 
@@ -96,7 +95,7 @@ See below for instructions on how to run the project for the first time and any 
 
     Open in 'historic/weekly_data/YYYY-MM-DD-HHMM.html'. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
 # Project Structure
-All the project contents are contained in a main folder called “roundup”. The schematic below illustrates the basic file structure of the project. 
+The schematic below illustrates the basic file structure of the project. 
 
 ![The file structure of the roundup project](directory_structure.png)
 
@@ -105,7 +104,7 @@ All the project contents are contained in a main folder called “roundup”. Th
 The project directory.
 
 - **runall.py**:  
-  The main script in this project. It loops through each of the scripts in `roundup_scripts/scrapers/XXX.py`, gathering a data frame of all of the new data available from each website. Then it invokes the `compare_historic(df)` function from `roundup_scripts/compare.py` to see which of the scripts have already been seen, and which are truly novel. `Compare_historic(df)` uses data from `papers_we_have_seen.txt` to make this determination. Once `compare_historic(df)` has been successfully executed, new date- and timestamped files are saved as `historic/weekly_data/YYYY-MM-DD-HHMM.csv` and `historic/weekly_data/YYYY-MM-DD-HHMM.txt` which contain the truly novel information.
+  The main script in this project. It loops through each of the scripts in `roundup_scripts/scrapers/XXX.py`, gathering a data frame of all of the new data available from each website. Then it invokes the `compare_historic(df)` function from `roundup_scripts/compare.py` to see which of the working papers have already been seen, and which are truly novel. `compare_historic(df)` uses data from `papers_we_have_seen.txt` to make this determination. Once `compare_historic(df)` has been successfully executed, new date- and time- stamped files are saved as `historic/weekly_data/YYYY-MM-DD-HHMM.csv`, `historic/weekly_data/YYYY-MM-DD-HHMM.txt`, and `historic/weekly_data/YYYY-MM-DD-HHMM.html` which contain metadata (title, authors, abstract, URL, date published, paper number, and unique paper ID number) on only the working papers that have not previously been scraped by runall.py.
 
 - **troubleshooter.py**:  
   A script Lorae is currently using on occasion to troubleshoot her code. Should she instead get vscode so she is not using Notepad++ and IDLE? Probably. But for now, this works.
@@ -126,12 +125,12 @@ The project directory.
   A file that can be considered the main historical record of the project. It tells `compare.py` which papers we have seen and which we haven’t by storing all of the index numbers of the papers that have been seen as a python set. Note that no data is stored here aside from index numbers (this is a memory-saving feature of the repository).
 
     - **weekly_data**:  
-  A folder containing the data that is gathered in every scrape of the project. Files are stored in the format `YYYY-MM-DD-HHMM.csv` and `YYYY-MM-DD-HHMM.txt` for the time the code was run. The `.csv` files contain the actual data that was newly seen in a given run of `runall.py`: the title, abstract, author, number, date, etc. This new data can easily be viewed using Microsoft Excel. But even better for viewing are the `.html` files, which can easily be browsed through. The `.txt` files are intended more for reference. They contain only the ID numbers of the of the novel data contained in the `.csv` and `.html` files.
+  A folder containing the data that is gathered in every scrape of the project. Files are stored in the format `YYYY-MM-DD-HHMM.csv`, `YYYY-MM-DD-HHMM.txt`, and `YYYY-MM-DD-HHMM.html` for the time the code was run. The `.csv` and `.html` files contain the actual data that was newly seen in a given run of `runall.py`. This new data can easily be viewed using Microsoft Excel or using a browser. The `.txt` files are intended more for reference. They contain only the ID numbers of the of the novel data.
 
 - **roundup_scripts**:  
   A folder containing all of the code used in the project, except for `troubleshooter.py` and `runall.py`.
   - **compare.py**:  
-    A script that contains a function used within `runall.py` called `compare_historic(df)`. The function `compare_historical.df` takes the most recently scraped data frame (df) as its only input argument and compares it to the data in `papers_we_have_seen.txt`. It then only “keeps” the papers that are newly seen and saves the new data in `historic/weekly_data/YYYY-MM-DD-HHMM.csv` and `historic/weekly_data/YYYY-MM-DD-HHMM.txt` files.
+    A script that contains a function used within `runall.py` called `compare_historic(df)`. The function `compare_historical.df` takes the most recently scraped data frame (df) as its only input argument and compares it to the data in `papers_we_have_seen.txt`. It then only keeps the papers that are newly seen and saves the new data in `historic/weekly_data/YYYY-MM-DD-HHMM.csv` and `historic/weekly_data/YYYY-MM-DD-HHMM.txt` files.
   - **scrapers**:  
     A folder that contains each of the individual web scrapers that goes to a specific website like BIS, Chicago Fed, NBER, etc. The scripts are named accordingly. All scripts have analogous functions called `scrape()`. These functions scrape their respective websites – so, for example, in `runall.py`, we can import BIS and run `BIS.scrape()` to get the most recent data (formatted as a pandas data frame) from the Bank for International Settlements, or we can import NBER and run `NBER.scrape()` to get a data frame of the most recent data scraped from the National Bureau of Economic Research.
 
