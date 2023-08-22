@@ -4,23 +4,44 @@
 # Lorae Stojanovic
 #
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 15 Aug 2023
+# LE: 21 Aug 2023
 
 from bs4 import BeautifulSoup
-import requests
 from selenium import webdriver
-import pandas as pd
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-def get_soup(url): # Used to get the initial soup from the main URL that lists all the papers
-    # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
-    page = requests.get(url, headers=headers) # Include headers in request
-    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
+def get_soup(url): 
+    # Create a new instance of the Firefox driver
+    driver = webdriver.Firefox()
+
+    # Go to the page
+    driver.get(url)
+
+    # Wait for the button with the specific aria-label and then click it
+    button = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//a[@aria-label="2023 Series"]'))
+    )
+    button.click()
+
+    # If you need to wait for some elements to ensure the page has loaded after clicking, 
+    # you can use WebDriverWait. For now, I'll add a simple wait to check for page complete loading.
+    WebDriverWait(driver, 30).until(
+        lambda driver: driver.execute_script('return document.readyState') == 'complete'
+    )
+
+    # Get the page source and parse it
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    # Don't forget to close the driver
+    driver.quit()
+
     return soup
     
-    
- 
 url = "https://www.bostonfed.org/publications/research-department-working-paper/"
 soup = get_soup(url)
-
 #print(soup)
+
+elements = soup.find_all('div', {'class': 'event-list-item'})
+print(elements)
