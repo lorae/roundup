@@ -13,7 +13,7 @@
 #
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 4 Aug 2023
+# LE: 22 Aug 2023
 
 from selenium import webdriver
 from bs4 import BeautifulSoup
@@ -65,7 +65,7 @@ def scrape():
         
         # Get the number
         # I'd use the link for this, since the links do contain the number, but sometimes the urls
-        # have inconsistencies (e.g. writing 23-16 instead of 2316. I've decided to use a different
+        # have inconsistencies (e.g. writing '23-16' instead of '2316'. I've decided to use a different
         # element to get the number.
         date_number = el.find('div', {'class': 'date-reference'}).get_text().split("|")
         number = date_number[1].replace("WP", "").strip()
