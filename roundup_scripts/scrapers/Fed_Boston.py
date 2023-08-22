@@ -22,4 +22,5 @@ def get_soup(url): # Used to get the initial soup from the main URL that lists a
  
 url = "https://www.bostonfed.org/publications/research-department-working-paper/"
 soup = get_soup(url)
-print(soup)
+
+#print(soup)

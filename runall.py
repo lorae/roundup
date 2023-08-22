@@ -52,6 +52,10 @@ roundup_scripts = {
     "NBER": NBER
 }
 
+roundup_scripts = {
+    "Fed_SanFrancisco-alt": Fed_SanFrancisco_alt
+}
+
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")
 
