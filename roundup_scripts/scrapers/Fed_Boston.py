@@ -59,7 +59,9 @@ def extract_pdf_metadata_from_url(pdf_url):
         metadata = pdf_reader.metadata
 
     return metadata
-    
+
+# Commenting out for now - code runs properly.
+'''
 url = "https://www.bostonfed.org/publications/research-department-working-paper/"
 soup = get_soup(url)
 #print(soup)
@@ -116,14 +118,4 @@ def extract_and_format_moddate(metadata):
 formatted_mod_date = extract_and_format_moddate(metadata)
 print(formatted_mod_date)  # Outputs: Mar 03, 2023
 
-# This webpage is horrible to parse. Not working.
 '''
-for el in elements:
-    authors = el.find('p', {'class': 'pub-card-authors'}).find_all('a', {'ng-href': True})
-    for a in authors:
-        author = a.get_text()
-        print(author)
-#elements = soup.find_all('div', {'class': 'event-list-item'})
-#print(elements)
-'''
-
