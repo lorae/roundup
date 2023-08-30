@@ -39,7 +39,7 @@ roundup_scripts = {
     "BFI": BFI,
     "BIS": BIS,
     "BOE": BOE, 
-    "ECB": ECB, 
+    #"ECB": ECB, 
     "Fed_Atlanta": Fed_Atlanta,
     "Fed_Board": Fed_Board,
     "Fed_Board_Notes": Fed_Board_Notes,

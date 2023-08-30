@@ -37,15 +37,21 @@ def scrape():
 
     # Create a pandas data frame from the extracted data
     df = pd.DataFrame(data, columns=["Title", "Link", "Date", "Abstract", "Number"])
+    print(df)
 
     # Extract data from PDF file: Author
     for i, row in df.iterrows():
+        print("getting paper")
+        print(i)
         # Get the PDF content for the current row
         pdf_content = requests.get(row["Link"]).content
+        print(pdf_content)
         pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
+        print(pdf_reader)
 
         # Extract the text from the first page
         text = pdf_reader.pages[0].extract_text()
+        print(text)
 
         # Clean up the text
             # Remove all instances of "\n" or two or more consecutive whitespace characters
@@ -63,6 +69,9 @@ def scrape():
 
         # Update the "Author" column in the DataFrame
         df.at[i, "Author"] = text
+        print(text)
+        
+    print("Almost done")
 
     # Rearrange the columns of the DataFrame
     df = df[["Title", "Link", "Date", "Abstract", "Author", "Number"]]

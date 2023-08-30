@@ -10,13 +10,20 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import PyPDF2
+import time
 
-def get_soup(url): # Used to get the initial soup
-    # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
-    page = requests.get(url, headers=headers) # Include headers in request
-    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
+session = requests.Session()
+
+def get_soup(url):
+    # Note that they are tricky at BEA. I have to keep changing the headers.
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '\
+           'AppleWebKit/537.36 (KHTML, like Gecko) '\
+           'Chrome/75.0.3770.80 Safari/537.36'}
+    page = session.get(url, headers=headers)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    time.sleep(5)  # Adding a delay of 5 seconds
     return soup
+
 
 def get_number(link): 
     soup = get_soup(link)
@@ -38,6 +45,8 @@ def get_numbers(df):
 # or NBER.scrape(), for instance, knowing that they all do the same thing - namely, navigate to their respective 
 # websites and extract the data.
 def scrape():
+    session = requests.Session()  # Create a session
+    
     # Define the URL
     url = "https://www.bea.gov/research/papers"
 
@@ -67,7 +76,7 @@ def scrape():
 
     # Create a DataFrame from the extracted data
     df = pd.DataFrame(data)
-
+    
     # Next pass where we add abstracts to the df
     df["Number"] = get_numbers(df)
         
