@@ -12,8 +12,6 @@ import pandas as pd
 import PyPDF2
 import time
 
-session = requests.Session()
-
 def get_soup(url):
     # Note that they are tricky at BEA. I have to keep changing the headers.
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '\
