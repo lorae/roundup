@@ -112,9 +112,6 @@ The project directory.
 - **README.md**:  
   The document you are currently reading.
 
-- **Python Tutorial v2.docx**:  
-  A tutorial for new Python users trying to get set up on this project.
-
 - **Requirements.txt**:  
   The necessary file to get your venv set up on this project.
 
