@@ -12,7 +12,7 @@ The scripts in this project gather six pieces of information on the most recent 
 
 The primary script used in this project is runall.py. It cycles through a variety of Python scripts that are each catered to one individual website, such as the National Bureau of Economic Research or the International Monetary Fund. The number of scripts in this project is constantly expanding.
 
-Websites that are scraped for data, as of August 2023, are:
+Websites that are scraped for data, as of September 2023, are:
 
 | Name of website                                                  | Name of script                          | Scraping method |
 |------------------------------------------------------------------|-----------------------------------------|-----------------|
