@@ -35,7 +35,7 @@ venv_python_path = "venv/Scripts/python.exe"
 # Make a dictionary of roundup_scripts used in the scraper.
 
 roundup_scripts = {
-    #"BEA": BEA, 
+    "BEA": BEA, 
     "BFI": BFI,
     "BIS": BIS,
     "BOE": BOE, 
@@ -51,6 +51,7 @@ roundup_scripts = {
     "IMF": IMF, 
     "NBER": NBER
 }
+
 
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")

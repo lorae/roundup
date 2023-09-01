@@ -17,6 +17,10 @@ def get_soup(url):
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) '\
            'AppleWebKit/537.36 (KHTML, like Gecko) '\
            'Chrome/75.0.3770.80 Safari/537.36'}
+           
+    # Create a session
+    session = requests.Session()  
+    
     page = session.get(url, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     time.sleep(5)  # Adding a delay of 5 seconds
@@ -42,9 +46,7 @@ def get_numbers(df):
 # I define the function "scrape" in every webscraper. That way, in runall.py, it is easy to call BOE.scrape()
 # or NBER.scrape(), for instance, knowing that they all do the same thing - namely, navigate to their respective 
 # websites and extract the data.
-def scrape():
-    session = requests.Session()  # Create a session
-    
+def scrape(): 
     # Define the URL
     url = "https://www.bea.gov/research/papers"
 
