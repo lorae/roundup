@@ -20,7 +20,7 @@ Websites that are scraped for data, as of August 2023, are:
 | [Becker Friedman Institute](https://www.bea.gov/research/papers) (at the University of Chicago)       | roundup_scripts/scrapers/BFI.py         | Scrapes main landing page and each individual WP's landing page using Requests and BeautifulSoup         |
 | [Bank for International Settlements](https://www.bis.org/doclist/wppubls.rss?from=&till=&objid=wppubls&page=&paging_length=10&sort_list=date_desc&theme=wppubls&ml=false&mlurl=&emptylisttext=)                                | roundup_scripts/scrapers/BIS.py         | Scrapes RSS feed using Feedparser     |
 | [Bank of England](https://www.bankofengland.co.uk/rss/publications)                                                  | roundup_scripts/scrapers/BOE.py         | Scrapes RSS feed using Feedparser and each individual WP's landing page using Requests and BeautifulSoup           |
-| [European Central Bank](https://www.ecb.europa.eu/rss/wppub.html)                                            | roundup_scripts/scrapers/ECB.py         | Scrapes RSS feed using Feedparser and each individual WP's PDF using PyPDF2 and io          |
+| [European Central Bank](https://www.ecb.europa.eu/pub/research/working-papers/html/index.en.html)                                            | roundup_scripts/scrapers/ECB.py         | Scrapes and parses main landing page using Selenium and BeautifulSoup          |
 | [Federal Reserve Bank of Atlanta](https://www.atlantafed.org/rss/wps)                                 | roundup_scripts/scrapers/Fed_Atlanta.py     | Scrapes RSS feed using Feedparser             |
 | [Federal Reserve Board of Governors](https://www.federalreserve.gov/econres/feds/index.htm) (of the United States): working papers | roundup_scripts/scrapers/Fed_Board.py       | Scrapes main landing page using Requests and BeautifulSoup             |
 | [Federal Reserve Board of Governors](https://www.federalreserve.gov/econres/notes/feds-notes/default.htm) (of the United States): Fed Notes | roundup_scripts/scrapers/Fed_Board_Notes.py       | Scrapes main landing page using Requests and BeautifulSoup             |
@@ -138,8 +138,10 @@ The project directory.
 # To-Do List
 | To-Do | Status |
 |-------|--------|
-| 8/1/2023  ECB is messed up – the author does not always contain the authors (sometimes it has the title of the paper and other information in it).    |    TO-DO    |
+| 8/1/2023  ECB is messed up – the author does not always contain the authors (sometimes it has the title of the paper and other information in it).    |    DONE 9/1/2023    |
 |    8/1/2023 Standardize dates to a certain format so that eventually the data can be filtered by date   |    TO-DO    |
+|    9/1/2023 Make the date for the following scripts more specific: NBER, FED_BOARD, FED_CHICAGO, FED_NEWYORK |    TO-DO    |
+|    9/1/2023 Why is one of the date entries in FED-DALLAS showing "None"? |    TO-DO    |
 |  8/3/2021 Do FRB SF. Note that it is Java rendered and there’s no RSS feed for the working papers.    |   DONE 8/15/2023     |
 |    8/3/2023 Do FRB Boston.  |    IN PROGRESS    |
 |    8/10/2023 Do Fed Notes   |    DONE 8/11/2023    |
