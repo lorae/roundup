@@ -35,11 +35,11 @@ venv_python_path = "venv/Scripts/python.exe"
 # Make a dictionary of roundup_scripts used in the scraper.
 
 roundup_scripts = {
-    "BEA": BEA, 
+    #"BEA": BEA, 
     "BFI": BFI,
     "BIS": BIS,
     "BOE": BOE, 
-    #"ECB": ECB, 
+    "ECB": ECB, 
     "Fed_Atlanta": Fed_Atlanta,
     "Fed_Board": Fed_Board,
     "Fed_Board_Notes": Fed_Board_Notes,
@@ -52,7 +52,6 @@ roundup_scripts = {
     "NBER": NBER
 }
 
-
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")
 
@@ -63,6 +62,7 @@ dfs = []
 total_tasks = len(roundup_scripts)
 for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
     # Append the result of each scrape to the list
+    print(f"running {name}.py ...")
     dfs.append(scraper.scrape())
     print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
 
