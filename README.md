@@ -133,7 +133,8 @@ The project directory.
     A script that contains a function used within `runall.py` called `compare_historic(df)`. The function `compare_historical.df` takes the most recently scraped data frame (df) as its only input argument and compares it to the data in `papers_we_have_seen.txt`. It then only keeps the papers that are newly seen and saves the new data in `historic/weekly_data/YYYY-MM-DD-HHMM.csv` and `historic/weekly_data/YYYY-MM-DD-HHMM.txt` files.
   - **scrapers**:  
     A folder that contains each of the individual web scrapers that goes to a specific website like BIS, Chicago Fed, NBER, etc. The scripts are named accordingly. All scripts have analogous functions called `scrape()`. These functions scrape their respective websites – so, for example, in `runall.py`, we can import BIS and run `BIS.scrape()` to get the most recent data (formatted as a pandas data frame) from the Bank for International Settlements, or we can import NBER and run `NBER.scrape()` to get a data frame of the most recent data scraped from the National Bureau of Economic Research.
-
+  - **scrapers_archive**:  
+    A folder that contains potentially useful archived scraper code.
 
 # To-Do List
 | To-Do | Status |
