@@ -112,7 +112,7 @@ The project directory.
 - **README.md**:  
   The document you are currently reading.
 
-- **Requirements.txt**:  
+- **requirements.txt**:  
   The necessary file to get your venv set up on this project.
 
 - **historic**:  
