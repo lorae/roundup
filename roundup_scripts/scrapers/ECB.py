@@ -3,7 +3,7 @@
 # the ECB website.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 31 August 2023
+# LE: 1 September 2023
 
 from bs4 import Tag, BeautifulSoup
 from selenium import webdriver
