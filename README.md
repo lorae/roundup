@@ -12,7 +12,7 @@ The scripts in this project gather six pieces of information on the most recent 
 
 The primary script used in this project is runall.py. It cycles through a variety of Python scripts that are each catered to one individual website, such as the National Bureau of Economic Research or the International Monetary Fund. The number of scripts in this project is constantly expanding.
 
-Websites that are scraped for data, as of August 2023, are:
+Websites that are scraped for data, as of September 2023, are:
 
 | Name of website                                                  | Name of script                          | Scraping method |
 |------------------------------------------------------------------|-----------------------------------------|-----------------|
@@ -112,10 +112,7 @@ The project directory.
 - **README.md**:  
   The document you are currently reading.
 
-- **Python Tutorial v2.docx**:  
-  A tutorial for new Python users trying to get set up on this project.
-
-- **Requirements.txt**:  
+- **requirements.txt**:  
   The necessary file to get your venv set up on this project.
 
 - **historic**:  
