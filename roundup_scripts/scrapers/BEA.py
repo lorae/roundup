@@ -4,7 +4,7 @@
 # pages corresponding to each individual paper.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
-# LE: 1 September 2023
+# LE: 8 September 2023
 
 import requests
 from bs4 import BeautifulSoup
