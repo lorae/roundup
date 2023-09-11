@@ -29,5 +29,5 @@ venv_python_path = "C:/Users/stoja/roundup/venv/Scripts/python.exe"
 #print(BEA.scrape())
 
 import subprocess
-subprocess.run([venv_python_path, "roundup_scripts/scrapers/ECB_alt.py"])
+subprocess.run([venv_python_path, "roundup_scripts/scrapers/Fed_Boston.py"])
 

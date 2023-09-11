@@ -60,7 +60,18 @@ def extract_pdf_metadata_from_url(pdf_url):
 
     return metadata
 
-# Commenting out for now - code runs properly.
+def extract_and_format_moddate(metadata):
+    # Extract the ModDate string
+    mod_date_str = metadata['/ModDate'][2:16]  # Extracts '20230303104258' from 'D:20230303104258-05'00''
+    
+    # Parse the ModDate string into a datetime object
+    mod_date = datetime.strptime(mod_date_str, '%Y%m%d%H%M%S')
+    
+    # Format the datetime object in the desired format
+    formatted_date = mod_date.strftime('%b %d, %Y')
+    
+    return formatted_date
+
 '''
 url = "https://www.bostonfed.org/publications/research-department-working-paper/"
 soup = get_soup(url)
@@ -70,25 +81,36 @@ elements = soup.find('div', {'class': 'event-list'}).find_all('div', {'class': '
 #print(elements)
 
 for el in elements:
+    # Getting the title from the landing page
     title = el.find('h2', {'class': 'card-title'}).find('a')['title']
     print(title)
     
+    # Getting the link from the landing page
     link = "https://www.bostonfed.org" + el.find('h2', {'class': 'card-title'}).find('a')['href']
     print(link)
     
-    # now we get the rest.
+    # Now we visit the individual entry page to extract authors, abstract, and number.
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
     page = requests.get(link, headers=headers) # Include headers in request
     soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
     
+    # Getting the authors from the individual WP page
     authors = soup.find('div', {'class': 'row working-paper-by-author-row'}).get_text().strip().replace("By ", "")
     print(authors)
     
+    # Getting the abstract from the individual WP page
     abstract = soup.find('div', {'id': 'collapse3'}).get_text().strip()
     print(abstract)
     
+    # Getting the number from the individual WP page
     number = soup.find('p', {'class': 'doi-text'}).get_text().split("No. ")[1].split("https:")[0].replace(".", "").strip()
     print(number)
+    
+    # Now we use the PDF metadata to get the date
+    # But first, we need the link to the pdf.
+    pdf_link = 
+    metadata = extract_pdf_metadata_from_url(link)
+    
 
 
 
@@ -102,20 +124,9 @@ for key, value in metadata.items():
 
 from datetime import datetime
 
-def extract_and_format_moddate(metadata):
-    # Extract the ModDate string
-    mod_date_str = metadata['/ModDate'][2:16]  # Extracts '20230303104258' from 'D:20230303104258-05'00''
-    
-    # Parse the ModDate string into a datetime object
-    mod_date = datetime.strptime(mod_date_str, '%Y%m%d%H%M%S')
-    
-    # Format the datetime object in the desired format
-    formatted_date = mod_date.strftime('%b %d, %Y')
-    
-    return formatted_date
 
-
+print(metadata)
 formatted_mod_date = extract_and_format_moddate(metadata)
-print(formatted_mod_date)  # Outputs: Mar 03, 2023
+print(formatted_mod_date)
 
 '''
