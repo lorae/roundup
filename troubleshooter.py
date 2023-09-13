@@ -29,5 +29,28 @@ venv_python_path = "C:/Users/stoja/roundup/venv/Scripts/python.exe"
 #print(BEA.scrape())
 
 import subprocess
-subprocess.run([venv_python_path, "roundup_scripts/scrapers/Fed_Boston.py"])
+subprocess.run([venv_python_path, "roundup_scripts/scrapers/BFI.py"])
 
+'''
+'''
+
+'''
+from roundup_scripts.scrapers import BFI
+roundup_scripts = {
+    "BFI": BFI
+}
+
+# Part 1: Scraping Data
+print(f"--------------------\n Part 1: Data Scrape \n--------------------")
+
+# Initialize an empty list to hold all data frames
+dfs = []
+
+# Progress bar 
+total_tasks = len(roundup_scripts)
+for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
+        # Append the result of each scrape to the list
+        print(f"running {name}.py ...")
+        dfs.append(scraper.scrape())
+        print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
+'''

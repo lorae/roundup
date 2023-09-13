@@ -18,7 +18,7 @@ import pandas as pd
 def scrape():
     url = "https://bfi.uchicago.edu/working-papers/"
     headers = { # if we do not spoof a browser, the website will not provide data
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+        'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'}
     soup = BeautifulSoup(requests.get(url, headers=headers).content, 'html.parser')
 
     elements = soup.select('div.teaser.teaser--working-paper ')
