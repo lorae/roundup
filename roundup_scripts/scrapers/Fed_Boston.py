@@ -16,7 +16,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import PyPDF2
 from io import BytesIO
 import io
-
+from datetime import datetime
+import pandas as pd
 
 def get_soup(url): 
     # Create a new instance of the Firefox driver
@@ -68,65 +69,80 @@ def extract_and_format_moddate(metadata):
     mod_date = datetime.strptime(mod_date_str, '%Y%m%d%H%M%S')
     
     # Format the datetime object in the desired format
-    formatted_date = mod_date.strftime('%b %d, %Y')
+    formatted_date = mod_date.strftime('%B %d, %Y')
     
     return formatted_date
 
-'''
-url = "https://www.bostonfed.org/publications/research-department-working-paper/"
-soup = get_soup(url)
-#print(soup)
+def scrape():
+    url = "https://www.bostonfed.org/publications/research-department-working-paper/"
+    soup = get_soup(url)
+    #print(soup)
 
-elements = soup.find('div', {'class': 'event-list'}).find_all('div', {'class': 'event-body-wrapper'})
-#print(elements)
+    elements = soup.find('div', {'class': 'event-list'}).find_all('div', {'class': 'event-body-wrapper'})
+    #print(elements)
 
-for el in elements:
-    # Getting the title from the landing page
-    title = el.find('h2', {'class': 'card-title'}).find('a')['title']
-    print(title)
-    
-    # Getting the link from the landing page
-    link = "https://www.bostonfed.org" + el.find('h2', {'class': 'card-title'}).find('a')['href']
-    print(link)
-    
-    # Now we visit the individual entry page to extract authors, abstract, and number.
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
-    page = requests.get(link, headers=headers) # Include headers in request
-    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
-    
-    # Getting the authors from the individual WP page
-    authors = soup.find('div', {'class': 'row working-paper-by-author-row'}).get_text().strip().replace("By ", "")
-    print(authors)
-    
-    # Getting the abstract from the individual WP page
-    abstract = soup.find('div', {'id': 'collapse3'}).get_text().strip()
-    print(abstract)
-    
-    # Getting the number from the individual WP page
-    number = soup.find('p', {'class': 'doi-text'}).get_text().split("No. ")[1].split("https:")[0].replace(".", "").strip()
-    print(number)
-    
-    # Now we use the PDF metadata to get the date
-    # But first, we need the link to the pdf.
-    pdf_link = 
-    metadata = extract_pdf_metadata_from_url(link)
-    
+    # Initialize lists
+    Title = []
+    Link = []
+    Number = []
+    Author = []
+    Date = []
+    Abstract = []
 
 
+    for el in elements:
+        # Getting the title from the landing page
+        title = el.find('h2', {'class': 'card-title'}).find('a')['title'].strip()
+        Title.append(title)
+        
+        # Getting the link from the landing page
+        link = "https://www.bostonfed.org" + el.find('h2', {'class': 'card-title'}).find('a')['href']
+        Link.append(link)
+        
+        # Now we visit the individual entry page to extract authors, abstract, and number.
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
+        page = requests.get(link, headers=headers) # Include headers in request
+        soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
+        
+        # Getting the authors from the individual WP page
+        author = soup.find('div', {'class': 'row working-paper-by-author-row'}).get_text().strip().replace("By ", "")
+        Author.append(author)
+        
+        # Getting the abstract from the individual WP page
+        abstract = soup.find('div', {'id': 'collapse3'}).get_text().strip()
+        Abstract.append(abstract)
+        
+        # Getting the number from the individual WP page
+        number = soup.find('p', {'class': 'doi-text'}).get_text().split("No. ")[1].split("https:")[0].replace(".", "").strip()
+        Number.append(number)
+        
+        # Now we use the PDF metadata to get the date
+        # But first, we need the link to the pdf.
+        pdf_link = "https://www.bostonfed.org" + soup.find('div', {'class': 'row working-paper-download-bttn-row'}).find('a', {'role': 'button'})['href']
+        # Now we download the PDF and access its metadata using the user-defined extract_pdf_metadata_from_url function
+        metadata = extract_pdf_metadata_from_url(pdf_link)
+        # Now we further extract and format the date of last modification
+        date = extract_and_format_moddate(metadata)
+        Date.append(date)
 
+    # Create a dictionary of the six lists, where the keys are the column names.
+    data = {'Title': Title,
+            'Link': Link,
+            'Date': Date,
+            'Author': Author,
+            'Number': Number,
+            'Abstract': Abstract}
 
-# Example usage
-pdf_url = 'https://www.bostonfed.org/-/media/Documents/Workingpapers/PDF/2023/wp2308.pdf'
-metadata = extract_pdf_metadata_from_url(pdf_url)
+    # Create a DataFrame from the dictionary.
+    df = pd.DataFrame(data)
 
-for key, value in metadata.items():
-    print(f"{key}: {value}")
+    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # we set them to be an identifier that is unique. In the case of Chicago, we combine
+    # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+    # is completely unique across all papers scraped.
+    df["Source"] = "FED-BOSTON"
+    df.index = df["Source"] + df['Number'].astype(str)
+    df.index.name = None
 
-from datetime import datetime
-
-
-print(metadata)
-formatted_mod_date = extract_and_format_moddate(metadata)
-print(formatted_mod_date)
-
-'''
+    print(df)
+    return(df)

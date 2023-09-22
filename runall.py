@@ -49,6 +49,7 @@ roundup_scripts = {
     "Fed_Atlanta": Fed_Atlanta,
     "Fed_Board": Fed_Board,
     "Fed_Board_Notes": Fed_Board_Notes,
+    "Fed_Boston": Fed_Boston,
     "Fed_Chicago": Fed_Chicago,
     "Fed_Cleveland": Fed_Cleveland,
     "Fed_Dallas": Fed_Dallas,
