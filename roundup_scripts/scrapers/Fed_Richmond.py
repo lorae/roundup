@@ -1,7 +1,7 @@
 ### Fed_Richmond.py ###
 # The purpose of this script is to scrape metadata from the most recent Richmond Fed working papers. This script uses
-# the Richmond Fed working paper landing page to obtain titles, links, authors and numbers. Dates and abstracts are
-#  found on the specific landing pages corresponding to each individual paper.
+# the Richmond Fed working paper landing page to obtain titles, links, authors and numbers. Abstracts are
+# found on the specific landing pages corresponding to each individual paper. Dates are estimated using PDF metadata.
 # Lorae Stojanovic
 # Special thanks to ChatGPT for coding assistance in this project.
 # LE: 22 Sept 2023
@@ -73,7 +73,7 @@ def scrape():
         Number.append(number)
         
         #Link
-        link = "https://www.richmondfed.org/" + el.find('div', {'class': 'data__title'}).find('a')['href']
+        link = "https://www.richmondfed.org" + el.find('div', {'class': 'data__title'}).find('a')['href']
         Link.append(link)
 
         # Navigate to the individual landing page to get the abstract and the date
@@ -86,7 +86,7 @@ def scrape():
         Abstract.append(abstract)
 
         # Date. We use the PDF metadata to get the date. But first, we need the link to the pdf.
-        pdf_link = "https://www.richmondfed.org/" + soup.find('span', {'class': 'comp-icon-bar__pdf'}).find('a')['href']
+        pdf_link = "https://www.richmondfed.org" + soup.find('span', {'class': 'comp-icon-bar__pdf'}).find('a')['href']
         # Now we download the PDF and access its metadata using the user-defined extract_pdf_metadata_from_url function
         metadata = extract_pdf_metadata_from_url(pdf_link)
         # Now we further extract and format the date of last modification using the user-defined extract_and_format_moddate function
