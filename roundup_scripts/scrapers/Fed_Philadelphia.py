@@ -11,8 +11,10 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import json
 from html import unescape  # Import the unescape function
+import re
 
 #all this code works but I'm commenting out for runall.py to work.
+# all it needs is the date (extracted from pdf metadata?) and to be plugged in.
 '''
 url = "https://www.philadelphiafed.org/search-results/all-work?searchtype=working-papers"
 
@@ -47,8 +49,30 @@ author_lists = [result['attributes']['authors'] for result in json_data['results
 Author = [', '.join([author['name'] for author in author_list]) for author_list in author_lists]
 print(Author)
 
+# Extract number. There are these <em></em> tags all over the place that need to be removed. Then I take off the "WP " part 
+# and keep only the first 5 characters which remain, which contain the number.
+Number = [result['attributes']['excerpt'].replace('<em></em>', '').split('WP ')[1][:5] for result in json_data['results']] 
+print(Number)
+
 # Extract links
 # Note: unescape makes sure that characters like the apostrophe don't appear as &ldquo;, &rdquo;, and &rsquo
 Link = ["https://www.philadelphiafed.org" + result['attributes']['url'] for result in json_data['results']] 
 print(Link)
+
+Abstract = []
+for link in Link:
+    # Now we visit the individual entry page to extract authors, abstract, and number.
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
+    page = requests.get(link, headers=headers) # Include headers in request
+    soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
+
+    # Get the abstract
+    abstract_element = soup.find('div', {'class': 'article-body'})
+    # Extract text from all <p> tags
+    p_tags = abstract_element.find_all('p')
+    abstract = ' '.join(p.text for p in p_tags).strip().replace("\n", "")
+    Abstract.append(abstract)
+
+print(Abstract)
+
 '''
