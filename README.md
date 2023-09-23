@@ -29,6 +29,8 @@ Websites that are scraped for data, as of September 2023, are:
 | [Federal Reserve Bank of Cleveland](https://www.clevelandfed.org/publications/working-paper)                                 | roundup_scripts/scrapers/Fed_Cleveland.py     | Scrapes and parses main landing page using Selenium and BeautifulSoup.   |
 | [Federal Reserve Bank of Dallas](https://www.dallasfed.org/research/papers)                                 | roundup_scripts/scrapers/Fed_Dallas.py     | Scrapes main landing page using requests and BeautifulSoup and also reads data from PDFs using PyPDF and io     |
 | [Federal Reserve Bank of New York](https://www.newyorkfed.org/research/staff_reports/index.html)                                 | roundup_scripts/scrapers/Fed_NewYork.py     | Parses and scrapes main landing page using requests_html and BeautifulSoup. Scrapes each individual WP's landing page using Requests and BeautifulSoup            |
+| [Federal Reserve Bank of Richmond](https://www.richmondfed.org/publications/research/working_papers)                               | roundup_scripts/scrapers/Fed_Richmond.py     | Reads main landing page using Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
+| [Federal Reserve Bank of Philadelphia](https://www.philadelphiafed.org/search-results/all-work?searchtype=working-papers)                               | roundup_scripts/scrapers/Fed_Philadelphia.py     | Reads main landing page using Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
 | [Federal Reserve Bank of San Francisco](https://www.frbsf.org/economic-research/publications/working-papers/)                                | roundup_scripts/scrapers/Fed_SanFrancisco.py     | Parses and scrapes main landing page using requests_html and BeautifulSoup.   |
 | [International Monetary Fund](https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers)                                      | roundup_scripts/scrapers/IMF.py         | Scrapes RSS feed using Feedparser. Scrapes each individual WP's landing page using Requests and BeautifulSoup            |
 | [National Bureau of Economic Research](https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100)                             | roundup_scripts/scrapers/NBER.py        | Interacts with NBER API and uses requests to parse the results  |
@@ -145,5 +147,5 @@ The project directory.
 |    9/1/2023 Make the date for the following scripts more specific: NBER, FED_BOARD, FED_CHICAGO, FED_NEWYORK |    TO-DO    |
 |    9/1/2023 Why is one of the date entries in FED-DALLAS showing "None"? |    TO-DO    |
 |  8/3/2021 Do FRB SF. Note that it is Java rendered and there’s no RSS feed for the working papers.    |   DONE 8/15/2023     |
-|    8/3/2023 Do FRB Boston.  |    IN PROGRESS    |
+|    8/3/2023 Do FRB Boston.  |    DONE 9/22/2023    |
 |    8/10/2023 Do Fed Notes   |    DONE 8/11/2023    |
