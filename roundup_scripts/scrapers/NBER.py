@@ -15,6 +15,7 @@ def scrape():
 
     # Make a GET request to the NBER API and parse the JSON response into a Python dictionary
     data = json.loads(requests.get(URL).text)['results']
+    print(data)
 
     # Create a Pandas DataFrame from the extracted data, with the "Long Abstract" extracted from the paper's URL using XPath
     df = pd.DataFrame({

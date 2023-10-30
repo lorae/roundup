@@ -12,8 +12,9 @@ from datetime import datetime
 
 def compare_historic(df):
     # Create filepath for output files
-    current_date = datetime.now().strftime('%Y-%m-%d-%H%M')
-    filepath = f'historic/weekly_data/{current_date}'
+    current_datetime = datetime.now().strftime('%Y-%m-%d-%H%M') # for output filepath
+    current_date = datetime.now().strftime('%Y-%m-%d') #for est_PubDate column
+    filepath = f'historic/weekly_data/{current_datetime}'
     
     # Open "papers-we-have-seen.txt" which contains the unique indices of all papers observed to date
     with open('historic/papers-we-have-seen.txt','r') as f:
@@ -43,6 +44,7 @@ def compare_historic(df):
     # save as csv using filepath. And use utf-8 encoding to ensure special 
     # characters are captured.
     df_novel = df.loc[list(novel_set)]
+    df_novel['est_PubDate'] = current_date # add a new column that's our best guess on the current date
     df_novel.to_csv(f'{filepath}.csv', encoding='utf-8')
     
     # Adjust the DataFrame before converting it to HTML
