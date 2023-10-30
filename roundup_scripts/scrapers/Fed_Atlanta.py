@@ -30,12 +30,13 @@ def scrape():
         Link.append(entry.link)
         
         # The date is the published entry, minus 11 characters (indicating hour, minute, and time zone)
-        date = entry.published[:-11].strip()
+        date = entry.published[:-10].strip()
         # The last 4 chars of date comprise the year (helper variable)
         year = date[-4:] # year is a helper variable
         mon = date[-8:-5] # mon is a helper variable (3-letter month name)
         month_year = calendar.month_name[list(calendar.month_abbr).index(mon)] + " " + year # helper variable
         Date.append(date)
+        
         
         # The abstract is the 1st element of "description", after splitting it by the name of the month and year
         # the paper was published. This is because the "desciption" also contains author and working 
