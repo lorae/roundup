@@ -4,16 +4,7 @@
 import streamlit as st
 import pandas as pd
 
-margins_css = """
-    <style>
-        .main > div {
-            padding-left: 0rem;
-            padding-right: 0rem;
-        }
-    </style>
-"""
 
-st.markdown(margins_css, unsafe_allow_html=True)
 
 
 # Cache our data
@@ -74,8 +65,16 @@ df_novel = df_novel.reset_index(drop=True)
 
 # Convert to HTML, set escape=False to prevent HTML syntax from being escaped
 html = df_novel.to_html(escape=False)
+# Wrap the HTML in a <div> element with a custom style to control the width
+html_with_style = f"""
+<div style="width:100%; overflow-x: auto; border-collapse: collapse;">
+    {html}
+</div>
+"""
 
-st.markdown(html, unsafe_allow_html=True)
+# Use st.markdown to display the HTML
+st.markdown(html_with_style, unsafe_allow_html=True)
+
 
 
 
