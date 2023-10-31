@@ -48,7 +48,6 @@ st.write(res)
 
 
 options = ["Red", "Blue", "Yellow"]
-selectbox_selection = st.selectbox("Select Color", options)
-st.write(f"Color selected is {selectbox_selection}")
 st.sidebar.header("Sidebar Header")
-st.sidebar.write("Data viewing pane")
+st.sidebar.selectbox("Select Color", options)
+st.write(f"Color selected is {selectbox_selection}")
