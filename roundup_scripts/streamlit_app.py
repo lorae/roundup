@@ -34,12 +34,11 @@ st.markdown(htmltext, unsafe_allow_html=True)
 
 
 
-slider_number = st.slider("Select your Number",
+slider_number = st.slider("Select recency of data as number of days",
                             min_value=1,
                             max_value=30,
                             value=7,
                             step=1)
-st.write(slider_number)
 
 
 
