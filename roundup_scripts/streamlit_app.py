@@ -38,12 +38,31 @@ slider_number = st.slider("Select your Number",
                             step=1)
 st.write(slider_number)
 
-html = f"""
+htmltext = f"""
 <a style='background:{selectbox_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
 """
+st.markdown(htmltext, unsafe_allow_html=True)
+
+# Adjust the DataFrame before converting it to HTML
+df_novel = df.reset_index(drop=True)  # Reset the index and drop the old index
+# Add hyperlinks to the titles
+df_novel['Title'] = df_novel.apply(lambda row: f'<a href="{row["Link"]}">{row["Title"]}</a>', axis=1)
+# Drop the 'Link' and 'Number' columns
+df_novel = df_novel.drop(['Link', 'Number'], axis=1)
+
+# create a custom order for sources
+source_order = ['NBER', 'FED-BOARD', 'FED-BOARD-NOTES', 'FED-ATLANTA', 'FED-BOSTON', 'FED-CHICAGO', 'FED-CLEVELAND', 'FED-DALLAS', 'FED-NEWYORK', 'FED-PHILADELPHIA', 'FED-RICHMOND', 'FED-SANFRANCISCO', 'BEA', 'BFI', 'BIS', 'BOE', 'ECB', 'IMF']
+# convert 'source' column to 'Categorical' data type with custom order
+df_novel['Source'] = pd.Categorical(df_novel['Source'], categories=source_order, ordered=True)
+# sort the dataframe by 'source' column
+df_novel = df_novel.sort_values(by='Source')
+# Reset the index of df_novel after sorting, and drop the old index
+df_novel = df_novel.reset_index(drop=True)
+
+# Convert to HTML, set escape=False to prevent HTML syntax from being escaped
+html = df_novel.to_html(escape=False)
+
 st.markdown(html, unsafe_allow_html=True)
-
-
 
 df, source_options, min_days_ago, max_days_ago = load_df()
 res = df
