@@ -12,18 +12,20 @@ def load_df():
     csv_url = 'https://raw.githubusercontent.com/lorae/roundup/main/historic/papers-we-have-seen-metadata.csv'
     df = pd.read_csv(csv_url)
     source_options = df.Source.unique()
-
-    min_days_ago = 0
-    max_days_ago = 30 
-    
-    return df, source_options, min_days_ago, max_days_ago
+   
+    return df, source_options
 
 def check_rows(column, options):
     return res.loc[res[column].isin(options)]
 
 st.set_page_config(page_title="KRoundup Data Viewer", page_icon="📖", layout="wide")    
 st.header('The latest economics working papers')
-st.subheader('E pluribus unum.')
+st.write("The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers (also known as pre-print papers) in economics.")
+htmltext = f"""
+<a style='background:{selectbox_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
+"""
+st.markdown(htmltext, unsafe_allow_html=True)
+
 
 options = ["Red", "Blue", "Yellow"]
 st.sidebar.header("Sidebar Header")
@@ -33,14 +35,11 @@ st.write(f"Color selected is {selectbox_selection}")
 slider_number = st.slider("Select your Number",
                             min_value=1,
                             max_value=30,
-                            value=5,
+                            value=7,
                             step=1)
 st.write(slider_number)
 
-htmltext = f"""
-<a style='background:{selectbox_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
-"""
-st.markdown(htmltext, unsafe_allow_html=True)
+
 
 df, source_options, min_days_ago, max_days_ago = load_df()
 res = df
