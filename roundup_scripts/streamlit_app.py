@@ -22,7 +22,7 @@ df['Title'] = df.apply(lambda row: f"[{row['Title']}]({row['Link']})", axis=1)
 df = df.drop(columns=['Link'])
 
 # Split the layout into 2 columns
-col1, col2 = st.beta_columns((3,1))
+col1, col2 = st.columns((3,1))
 
 # Display the data table in the left column (col1)
 col1.write(df, use_container_width=True)
