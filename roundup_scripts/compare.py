@@ -47,6 +47,9 @@ def compare_historic(df):
     df_novel['est_PubDate'] = current_date # add a new column that's our best guess on the current date
     df_novel.to_csv(f'{filepath}.csv', encoding='utf-8')
     
+    # Overwrite the historical csv with the new data. Open the CSV file in append mode ('a')
+    df_novel.to_csv('historic/papers-we-have-seen-metadata.csv', mode = 'a', header = False, index = False, encoding='utf-8-sig')
+    
     # Adjust the DataFrame before converting it to HTML
     df_novel = df_novel.reset_index(drop=True)  # Reset the index and drop the old index
     # Add hyperlinks to the titles
@@ -71,7 +74,6 @@ def compare_historic(df):
         f.write(html)
 
         
-    # Overwrite the historical with the new data
+    # Overwrite the historical names with the new data
     with open('historic/papers-we-have-seen.txt','w') as f:
         f.write(str(historic_set | recent_set))  # union of the two sets  
-  
