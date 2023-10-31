@@ -1,11 +1,15 @@
 # This is where the app will be.
+# Helpful tutorial: https://python-textbook.pythonhumanities.com/05_streamlit/05_01_03_displaying_data.html
 
 import streamlit as st
 import pandas as pd
 
 # Title of the app
 st.title('Roundup Data Viewer')
-st.set_page_config(layout="wide")
+st.header('The latest economics working papers')
+st.subheader('This is a subheader.')
+st.write('Displayed are the most recent working paper publications from 18 websites.')
+#st.set_page_config(layout="wide")
 
 # GitHub raw URL of the CSV file
 csv_url = 'https://raw.githubusercontent.com/lorae/roundup/main/historic/papers-we-have-seen-metadata.csv'
@@ -22,16 +26,8 @@ df['Title'] = df.apply(lambda row: f"[{row['Title']}]({row['Link']})", axis=1)
 # Remove the 'Link' column
 df = df.drop(columns=['Link'])
 
-# Split the layout into 2 columns
-col1, col2 = st.columns((3,1))
+# Sidebar
+st.sidebar.header("Sidebar Header")
 
-# Display the data table in the left column (col1)
-col1.write(df, use_container_width=True)
-
-# Drop-down menu for sorting in the right column (col2)
-sort_option = col2.selectbox('Sort by:', options=['None'] + list(df.columns))
-
-# Sort data if an option is selected
-if sort_option != 'None':
-    df = df.sort_values(sort_option)
-    col1.write(df, use_container_width=True)  # Re-display the sorted data table
+# Data frame
+st.dataframe(df, height = 750)
