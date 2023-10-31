@@ -21,16 +21,18 @@ def check_rows(column, options):
 st.set_page_config(page_title="KRoundup Data Viewer", page_icon="📖", layout="wide")    
 st.header('The latest economics working papers')
 st.write("The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers (also known as pre-print papers) in economics.")
+
+options = ["Red", "Blue", "Yellow"]
+st.sidebar.header("Sidebar Header")
+selectbox_selection = st.sidebar.selectbox("Select Color", options)
+st.write(f"Color selected is {selectbox_selection}")
 htmltext = f"""
 <a style='background:{selectbox_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
 """
 st.markdown(htmltext, unsafe_allow_html=True)
 
 
-options = ["Red", "Blue", "Yellow"]
-st.sidebar.header("Sidebar Header")
-selectbox_selection = st.sidebar.selectbox("Select Color", options)
-st.write(f"Color selected is {selectbox_selection}")
+
 
 slider_number = st.slider("Select your Number",
                             min_value=1,
