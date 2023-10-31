@@ -51,4 +51,4 @@ options = ["Red", "Blue", "Yellow"]
 selectbox_selection = st.selectbox("Select Color", options)
 st.write(f"Color selected is {selectbox_selection}")
 st.sidebar.header("Sidebar Header")
-#st.sidebar.[widget]().writ
+st.sidebar.[widget]().write("Data viewing pane")
