@@ -5,6 +5,7 @@ import pandas as pd
 
 # Title of the app
 st.title('Roundup Data Viewer')
+st.set_page_config(layout="wide")
 
 # GitHub raw URL of the CSV file
 csv_url = 'https://raw.githubusercontent.com/lorae/roundup/main/historic/papers-we-have-seen-metadata.csv'
