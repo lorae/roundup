@@ -30,4 +30,4 @@ df = df.drop(columns=['Link'])
 st.sidebar.header("Sidebar Header")
 
 # Data frame
-st.dataframe(df, width = 750)
+st.dataframe(df, width = 2000)
