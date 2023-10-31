@@ -6,7 +6,6 @@ import pandas as pd
 
 
 
-
 # Cache our data
 @st.cache()
 def load_df():
@@ -21,9 +20,8 @@ def load_df():
 
 def check_rows(column, options):
     return res.loc[res[column].isin(options)]
-    
-# Title of the app
-st.title('Roundup Data Viewer')
+
+st.set_page_config(page_title="KRoundup Data Viewer", page_icon="📖", layout="wide")    
 st.header('The latest economics working papers')
 st.subheader('E pluribus unum.')
 
