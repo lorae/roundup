@@ -38,7 +38,7 @@ slider_number = st.slider("Select your Number",
                             step=1)
 st.write(slider_number)
 
-html = """
+html = f"""
 <a style='background:{selectbox_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
 """
 st.markdown(html, unsafe_allow_html=True)
