@@ -43,6 +43,9 @@ htmltext = f"""
 """
 st.markdown(htmltext, unsafe_allow_html=True)
 
+df, source_options, min_days_ago, max_days_ago = load_df()
+res = df
+
 # Adjust the DataFrame before converting it to HTML
 df_novel = df.reset_index(drop=True)  # Reset the index and drop the old index
 # Add hyperlinks to the titles
@@ -64,8 +67,7 @@ html = df_novel.to_html(escape=False)
 
 st.markdown(html, unsafe_allow_html=True)
 
-df, source_options, min_days_ago, max_days_ago = load_df()
-res = df
+
 
 name_query = st.text_input("String match for Name")
 
