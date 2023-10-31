@@ -30,4 +30,8 @@ df = df.drop(columns=['Link'])
 st.sidebar.header("Sidebar Header")
 
 # Data frame
-st.dataframe(df, width = 2000)
+st.dataframe(df, height = 750)
+
+options = ["Red", "Blue", "Yellow"]
+selectbox_selection = st.selectbox("Select Color", options)
+st.write(f"Color selected is {selectbox_selection}")
