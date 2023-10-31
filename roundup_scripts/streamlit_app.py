@@ -7,7 +7,7 @@ import pandas as pd
 # Title of the app
 st.title('Roundup Data Viewer')
 st.header('The latest economics working papers')
-st.subheader('This is a subheader.')
+st.subheader('E pluribus unum.')
 st.write('Displayed are the most recent working paper publications from 18 websites.')
 #st.set_page_config(layout="wide")
 
