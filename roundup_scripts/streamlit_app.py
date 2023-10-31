@@ -38,7 +38,7 @@ name_query = st.text_input("String match for Name")
 if name_query != "":
     res = res.loc[res.Name.str.contains(name_query)]
  
- removal_columns = st.multiselect("Select Columns to Remove", df.columns.tolist())
+removal_columns = st.multiselect("Select Columns to Remove", df.columns.tolist())
 for column in removal_columns:
     res = res.drop(column, axis=1)
 st.write(res)
