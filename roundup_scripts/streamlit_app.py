@@ -4,6 +4,16 @@
 import streamlit as st
 import pandas as pd
 
+margins_css = """
+    <style>
+        .main > div {
+            padding-left: 0rem;
+            padding-right: 0rem;
+        }
+    </style>
+"""
+
+st.markdown(margins_css, unsafe_allow_html=True)
 
 
 # Cache our data
