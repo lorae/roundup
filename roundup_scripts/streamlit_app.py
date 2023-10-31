@@ -25,10 +25,11 @@ def check_rows(column, options):
 st.title('Roundup Data Viewer')
 st.header('The latest economics working papers')
 st.subheader('E pluribus unum.')
-st.markdown(html, unsafe_allow_html=True)
+
 html = """
 <a style='background:yellow'>Displayed are the most recent working paper publications from 18 websites.</a>
 """
+st.markdown(html, unsafe_allow_html=True)
 
 df, source_options, min_days_ago, max_days_ago = load_df()
 res = df
