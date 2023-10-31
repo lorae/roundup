@@ -43,7 +43,7 @@ st.write(slider_number)
 
 
 
-df, source_options, min_days_ago, max_days_ago = load_df()
+df, source_options = load_df()
 res = df
 
 # Adjust the DataFrame before converting it to HTML
