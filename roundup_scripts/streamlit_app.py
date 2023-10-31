@@ -31,6 +31,8 @@ html = """
 """
 st.markdown(html, unsafe_allow_html=True)
 
+
+
 df, source_options, min_days_ago, max_days_ago = load_df()
 res = df
 
@@ -48,3 +50,5 @@ st.write(res)
 options = ["Red", "Blue", "Yellow"]
 selectbox_selection = st.selectbox("Select Color", options)
 st.write(f"Color selected is {selectbox_selection}")
+st.sidebar.header("Sidebar Header")
+#st.sidebar.[widget]().writ
