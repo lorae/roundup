@@ -26,8 +26,20 @@ st.title('Roundup Data Viewer')
 st.header('The latest economics working papers')
 st.subheader('E pluribus unum.')
 
+options = ["Red", "Blue", "Yellow"]
+st.sidebar.header("Sidebar Header")
+selectbox_selection = st.sidebar.selectbox("Select Color", options)
+st.write(f"Color selected is {selectbox_selection}")
+
+slider_number = st.slider("Select your Number",
+                            min_value=1,
+                            max_value=30,
+                            value=5,
+                            step=1)
+st.write(slider_number)
+
 html = """
-<a style='background:yellow'>Displayed are the most recent working paper publications from 18 websites.</a>
+<a style='background:{selectbox_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
 """
 st.markdown(html, unsafe_allow_html=True)
 
@@ -47,7 +59,5 @@ for column in removal_columns:
 st.write(res)
 
 
-options = ["Red", "Blue", "Yellow"]
-st.sidebar.header("Sidebar Header")
-st.sidebar.selectbox("Select Color", options)
-st.write(f"Color selected is {selectbox_selection}")
+
+
