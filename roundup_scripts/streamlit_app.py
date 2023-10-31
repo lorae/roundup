@@ -8,7 +8,10 @@ import pandas as pd
 st.title('Roundup Data Viewer')
 st.header('The latest economics working papers')
 st.subheader('E pluribus unum.')
-st.write('Displayed are the most recent working paper publications from 18 websites.')
+html = """
+<a style='background:yellow'>Displayed are the most recent working paper publications from 18 websites.</a>
+"""
+st.markdown(html, unsafe_allow_html=True)
 #st.set_page_config(layout="wide")
 
 # GitHub raw URL of the CSV file
