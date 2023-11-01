@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 @st.cache()
 def load_df():
     csv_url = 'https://raw.githubusercontent.com/lorae/roundup/main/historic/papers-we-have-seen-metadata.csv'
-    df = pd.read_csv(csv_url)
+    df = pd.read_csv(csv_url, parse_dates=['est_PubDate'])
     source_options = df.Source.unique()
     
     current_date = datetime.now()
