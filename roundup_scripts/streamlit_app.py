@@ -31,7 +31,8 @@ st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="w
 st.header('The latest economics working papers')
 st.write(
     "The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers "
-    "(also known as pre-print papers) in economics."
+    "(also known as pre-print papers) in economics. Currently, 18 websites are scraped for their data, ensuring that robots.txt guidelines "
+    "are abided by."
 )
 
 df, source_options, current_date = load_df()
