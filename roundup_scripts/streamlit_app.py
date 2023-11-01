@@ -1,5 +1,6 @@
 # This is where the app will be.
 # Helpful tutorial: https://python-textbook.pythonhumanities.com/05_streamlit/05_01_03_displaying_data.html
+# table styling: https://www.w3schools.com/html/html_table_styling.asp
 
 import streamlit as st
 import pandas as pd
@@ -12,8 +13,10 @@ def load_df():
     csv_url = 'https://raw.githubusercontent.com/lorae/roundup/main/historic/papers-we-have-seen-metadata.csv'
     df = pd.read_csv(csv_url)
     source_options = df.Source.unique()
+    
+    current_date = datetime.now()
    
-    return df, source_options
+    return df, source_options, current_date
 
 def check_rows(column, options):
     return res.loc[res[column].isin(options)]
@@ -41,8 +44,7 @@ slider_number = st.slider("Select recency of data as number of days",
                             step=1)
 
 
-
-df, source_options = load_df()
+df, source_options, current_date = load_df()
 res = df
 
 # Adjust the DataFrame before converting it to HTML
