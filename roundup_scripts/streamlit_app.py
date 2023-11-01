@@ -55,7 +55,7 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             step=1)
 # WEB SCRAPER STATUS
 st.sidebar.header("Web Scraper Status")
-with st.sidebar.beta_expander("Show/Hide Status", expanded=False):  # This line creates a collapsible section
+with st.sidebar.expander("Show/Hide Status", expanded=False):  # This line creates a collapsible section
     # Convert DataFrame to HTML, remove index and borders
     html_status_table = status_df.to_html(index=False, border=0)
     # Display HTML table using st.markdown
