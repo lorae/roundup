@@ -36,7 +36,7 @@ color_options = ["Red", "Orange", "Green", "Blue", "Violet", "Pink", "Yellow"]
 # Color selection
 color_selection = st.sidebar.selectbox("Select Color", color_options)
 # Source selection
-source_selection = st.sidebar.selectbox("Select Source", source_options)
+source_selection = st.sidebar.multiselect("Select Source(s)", source_options_with_all, default=[all_sources_option])
 st.write(f"Color selected is {color_selection}")
 # Recency selection
 slider_selection = st.sidebar.slider("How many days of data would you like to view?",
