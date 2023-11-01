@@ -29,7 +29,10 @@ def check_rows(column, options):
 
 st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="wide")    
 st.header('The latest economics working papers')
-st.write("The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers (also known as pre-print papers) in economics.")
+st.write(
+    "The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers "
+    "(also known as pre-print papers) in economics."
+)
 
 df, source_options, current_date = load_df()
 res = df
