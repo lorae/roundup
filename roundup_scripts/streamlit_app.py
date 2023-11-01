@@ -36,7 +36,7 @@ st.markdown(htmltext, unsafe_allow_html=True)
 
 
 
-slider_number = st.slider("How many days of data would you like to view?",
+slider_number = st.sidebar.slider("How many days of data would you like to view?",
                             min_value=1,
                             max_value=30,
                             value=7,
