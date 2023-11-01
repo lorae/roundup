@@ -75,16 +75,20 @@ html = df_novel.to_html(escape=False)
 # Define custom CSS style
 css_style = """
 <style>
-    table {
+    table.customTable {
         display: inline-block;
     }
-    td {
+    table.customTable td {
         word-wrap: break-word;
         word-break: break-all;
-        max-width: 150px;  # You can set this to a value that suits your layout
+    }
+    table.customTable td:nth-child(3) {  # Assuming 'Abstract' is the 3rd column
+        font-size: 10px;  # Set to desired font size
+        max-width: 400px;  # Set to desired column width
     }
 </style>
 """
+
 
 # Apply custom CSS style
 st.markdown(css_style, unsafe_allow_html=True)
