@@ -29,8 +29,10 @@ res = df
 
 ### Sidebar
 st.sidebar.header("Options")
-# Color selection
+# Configuring options
+source_options_with_all = "All" + list(source_options)
 color_options = ["Red", "Orange", "Green", "Blue", "Violet", "Pink", "Yellow"]
+# Color selection
 color_selection = st.sidebar.selectbox("Select Color", color_options)
 # Source selection
 source_selection = st.sidebar.selectbox("Select Source", source_options)
@@ -53,9 +55,14 @@ st.markdown(htmltext, unsafe_allow_html=True)
 # Get the minimum date based on the slider input
 min_date = current_date - timedelta(days=slider_selection)
 
-# Apply the recency and source filters simultaneously
-df_filtered = df[(df['est_PubDate'] >= min_date) &
- (df['Source'] == source_selection)]
+# Apply user selected options
+# Check if "All" is selected or individual sources are selected
+if all_sources_option in source_selection:
+    # If "All" is selected, use the whole DataFrame
+    df_novel = df[df['est_PubDate'] >= min_date]
+else:
+    # Otherwise, filter by the selected sources
+    df_novel = df[(df['est_PubDate'] >= min_date) & (df['Source'].isin(source_selection))]
 
 
 # Adjust the DataFrame before converting it to HTML
