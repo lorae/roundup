@@ -19,7 +19,7 @@ def load_df():
 
 def load_status():
     txt_url = 'https://raw.githubusercontent.com/lorae/roundup/main/scraper_status.txt'
-    status_df = pd.readlines(txt_url)
+    status_df = pd.read_csv(txt_url, names=["Source", "Status"])
     
     return status_df
     
