@@ -54,7 +54,7 @@ st.markdown(htmltext, unsafe_allow_html=True)
 
 
 # Get the minimum date based on the slider input
-min_date = current_date + 1 - timedelta(days=slider_selection)
+min_date = current_date - timedelta(days=(slider_selection-1))
 
 # Apply user selected options
 # Check if "All" is selected or individual sources are selected
