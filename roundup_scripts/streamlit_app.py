@@ -31,8 +31,8 @@ st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="w
 st.header('The latest economics working papers')
 st.write(
     "The following table contains an aggregation of titles, authors, abstracts, source, dates of publication of economics working papers "
-    "that have been aggregated from 18 different websites. Working papers, also known as pre-print papers, are academic articles that have "
-    "not yet been vetted by the peer-review process at an academic journal."
+    "from 18 different websites. Working papers, also known as pre-print papers, are academic articles that have not yet been vetted by the"
+    "peer-review process at a journal."
 )
 
 df, source_options, current_date = load_df()
