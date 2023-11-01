@@ -55,7 +55,7 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             step=1)
 # WEB SCRAPER STATUS
 st.sidebar.header("Web Scraper Status")
-st.sidebar.table(status_df)
+#st.sidebar.table(status_df)
 
 ### Main
 htmltext = f"""
