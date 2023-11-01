@@ -24,6 +24,10 @@ st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="w
 st.header('The latest economics working papers')
 st.write("The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers (also known as pre-print papers) in economics.")
 
+df, source_options, current_date = load_df()
+res = df
+
+
 options = ["Red", "Blue", "Yellow"]
 st.sidebar.header("Options")
 color_selection = st.sidebar.selectbox("Select Color", options)
@@ -44,8 +48,6 @@ slider_number = st.sidebar.slider("How many days of data would you like to view?
                             step=1)
 
 
-df, source_options, current_date = load_df()
-res = df
 
 
 
