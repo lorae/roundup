@@ -45,9 +45,7 @@ st.sidebar.header("Options")
 # Configuring options
 all_sources_option = "All"
 source_options_with_all = [all_sources_option] + list(source_options)
-color_options = ["Red", "Orange", "Green", "Blue", "Violet", "Pink", "Yellow"]
 # Color selection
-color_selection = st.sidebar.selectbox("Select Color", color_options)
 # Source selection
 source_selection = st.sidebar.multiselect("Select Source(s)", source_options_with_all, default=[all_sources_option])
 st.write(f"Color selected is {color_selection}")
@@ -66,10 +64,6 @@ with st.sidebar.expander("Show/Hide Status", expanded=False):  # This line creat
     st.markdown(html_status_table, unsafe_allow_html=True)
 
 ### Main
-htmltext = f"""
-<a style='background:{color_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
-"""
-st.markdown(htmltext, unsafe_allow_html=True)
 
 
 
