@@ -55,7 +55,7 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             step=1)
 # WEB SCRAPER STATUS
 st.sidebar.header("Web Scraper Status")
-#st.sidebar.table(status_df)
+st.sidebar.table(status_df)
 
 ### Main
 htmltext = f"""
@@ -119,20 +119,4 @@ st.markdown(css_style, unsafe_allow_html=True)
 
 # Convert DataFrame to HTML and display
 st.markdown(html, unsafe_allow_html=True)
-
-
-
-
-name_query = st.text_input("String match for Name")
-
-if name_query != "":
-    res = res.loc[res.Name.str.contains(name_query)]
- 
-removal_columns = st.multiselect("Select Columns to Remove", df.columns.tolist())
-for column in removal_columns:
-    res = res.drop(column, axis=1)
-st.write(res)
-
-
-
 
