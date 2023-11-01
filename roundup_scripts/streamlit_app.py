@@ -86,8 +86,6 @@ css_style = """
 </style>
 """
 
-# Use st.markdown to display the HTML
-st.markdown(html_with_style, unsafe_allow_html=True)
 # Apply custom CSS style
 st.markdown(css_style, unsafe_allow_html=True)
 
