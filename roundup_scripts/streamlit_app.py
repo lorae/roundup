@@ -58,7 +58,7 @@ min_date = current_date - timedelta(days=slider_selection)
 
 # Apply user selected options
 # Check if "All" is selected or individual sources are selected
-if "All" in source_selection:
+if all_sources_option in source_selection:
     # If "All" is selected, use the whole DataFrame
     df_novel = df[df['est_PubDate'] >= min_date]
 else:
