@@ -48,7 +48,6 @@ source_options_with_all = [all_sources_option] + list(source_options)
 # Color selection
 # Source selection
 source_selection = st.sidebar.multiselect("Select Source(s)", source_options_with_all, default=[all_sources_option])
-st.write(f"Color selected is {color_selection}")
 # Recency selection
 slider_selection = st.sidebar.slider("How many days of data would you like to view?",
                             min_value=1,
