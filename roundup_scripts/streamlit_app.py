@@ -90,7 +90,7 @@ css_style = """
 st.markdown(css_style, unsafe_allow_html=True)
 
 # Convert DataFrame to HTML and display
-st.markdown(df.to_html(index=False, escape=False), unsafe_allow_html=True)
+st.markdown(html, unsafe_allow_html=True)
 
 
 
