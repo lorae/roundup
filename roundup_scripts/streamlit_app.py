@@ -30,7 +30,8 @@ res = df
 ### Sidebar
 st.sidebar.header("Options")
 # Configuring options
-source_options_with_all = ["All"] + list(source_options)
+all_sources_option = "All"
+source_options_with_all = [all_sources_option] + list(source_options)
 color_options = ["Red", "Orange", "Green", "Blue", "Violet", "Pink", "Yellow"]
 # Color selection
 color_selection = st.sidebar.selectbox("Select Color", color_options)
@@ -57,7 +58,7 @@ min_date = current_date - timedelta(days=slider_selection)
 
 # Apply user selected options
 # Check if "All" is selected or individual sources are selected
-if ["All"] in source_selection:
+if "All" in source_selection:
     # If "All" is selected, use the whole DataFrame
     df_novel = df[df['est_PubDate'] >= min_date]
 else:
