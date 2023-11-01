@@ -30,7 +30,7 @@ res = df
 ### Sidebar
 st.sidebar.header("Options")
 # Configuring options
-source_options_with_all = "All" + list(source_options)
+source_options_with_all = ["All"] + list(source_options)
 color_options = ["Red", "Orange", "Green", "Blue", "Violet", "Pink", "Yellow"]
 # Color selection
 color_selection = st.sidebar.selectbox("Select Color", color_options)
