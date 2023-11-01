@@ -25,11 +25,12 @@ st.header('The latest economics working papers')
 st.write("The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers (also known as pre-print papers) in economics.")
 
 options = ["Red", "Blue", "Yellow"]
-st.sidebar.header("Sidebar Header")
-selectbox_selection = st.sidebar.selectbox("Select Color", options)
-st.write(f"Color selected is {selectbox_selection}")
+st.sidebar.header("Options")
+color_selection = st.sidebar.selectbox("Select Color", options)
+source_selection = st.sidebar.selectbox("Select Source", source_options)
+st.write(f"Color selected is {color_selection}")
 htmltext = f"""
-<a style='background:{selectbox_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
+<a style='background:{color_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
 """
 st.markdown(htmltext, unsafe_allow_html=True)
 
