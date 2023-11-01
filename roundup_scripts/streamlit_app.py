@@ -46,6 +46,28 @@ slider_number = st.slider("How many days of data would you like to view?",
 df, source_options, current_date = load_df()
 res = df
 
+
+# Define custom CSS style
+css_style = """
+<style>
+    table {
+        display: inline-block;
+    }
+    td {
+        word-wrap: break-word;
+        word-break: break-all;
+        max-width: 150px;  # You can set this to a value that suits your layout
+    }
+</style>
+"""
+
+# Apply custom CSS style
+st.markdown(css_style, unsafe_allow_html=True)
+
+# Convert DataFrame to HTML and display
+st.markdown(df.to_html(index=False, escape=False), unsafe_allow_html=True)
+
+
 # Get the minimum date based on the slider input
 min_date = current_date - timedelta(days=slider_number)
 
