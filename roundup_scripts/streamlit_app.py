@@ -17,6 +17,13 @@ def load_df():
    
     return df, source_options, current_date
 
+def load_status():
+    txt_url = 'https://raw.githubusercontent.com/lorae/roundup/main/scraper_status.txt'
+    status_df = pd.readlines(txt_url)
+    
+    return status_df
+    
+    
 def check_rows(column, options):
     return res.loc[res[column].isin(options)]
 
@@ -26,6 +33,7 @@ st.write("The following metadata includes titles, authors, abstracts, source, an
 
 df, source_options, current_date = load_df()
 res = df
+status_df = load_status()
 
 ### Sidebar
 # OPTIONS
@@ -47,6 +55,7 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             step=1)
 # WEB SCRAPER STATUS
 st.sidebar.header("Web Scraper Status")
+st.sidebar.table(status_df)
 
 ### Main
 htmltext = f"""
