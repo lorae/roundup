@@ -4,8 +4,7 @@
 
 import streamlit as st
 import pandas as pd
-
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Cache our data
 @st.cache()
@@ -21,7 +20,7 @@ def load_df():
 def check_rows(column, options):
     return res.loc[res[column].isin(options)]
 
-st.set_page_config(page_title="KRoundup Data Viewer", page_icon="📖", layout="wide")    
+st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="wide")    
 st.header('The latest economics working papers')
 st.write("The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers (also known as pre-print papers) in economics.")
 
@@ -37,7 +36,7 @@ st.markdown(htmltext, unsafe_allow_html=True)
 
 
 
-slider_number = st.slider("Select recency of data as number of days",
+slider_number = st.slider("How many days of data would you like to view?",
                             min_value=1,
                             max_value=30,
                             value=7,
@@ -46,6 +45,12 @@ slider_number = st.slider("Select recency of data as number of days",
 
 df, source_options, current_date = load_df()
 res = df
+
+# Get the minimum date based on the slider input
+min_date = current_date - timedelta(days=slider_number)
+
+# Apply the filter to your DataFrame
+df_novel = df[df['est_PubDate'] >= min_date]
 
 # Adjust the DataFrame before converting it to HTML
 df_novel = df.reset_index(drop=True)  # Reset the index and drop the old index
