@@ -28,6 +28,7 @@ df, source_options, current_date = load_df()
 res = df
 
 ### Sidebar
+# OPTIONS
 st.sidebar.header("Options")
 # Configuring options
 all_sources_option = "All"
@@ -44,7 +45,9 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             max_value=30,
                             value=7,
                             step=1)
-                            
+# WEB SCRAPER STATUS
+st.sidebar.header("Web Scraper Status")
+
 ### Main
 htmltext = f"""
 <a style='background:{color_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
