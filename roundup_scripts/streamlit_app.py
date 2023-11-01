@@ -54,12 +54,12 @@ st.markdown(htmltext, unsafe_allow_html=True)
 min_date = current_date - timedelta(days=slider_selection)
 
 # Apply the recency and source filters simultaneously
-df_novel = df[(df['est_PubDate'] >= min_date) &
+df_filtered = df[(df['est_PubDate'] >= min_date) &
  (df['Source'] == source_selection)]
 
 
 # Adjust the DataFrame before converting it to HTML
-df_novel = df.reset_index(drop=True)  # Reset the index and drop the old index
+df_novel = df_filtered.reset_index(drop=True)  # Reset the index and drop the old index
 # Add hyperlinks to the titles
 df_novel['Title'] = df_novel.apply(lambda row: f'<a href="{row["Link"]}">{row["Title"]}</a>', axis=1)
 # Drop the 'Link' and 'Number' columns
