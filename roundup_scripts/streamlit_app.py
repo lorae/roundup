@@ -83,8 +83,8 @@ css_style = """
         word-break: break-all;
     }
     table.customTable td:nth-child(3) {  # Assuming 'Abstract' is the 3rd column
-        font-size: 8px;  # Set to desired font size
-        max-width: 400px;  # Set to desired column width
+        font-size: 6px;  # Set to desired font size
+        max-width: 500px;  # Set to desired column width
     }
 </style>
 """
