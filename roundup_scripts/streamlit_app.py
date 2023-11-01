@@ -53,10 +53,10 @@ st.markdown(htmltext, unsafe_allow_html=True)
 # Get the minimum date based on the slider input
 min_date = current_date - timedelta(days=slider_selection)
 
-# Apply the recency filter
-df_novel = df[df['est_PubDate'] >= min_date]
-# Apply the source filter 
-df_novel = df[df['Source'] == source_selection]
+# Apply the recency and source filters simultaneously
+df_novel = df[(df['est_PubDate'] >= min_date) &
+ (df['Source'] == source_selection)]
+
 
 # Adjust the DataFrame before converting it to HTML
 df_novel = df.reset_index(drop=True)  # Reset the index and drop the old index
