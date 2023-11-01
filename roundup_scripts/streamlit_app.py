@@ -30,9 +30,9 @@ def check_rows(column, options):
 st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="wide")    
 st.header('The latest economics working papers')
 st.write(
-    "The following metadata includes titles, authors, abstracts, source, and best estimate date of publication of various working papers "
-    "(also known as pre-print papers) in economics. Currently, 18 websites are scraped for their data, ensuring that robots.txt guidelines "
-    "are abided by."
+    "The following table contains an aggregation of titles, authors, abstracts, source, dates of publication of economics working papers"
+    "aggregated from 18 different websites. Working papers, also known as pre-print papers, are articles that have not gone through"
+    "the peer-review process of an academic journal yet."
 )
 
 df, source_options, current_date = load_df()
