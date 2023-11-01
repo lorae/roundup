@@ -27,12 +27,22 @@ st.write("The following metadata includes titles, authors, abstracts, source, an
 df, source_options, current_date = load_df()
 res = df
 
-
-options = ["Red", "Blue", "Yellow"]
+### Sidebar
 st.sidebar.header("Options")
-color_selection = st.sidebar.selectbox("Select Color", options)
+# Color selection
+color_options = ["Red", "Orange", "Green", "Blue", "Violet", "Pink", "Yellow"]
+color_selection = st.sidebar.selectbox("Select Color", color_options)
+# Source selection
 source_selection = st.sidebar.selectbox("Select Source", source_options)
 st.write(f"Color selected is {color_selection}")
+# Recency selection
+slider_selection = st.sidebar.slider("How many days of data would you like to view?",
+                            min_value=1,
+                            max_value=30,
+                            value=7,
+                            step=1)
+                            
+### Main
 htmltext = f"""
 <a style='background:{color_selection}'>Displayed are the most recent working paper publications from 18 websites.</a>
 """
@@ -40,22 +50,13 @@ st.markdown(htmltext, unsafe_allow_html=True)
 
 
 
-
-slider_number = st.sidebar.slider("How many days of data would you like to view?",
-                            min_value=1,
-                            max_value=30,
-                            value=7,
-                            step=1)
-
-
-
-
-
 # Get the minimum date based on the slider input
-min_date = current_date - timedelta(days=slider_number)
+min_date = current_date - timedelta(days=slider_selection)
 
-# Apply the filter to your DataFrame
+# Apply the recency filter
 df_novel = df[df['est_PubDate'] >= min_date]
+# Apply the source filter 
+df_novel = df[df['Source'] == source_selection]
 
 # Adjust the DataFrame before converting it to HTML
 df_novel = df.reset_index(drop=True)  # Reset the index and drop the old index
