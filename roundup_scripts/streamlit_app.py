@@ -60,10 +60,10 @@ min_date = current_date - timedelta(days=slider_selection)
 # Check if "All" is selected or individual sources are selected
 if all_sources_option in source_selection:
     # If "All" is selected, use the whole DataFrame
-    df_novel = df[df['est_PubDate'] >= min_date]
+    df_filtered = df[df['est_PubDate'] >= min_date]
 else:
     # Otherwise, filter by the selected sources
-    df_novel = df[(df['est_PubDate'] >= min_date) & (df['Source'].isin(source_selection))]
+    df_filtered = df[(df['est_PubDate'] >= min_date) & (df['Source'].isin(source_selection))]
 
 
 # Adjust the DataFrame before converting it to HTML
