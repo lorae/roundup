@@ -7,7 +7,6 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 # Cache our data
-@st.cache()
 def load_df():
     csv_url = 'https://raw.githubusercontent.com/lorae/roundup/main/historic/papers-we-have-seen-metadata.csv'
     df = pd.read_csv(csv_url, parse_dates=['est_PubDate'])
