@@ -39,7 +39,7 @@ df, source_options, current_date = load_df()
 res = df
 status_df = load_status()
 
-st.write(df['est_PubDate'].head(), df['est_PubDate'].dtype)
+st.write(df['est_PubDate'], df['est_PubDate'].dtype)
 
 ### Sidebar
 # OPTIONS
