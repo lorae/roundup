@@ -13,7 +13,7 @@ from datetime import datetime
 def compare_historic(df):
     # Create filepath for output files
     current_datetime = datetime.now().strftime('%Y-%m-%d-%H%M') # for output filepath
-    current_date = datetime.now().strftime('%Y/%m/%d') #for est_PubDate column
+    current_date = datetime.now().strftime('%m/%d/%Y') #for est_PubDate column
     filepath = f'historic/weekly_data/{current_datetime}'
     
     # Open "papers-we-have-seen.txt" which contains the unique indices of all papers observed to date
