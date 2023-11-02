@@ -13,7 +13,7 @@ from datetime import datetime
 def compare_historic(df):
     # Create filepath for output files
     current_datetime = datetime.now().strftime('%Y-%m-%d-%H%M') # for output filepath
-    current_date = datetime.now().strftime('%Y-%m-%d') #for est_PubDate column
+    current_date = datetime.now().strftime('%Y/%m/%d') #for est_PubDate column
     filepath = f'historic/weekly_data/{current_datetime}'
     
     # Open "papers-we-have-seen.txt" which contains the unique indices of all papers observed to date
@@ -47,7 +47,11 @@ def compare_historic(df):
     df_novel['est_PubDate'] = current_date # add a new column that's our best guess on the current date
     df_novel.to_csv(f'{filepath}.csv', encoding='utf-8')
     
-    # Overwrite the historical csv with the new data. Open the CSV file in append mode ('a')
+    # Prior to appending the new data, we want to ensure the order of the columns is matched.
+    existing_df = pd.read_csv('historic/papers-we-have-seen-metadata.csv')
+    column_order = existing_df.columns.tolist()
+    df_novel = df_novel[column_order]
+    # Append the new data to the historical data. Open the CSV file in append mode ('a')
     df_novel.to_csv('historic/papers-we-have-seen-metadata.csv', mode = 'a', header = False, index = False, encoding='utf-8-sig')
     
     # Adjust the DataFrame before converting it to HTML
