@@ -28,6 +28,8 @@ def check_rows(column, options):
 
 st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="wide")    
 st.header('The latest economics working papers')
+st.write(df['est_PubDate'].head(), df['est_PubDate'].dtype)
+
 st.write(
     "The following table contains an aggregation of titles, authors, abstracts, source, dates of publication of economics working papers "
     "from 18 different websites. Working papers, also known as pre-print papers, are academic articles that have not yet been vetted by the"
