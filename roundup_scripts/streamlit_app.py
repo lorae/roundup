@@ -32,7 +32,8 @@ st.header('The latest economics working papers')
 st.write(
     "The following table contains an aggregation of titles, authors, abstracts, source, dates of publication of economics working papers "
     "from 18 different websites. Working papers, also known as pre-print papers, are articles that have not yet been vetted by the "
-    "peer-review process at an academic journal."
+    "peer-review process at an academic journal.\n"
+    "See the source code and replicate the project at: https://github.com/lorae/roundup"
 )
 
 df, source_options, current_date = load_df()
