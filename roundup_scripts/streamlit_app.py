@@ -31,7 +31,7 @@ st.header('The latest economics working papers')
 
 st.write(
     "The following table contains an aggregation of titles, authors, abstracts, source, dates of publication of economics working papers "
-    "from 18 different websites. Working papers, also known as pre-print papers, are academic articles that have not yet been vetted by the"
+    "from 18 different websites. Working papers, also known as pre-print papers, are academic articles that have not yet been vetted by the "
     "peer-review process at a journal."
 )
 
@@ -67,7 +67,7 @@ with st.sidebar.expander("Show/Hide Status", expanded=False):  # This line creat
 
 
 # Get the minimum date based on the slider input
-min_date = current_date - timedelta(days=(slider_selection+1))
+min_date = current_date - timedelta(days=(slider_selection))
 
 # Apply user selected options
 # Check if "All" is selected or individual sources are selected
