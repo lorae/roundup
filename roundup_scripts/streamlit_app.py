@@ -115,6 +115,10 @@ css_style = """
 </style>
 """
 
+# Print number of data frame entries
+num_entries = len(df_novel)
+st.write(f"Number of entries matching search: {num_entries}")
+
 
 # Apply custom CSS style
 st.markdown(css_style, unsafe_allow_html=True)
