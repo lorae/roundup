@@ -93,7 +93,8 @@ df_novel['Source'] = pd.Categorical(df_novel['Source'], categories=source_order,
 # sort the dataframe by 'source' column
 df_novel = df_novel.sort_values(by='Source')
 # Reset the index of df_novel after sorting, and drop the old index
-df_novel = df_novel.reset_index(drop=True)
+#df_novel = df_novel.reset_index(drop=True)
+df_novel.index = range(1, len(df_novel) + 1)
 
 # Convert to HTML, set escape=False to prevent HTML syntax from being escaped
 html = df_novel.to_html(escape=False)
