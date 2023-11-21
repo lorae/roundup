@@ -2,7 +2,7 @@ name: Daily Run
 
 on:
   schedule:
-    - cron: '5 14 * * *'  # Runs every day at 9:05 AM EST (14:05 UTC)
+    - cron: '20 17 * * *'  # Runs every day at 12:20 PM EST (17:20 UTC)
 
 jobs:
   build:
@@ -10,10 +10,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: '3.x'  # Use '3.x' for the latest version or specify, e.g., '3.8'
 
