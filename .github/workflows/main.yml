@@ -2,7 +2,7 @@ name: Daily Run
 
 on:
   schedule:
-    - cron: '20 17 * * *'  # Runs every day at 12:20 PM EST (17:20 UTC)
+    - cron: '53 17 * * *'  # Runs every day at 12:53 PM EST (17:53 UTC)
 
 jobs:
   build:
@@ -21,4 +21,4 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Run script
-      run: python runall.py  # Relative to the root of the repository
+      run: python test-github-actions.py  # Relative to the root of the repository
