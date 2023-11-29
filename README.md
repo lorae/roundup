@@ -1,3 +1,5 @@
+View the website here: https://roundup.streamlit.app/
+
 # About
 
 The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present research that has not yet been peer reviewed.) This provides insight into what topics are currently being studied in economics.
@@ -138,14 +140,3 @@ The project directory.
     A folder that contains each of the individual web scrapers that goes to a specific website like BIS, Chicago Fed, NBER, etc. The scripts are named accordingly. All scripts have analogous functions called `scrape()`. These functions scrape their respective websites – so, for example, in `runall.py`, we can import BIS and run `BIS.scrape()` to get the most recent data (formatted as a pandas data frame) from the Bank for International Settlements, or we can import NBER and run `NBER.scrape()` to get a data frame of the most recent data scraped from the National Bureau of Economic Research.
   - **scrapers_archive**:  
     A folder that contains potentially useful archived scraper code.
-
-# To-Do List
-| To-Do | Status |
-|-------|--------|
-| 8/1/2023  ECB is messed up – the author does not always contain the authors (sometimes it has the title of the paper and other information in it).    |    DONE 9/1/2023    |
-|    8/1/2023 Standardize dates to a certain format so that eventually the data can be filtered by date   |    TO-DO    |
-|    9/1/2023 Make the date for the following scripts more specific: NBER, FED_BOARD, FED_CHICAGO, FED_NEWYORK |    TO-DO    |
-|    9/1/2023 Why is one of the date entries in FED-DALLAS showing "None"? |    TO-DO    |
-|  8/3/2021 Do FRB SF. Note that it is Java rendered and there’s no RSS feed for the working papers.    |   DONE 8/15/2023     |
-|    8/3/2023 Do FRB Boston.  |    DONE 9/22/2023    |
-|    8/10/2023 Do Fed Notes   |    DONE 8/11/2023    |
