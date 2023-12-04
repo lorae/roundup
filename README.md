@@ -1,4 +1,6 @@
-View the website here: https://roundup.streamlit.app/
+# The website is active!
+
+View it here: https://roundup.streamlit.app/
 
 # About
 
@@ -12,7 +14,7 @@ The scripts in this project gather six pieces of information on the most recent 
 - URL
 - Paper number (according to each website's own numbering system)
 
-The primary script used in this project is runall.py. It cycles through a variety of Python scripts that are each catered to one individual website, such as the National Bureau of Economic Research or the International Monetary Fund. The number of scripts in this project is constantly expanding.
+The primary script used in this project is `runall.py`. It cycles through a variety of Python scripts that are each catered to one individual website, such as the National Bureau of Economic Research or the International Monetary Fund. The number of scripts in this project is constantly expanding.
 
 Websites that are scraped for data, as of September 2023, are:
 
@@ -97,7 +99,7 @@ See below for instructions on how to run the project for the first time and any 
 
 4. **View results:**
 
-    Open in 'historic/weekly_data/YYYY-MM-DD-HHMM.html'. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
+    Open in `historic/weekly_data/YYYY-MM-DD-HHMM.html`. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
 # Project Structure
 The schematic below illustrates the basic file structure of the project. 
 
@@ -110,9 +112,6 @@ The project directory.
 - **runall.py**:  
   The main script in this project. It loops through each of the scripts in `roundup_scripts/scrapers/XXX.py`, first checking against `scraper_status.txt` to check if any of the scrapers are turned off. If they are, it skips executing the scraper. If the scraper is on, then it will attempt to run it (if there is an error during script execution, then it will turn the scraper off for future runs). Running each scraper script means gathering a data frame of all of the new data available from each website. Then it invokes the `compare_historic(df)` function from `roundup_scripts/compare.py` to see which of the working papers have already been seen, and which are truly novel. `compare_historic(df)` uses data from `papers_we_have_seen.txt` to make this determination. Once `compare_historic(df)` has been successfully executed, new date- and time- stamped files are saved as `historic/weekly_data/YYYY-MM-DD-HHMM.csv`, `historic/weekly_data/YYYY-MM-DD-HHMM.txt`, and `historic/weekly_data/YYYY-MM-DD-HHMM.html` which contain metadata (title, authors, abstract, URL, date published, paper number, and unique paper ID number) on only the working papers that have not previously been scraped by runall.py.
 
-- **troubleshooter.py**:  
-  A script Lorae is currently using on occasion to troubleshoot her code. Should she instead get vscode so she is not using Notepad++ and IDLE? Probably. But for now, this works.
-
 - **README.md**:  
   The document you are currently reading.
 
@@ -120,7 +119,7 @@ The project directory.
   The necessary file to get your venv set up on this project.
 
 - **scraper_status.txt**:  
-  A file that lists whether each scraper is turned on or off. If a scraper is turned off, runall.py will not attempt to run it. runall.py also writes to this file, and switches scrapers off when it encounters an error trying to run them. 
+  A file that lists whether each scraper is turned on or off. If a scraper is turned off, `runall.py` will not attempt to run it. `runall.py` also writes to this file, and switches scrapers off when it encounters an error trying to run them. 
   The purpose of this file is to enable the code to run, even if a few of the scrapers are broken. The changing nature of the websites means that even the most well-coded web scrapers will fail eventually.
 
 - **historic**:  
