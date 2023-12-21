@@ -1,11 +1,11 @@
-BEA,on
+BEA,off
 BFI,on
 BIS,on
 BOE,on
-ECB,on
+ECB,off
 Fed_Atlanta,on
 Fed_Board,on
-Fed_Boston,on
+Fed_Boston,off
 Fed_Board_Notes,on
 Fed_Chicago,on
 Fed_Cleveland,on
