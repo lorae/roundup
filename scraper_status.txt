@@ -6,11 +6,11 @@ ECB,off
 Fed_Atlanta,on
 Fed_Board,on
 Fed_Boston,off
-Fed_Board_Notes,on
+Fed_Board_Notes,off
 Fed_Chicago,on
 Fed_Cleveland,on
 Fed_Dallas,on
-Fed_NewYork,on
+Fed_NewYork,off
 Fed_Philadelphia,on
 Fed_Richmond,on
 Fed_SanFrancisco,on
