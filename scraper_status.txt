@@ -5,7 +5,7 @@ BOE,on
 ECB,off
 Fed_Atlanta,on
 Fed_Board,on
-Fed_Boston,off
+Fed_Boston,on
 Fed_Board_Notes,off
 Fed_Chicago,on
 Fed_Cleveland,on
