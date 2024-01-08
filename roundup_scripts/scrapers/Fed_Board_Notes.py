@@ -22,15 +22,18 @@ def get_soup(url): # Used to get the initial soup from the main URL that lists a
 
 def scrape():
     url_list = ["https://www.federalreserve.gov/econres/notes/feds-notes/default.htm"]
+    print(url_list)
     # Get the current year and month
     current_year = datetime.now().year
     current_month = datetime.now().month
 
     # If the current month is January, also look at last year's entries.
     if current_month == 1:
+        print("current month is January")
         # Create a URL for the current year
         last_year_url = f"https://www.federalreserve.gov/econres/notes/feds-notes/{current_year-1}-index.htm"
-        url_list += last_year_url
+        print(last_year_url)
+        url_list += [last_year_url]
 
     print(url_list)
 
