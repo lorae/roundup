@@ -1,8 +1,8 @@
-BEA,off
+BEA,on
 BFI,on
 BIS,on
 BOE,on
-ECB,off
+ECB,on
 Fed_Atlanta,on
 Fed_Board,on
 Fed_Boston,on
