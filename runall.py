@@ -53,16 +53,16 @@ roundup_scripts = {
     "Fed_Chicago": Fed_Chicago,
     "Fed_Cleveland": Fed_Cleveland,
     "Fed_Dallas": Fed_Dallas,
-    "Fed_NewYork": Fed_NewYork,
+    #"Fed_NewYork": Fed_NewYork,
     "Fed_Philadelphia": Fed_Philadelphia,
     "Fed_Richmond": Fed_Richmond,
     "Fed_SanFrancisco": Fed_SanFrancisco,
     "IMF": IMF, 
     "NBER": NBER
 }
-#roundup_scripts = {
-#    "Fed_Board_Notes": Fed_Board_Notes
-#}
+# roundup_scripts = {
+    # "Fed_NewYork": Fed_NewYork
+# }
 
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")

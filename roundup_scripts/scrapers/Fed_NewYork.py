@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from requests_html import HTMLSession
 import pandas as pd
+import json
 
 # Function to check if a URL exists by checking the HTTP status code
 def url_exists(url):
@@ -59,7 +60,7 @@ def scrape():
     # This page is java rendered, so we are using the requests_html package.
     session = HTMLSession()
 
-    url_list = url_conditional(before = "https://www.newyorkfed.org/research/staff_reports/index.html#", after = "")
+    url_list = url_conditional(before = "https://www.newyorkfed.org//api/research/getsritemshtml?year=", after = "&useLucene=true")
 
     # Initialize lists
     Title = []
@@ -71,61 +72,123 @@ def scrape():
 
     for url in url_list:
         print(f"Scraping {url}")
+        
+        response = requests.get(url)
+        # Check if the request was successful
+        if response.status_code == 200:
+            data = response.json()
+        else:
+            print(f"Failed to retrieve data: {response.status_code}")
+            continue  # Skip to the next iteration of the loop
+        
+        for entry in data:
+            # Assign the value of 'AuthorsHtml' or 'No authors listed' if 'AuthorsHtml' is missing or empty
+            author = entry.get("AuthorsHtml") or "No authors listed"
+            print(author)
+            title = entry.get("Paper_Title", "No title provided").strip()
+            print(title)
+            number = entry.get("Series_Number") or "No series number listed" #will have to assign a number later
+            print(number)
+            # or get the number from the url
+            alt_number = entry.get("Id", "No ID listed") # In case there is no number, use this instead
+            print(alt_number)
+            link = entry.get("Uri", "No URL listed") # will have to find a way to put an error in
+            print(link)
+            date = entry.get("PublicationDate", "No publication date listed")
+            print(date)
+            print("")
+            
 
-        # Send a GET request and render the JavaScript
-        r = session.get(url)
-        r.html.render(sleep=5, keep_page=True, scrolldown=1)
+        # Parse the JSON response into a Python dictionary
+        # data = json.loads(response.text)['results']
+        # print(data)
 
-        # Use BeautifulSoup to parse the page
-        soup = BeautifulSoup(r.html.html, 'html.parser')
-        elements = soup.select('tr > td > p')
+    # # Create a Pandas DataFrame from the extracted data, with the "Long Abstract" extracted from the paper's URL using XPath
+    # df = pd.DataFrame({
+        # 'Title': [d['title'] for d in data],
+        # 'Link': ['https://www.nber.org' + d['url'] for d in data],
+        # 'Date': [d['displaydate'] for d in data],
+        # 'Abstract': [html.fromstring(requests.get('https://www.nber.org' + d['url']).content)
+                          # .xpath('/html/body/div[2]/main/div[2]/div[2]/div/p/text()')[0].strip()
+                          # for d in data], 
+        # # Authors come in a list, so they must be looped through and then joined into a string using
+        # # the ",".join([Jane Doe, John Doe]) function, which would make a string "Jane Doe, John Doe".
+        # 'Author': [", ".join([re.sub('<[^>]+>', '', author) for author in d['authors']]) for d in data],
+        # 'Number': [d['url'].split('/papers/w')[1] for d in data]
+    # }).sort_values(by='Number')
 
-        # Filter elements based on the presence of 'a' tag (to avoid the 7 unnecessary p elements)
-        elements = [el for el in elements if el.select_one('a')]
+    # # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # # we set them to be an identifier that is unique. In the case of NBER, we combine
+    # # NBER with the number of the paper (eg. 999) to get an identifier NBER999 that
+    # # is completely unique across all papers scraped.
+    # df["Source"] = "NBER"
+    # df.index = df["Source"] + df['Number'].astype(str)
+    # df.index.name = None
+    
+    # print(df)
+    # return(df)
+            
+        # # Send a GET request and render the JavaScript
+        # r = session.get(url)
+        # r.html.render(sleep=5, keep_page=True, scrolldown=1)
 
-        # Append data to Title, Link, Number, Author lists
-        Title += [el.select_one('a').text.strip() for el in elements]
-        Link += ["https://www.newyorkfed.org" + el.select_one('a')['href'] for el in elements]
-        Number += [el.select_one('a')['href'].split("/sr")[1].replace('.html', '') for el in elements]
-        Author += [list(el.stripped_strings)[1] for el in elements]
+        # # Use BeautifulSoup to parse the page
+        # soup = BeautifulSoup(r.html.html, 'html.parser')
+        # elements = soup.select('tr > td > p')
 
-        # Append to Date list. Date is slightly more complicated, so I've moved it out of the list 
-        # comprehension to show it more step-by-step.
-        for el in elements:
-            date_raw = el.select_one('span.paraNotes').get_text().split('\xa0')
-            month = date_raw[1].strip()[4:]
-            year = date_raw[2].strip()
-            Date.append(month + " " + year)
+        # # Filter elements based on the presence of 'a' tag (to avoid the 7 unnecessary p elements)
+        # elements = [el for el in elements if el.select_one('a')]
 
-        # Append to Abstract list. They are located on a separate url found in Link.
-        for link in Link:
-            response = requests.get(link)
-            content = response.content
-            soup = BeautifulSoup(content, 'html.parser')
+        # # Append data to Title, Link, Number, Author lists
+        # Title += [el.select_one('a').text.strip() for el in elements]
+        # print(Title)
+        # Link += ["https://www.newyorkfed.org" + el.select_one('a')['href'] for el in elements]
+        # Number += [el.select_one('a')['href'].split("/sr")[1].replace('.html', '') for el in elements]
+        # Author += [list(el.stripped_strings)[1] for el in elements]
 
-            # Get the abstracts
-            abstract = soup.select('div.ts-article-text')[1].text.strip().replace('\n', ' ')
-            Abstract.append(abstract)
+        # # Append to Date list. Date is slightly more complicated, so I've moved it out of the list 
+        # # comprehension to show it more step-by-step.
+        # for el in elements:
+            # date_raw = el.select_one('span.paraNotes').get_text().split('\xa0')
+            # month = date_raw[1].strip()[4:]
+            # year = date_raw[2].strip()
+            # Date.append(month + " " + year)
 
+        # # Append to Abstract list. They are located on a separate url found in Link.
+        # for link in Link:
+            # response = requests.get(link)
+            # content = response.content
+            # soup = BeautifulSoup(content, 'html.parser')
+
+            # # Get the abstracts
+            # abstract = soup.select('div.ts-article-text')[1].text.strip().replace('\n', ' ')
+            # Abstract.append(abstract)
           
-    # Create a dictionary of the six lists, where the keys are the column names.
-    data = {'Title': Title,
-            'Link': Link,
-            'Date': Date,
-            'Author': Author,
-            'Number': Number,
-            'Abstract': Abstract}
+        # # Create a dictionary of the six lists, where the keys are the column names.
+        # data = {'Title': Title,
+                # 'Link': Link,
+                # 'Date': Date,
+                # 'Author': Author,
+                # 'Number': Number,
+                # 'Abstract': Abstract}
+                
+        # #print(data)
 
-    # Create a DataFrame from the dictionary.
-    df = pd.DataFrame(data)
+        # # Create a DataFrame from the dictionary.
+        # df = pd.DataFrame(data)
 
-    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
-    # we set them to be an identifier that is unique. In the case of Chicago, we combine
-    # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
-    # is completely unique across all papers scraped.
-    df["Source"] = "FED-NEWYORK"
-    df.index = df["Source"] + df['Number'].astype(str)
-    df.index.name = None
+    # # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # # we set them to be an identifier that is unique. In the case of Chicago, we combine
+    # # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+    # # is completely unique across all papers scraped.
+    # df["Source"] = "FED-NEWYORK"
+    # df.index = df["Source"] + df['Number'].astype(str)
+    # df.index.name = None
 
-    print(df)
-    return(df)
+    # print(df)
+    # return(df)
+    
+    
+# '/api/research/getsritemshtml?year=' + year + '&useLucene=true'
+# I got the NY Fed API!
+# https://www.newyorkfed.org//api/research/getsritemshtml?year=2023&useLucene=true
