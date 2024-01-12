@@ -79,25 +79,43 @@ def scrape():
             data = response.json()
         else:
             print(f"Failed to retrieve data: {response.status_code}")
-            continue  # Skip to the next iteration of the loop
+            continue  # Skip to the next iteration of the parent for loop
         
         for entry in data:
             # Assign the value of 'AuthorsHtml' or 'No authors listed' if 'AuthorsHtml' is missing or empty
-            author = entry.get("AuthorsHtml") or "No authors listed"
-            print(author)
-            title = entry.get("Paper_Title", "No title provided").strip()
-            print(title)
-            number = entry.get("Series_Number") or "No series number listed" #will have to assign a number later
-            print(number)
-            # or get the number from the url
-            alt_number = entry.get("Id", "No ID listed") # In case there is no number, use this instead
-            print(alt_number)
-            link = entry.get("Uri", "No URL listed") # will have to find a way to put an error in
-            print(link)
-            date = entry.get("PublicationDate", "No publication date listed")
-            print(date)
-            print("")
-            
+            Author += [entry.get("AuthorsHtml").strip() or "No authors listed"]
+            Title += [entry.get("Paper_Title").strip() or "No title listed"]   
+            Date += [entry.get("PublicationDate", "No publication date listed")]
+            # Assigning link a variable name so it can be used in logical sequence below
+            link = "https://www.newyorkfed.org/" + entry.get("Uri") or "No link listed" # will have to find a way to put an error in
+            Link += [link]
+                        
+            # Series of logical steps to get number entry. Number is essential because it is used to uniquely identify
+            # papers. Thus, we try to use several unique identifiers as a number before ultimately quitting the script
+            # if none are successful.
+            # 1) Attempt to assign 'Series_Number' or fallback to "No series number listed"
+            number = entry.get("Series_Number", "").strip() or "No series number listed"
+            if number == "No series number listed":
+                # 2) If Series_Number not listed, check if link is present. If link present (defined above), extract the last 4 characters 
+                # as the number
+                if link != "No link listed":
+                    number = link[-4:].strip()
+                else:
+                    # 3) If no link, try to use 'Id'
+                    id_number = entry.get("Id") or "No ID listed"
+                    if id_number != "No ID listed":
+                        number = id_number
+                    else:
+                        # 4) If 'Id' is also not present, report a fatal error and exit
+                        print("Fatal error: Unable to assign unique ID number to entry.")
+                        sys.exit()
+            Number += [number]
+
+    print(Author)
+    print(Title)
+    print(Date)
+    print(Link)
+    print(Number)
 
         # Parse the JSON response into a Python dictionary
         # data = json.loads(response.text)['results']
