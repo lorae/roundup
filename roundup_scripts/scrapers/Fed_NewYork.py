@@ -137,9 +137,4 @@ def scrape():
     df.index.name = None
 
     print(df)
-    # return(df)
-    
-    
-# '/api/research/getsritemshtml?year=' + year + '&useLucene=true'
-# I got the NY Fed API!
-# https://www.newyorkfed.org//api/research/getsritemshtml?year=2023&useLucene=true
+    return(df)
