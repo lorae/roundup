@@ -4,7 +4,9 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present research that has not yet been peer reviewed.) This provides insight into what topics are currently being studied in economics.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) This provides insight into what topics are currently being studied in economics. This website may be of use for those interested in understanding the most recent active areas of economics research, such as academic economists, policy-oriented researchers, and students. Currently, the project incorporates data from 18 different sources.
+
+# How it works
 
 The scripts in this project gather six pieces of information on the most recent working papers:
 - Title
