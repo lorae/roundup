@@ -57,6 +57,7 @@ roundup_scripts = {
     "Fed_Philadelphia": Fed_Philadelphia,
     "Fed_Richmond": Fed_Richmond,
     "Fed_SanFrancisco": Fed_SanFrancisco,
+    "Fed_StLouis": Fed_StLouis,
     "IMF": IMF, 
     "NBER": NBER
 }
