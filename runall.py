@@ -62,7 +62,7 @@ roundup_scripts = {
     "NBER": NBER
 }
 # roundup_scripts = {
-    # "Fed_NewYork": Fed_NewYork
+    # "Fed_StLouis": Fed_StLouis
 # }
 
 # Part 1: Scraping Data
