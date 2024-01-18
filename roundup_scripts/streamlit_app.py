@@ -36,13 +36,21 @@ st.write(
     "See the source code and replicate the project at: https://github.com/lorae/roundup"
 )
 
+# Load data
 df, source_options, current_date = load_df()
 res = df
 status_df = load_status()
 
+# Calculate the number of active web scrapers
+total_scrapers = status_df.shape[0]
+active_scrapers = (status_df['Status'] == 'on').sum()
+
 ### Sidebar
 # OPTIONS
 st.sidebar.header("Options")
+# Display the status
+status_message = f"{active_scrapers} of {total_scrapers} web scrapers currently active"
+st.sidebar.write(status_message)
 # Configuring options
 all_sources_option = "All"
 source_options_with_all = [all_sources_option] + list(source_options)
