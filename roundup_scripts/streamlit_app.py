@@ -45,16 +45,22 @@ status_df = load_status()
 total_scrapers = status_df.shape[0]
 active_scrapers = (status_df['Status'] == 'on').sum()
 
-### Sidebar
+########## Sidebar ##########
 # OPTIONS
 st.sidebar.header("Options")
-# Display the status
+# Display number of active web scrapers
 status_message = f"{active_scrapers} of {total_scrapers} web scrapers currently active"
 st.sidebar.write(status_message)
+# Web scraper status drop down
+st.sidebar.header("Web Scraper Status")
+with st.sidebar.expander("Show/Hide Status", expanded=False):  # This line creates a collapsible section
+    # Convert DataFrame to HTML, remove index and borders
+    html_status_table = status_df.to_html(index=False, border=0)
+    # Display HTML table using st.markdown
+    st.markdown(html_status_table, unsafe_allow_html=True)
 # Configuring options
 all_sources_option = "All"
 source_options_with_all = [all_sources_option] + list(source_options)
-# Color selection
 # Source selection
 source_selection = st.sidebar.multiselect("Select Source(s)", source_options_with_all, default=[all_sources_option])
 # Recency selection
@@ -63,17 +69,9 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             max_value=30,
                             value=7,
                             step=1)
-# WEB SCRAPER STATUS
-st.sidebar.header("Web Scraper Status")
-with st.sidebar.expander("Show/Hide Status", expanded=False):  # This line creates a collapsible section
-    # Convert DataFrame to HTML, remove index and borders
-    html_status_table = status_df.to_html(index=False, border=0)
-    # Display HTML table using st.markdown
-    st.markdown(html_status_table, unsafe_allow_html=True)
-
-### Main
 
 
+########## Main ##########
 
 # Get the minimum date based on the slider input
 min_date = current_date - timedelta(days=(slider_selection))
@@ -126,7 +124,7 @@ css_style = """
 
 # Print number of data frame entries
 num_entries = len(df_novel)
-st.write(f"Number of entries matching search: {num_entries}")
+st.write(f"{num_entries} results")
 
 
 # Apply custom CSS style
