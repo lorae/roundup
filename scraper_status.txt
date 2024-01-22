@@ -10,6 +10,7 @@ Fed_Board_Notes,on
 Fed_Chicago,on
 Fed_Cleveland,on
 Fed_Dallas,on
+Fed_KansasCity,off
 Fed_NewYork,on
 Fed_Philadelphia,on
 Fed_Richmond,on
