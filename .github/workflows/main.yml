@@ -3,6 +3,7 @@ name: Daily Run
 on:
   schedule:
     - cron: '15 21 * * *'  # Runs every day at 4:15 PM EST (21:15 UTC)
+  workflow_dispatch:
 
 jobs:
  build:
@@ -15,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.x'
+        python-version: '3.9'
 
     - name: Install system dependencies
       run: sudo apt-get update && sudo apt-get install -y libxml2-dev libxslt-dev
