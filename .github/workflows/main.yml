@@ -2,10 +2,10 @@ name: Daily Run
 
 on:
   schedule:
-    - cron: '53 17 * * *'  # Runs every day at 12:53 PM EST (17:53 UTC)
+    - cron: '15 21 * * *'  # Runs every day at 4:15 PM EST (21:15 UTC)
 
 jobs:
-  build:
+ build:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,10 +15,13 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.x'  # Use '3.x' for the latest version or specify, e.g., '3.8'
+        python-version: '3.x'
 
-    - name: Install dependencies
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y libxml2-dev libxslt-dev
+
+    - name: Install Python dependencies
       run: pip install -r requirements.txt
 
     - name: Run script
-      run: python test-github-actions.py  # Relative to the root of the repository
+      run: python runall.py
