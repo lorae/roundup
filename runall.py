@@ -78,7 +78,9 @@ for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
         try:
             # Append the result of each scrape to the list
             print(f"running {name}.py ...")
-            dfs.append(scraper.scrape())
+            scrape_results = scraper.scrape()
+            print(scrape_results)
+            dfs.append(scrape_results)
             print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
         except Exception as e:
             print(f"Error occurred while running {name}.py: {e}")
