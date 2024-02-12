@@ -4,7 +4,7 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) This provides insight into what topics are currently being studied in economics. This website may be of use for those interested in understanding the most recent active areas of economics research, such as academic economists, policy-oriented researchers, and students. Currently, the project incorporates data from 18 different sources.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) This provides insight into what topics are currently being studied in economics. This website may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of February 2024, the project incorporates data from 20 different sources.
 
 # How it works
 
@@ -18,7 +18,8 @@ The scripts in this project gather six pieces of information on the most recent 
 
 The primary script used in this project is `runall.py`. It cycles through a variety of Python scripts that are each catered to one individual website, such as the National Bureau of Economic Research or the International Monetary Fund. The number of scripts in this project is constantly expanding.
 
-Websites that are scraped for data, as of September 2023, are:
+# Data sources
+Websites that are scraped for data, as of February 2024, are:
 
 | Name of website                                                  | Name of script                          | Scraping method |
 |------------------------------------------------------------------|-----------------------------------------|-----------------|
@@ -34,10 +35,12 @@ Websites that are scraped for data, as of September 2023, are:
 | [Federal Reserve Bank of Chicago](https://www.chicagofed.org/publications/publication-listing?filter_series=18)                                | roundup_scripts/scrapers/Fed_Chicago.py     | Scrapes main landing page and each individual WP's landing page using Requests and BeautifulSoup            |
 | [Federal Reserve Bank of Cleveland](https://www.clevelandfed.org/publications/working-paper)                                 | roundup_scripts/scrapers/Fed_Cleveland.py     | Scrapes and parses main landing page using Selenium and BeautifulSoup.   |
 | [Federal Reserve Bank of Dallas](https://www.dallasfed.org/research/papers)                                 | roundup_scripts/scrapers/Fed_Dallas.py     | Scrapes main landing page using requests and BeautifulSoup and also reads data from PDFs using PyPDF and io     |
+| [Federal Reserve Bank of Kansas City](https://www.kansascityfed.org/research/research-working-papers/)                                 | roundup_scripts/scrapers/Fed_KansasCity.py     | Uses requests to acccess Kansas City Fed's API for JSON-formatted data on recent publications.     |
 | [Federal Reserve Bank of New York](https://www.newyorkfed.org/research/staff_reports/index.html)                                 | roundup_scripts/scrapers/Fed_NewYork.py     | Uses requests to access New York Fed API for JSON-formatted data on recent publications. Scrapes each individual WP's landing page using requests and BeautifulSoup            |
-| [Federal Reserve Bank of Richmond](https://www.richmondfed.org/publications/research/working_papers)                               | roundup_scripts/scrapers/Fed_Richmond.py     | Reads main landing page using Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
 | [Federal Reserve Bank of Philadelphia](https://www.philadelphiafed.org/search-results/all-work?searchtype=working-papers)                               | roundup_scripts/scrapers/Fed_Philadelphia.py     | Reads main landing page using Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
+| [Federal Reserve Bank of Richmond](https://www.richmondfed.org/publications/research/working_papers)                               | roundup_scripts/scrapers/Fed_Richmond.py     | Reads main landing page using Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
 | [Federal Reserve Bank of San Francisco](https://www.frbsf.org/economic-research/publications/working-papers/)                                | roundup_scripts/scrapers/Fed_SanFrancisco.py     | Parses and scrapes main landing page using requests_html and BeautifulSoup.   |
+| [Federal Reserve Bank of St. Louis](https://research.stlouisfed.org/wp)                                | roundup_scripts/scrapers/Fed_StLouis.py     | Scrapes main landing page using Requests and BeautifulSoup.   |
 | [International Monetary Fund](https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers)                                      | roundup_scripts/scrapers/IMF.py         | Scrapes RSS feed using Feedparser. Scrapes each individual WP's landing page using Requests and BeautifulSoup            |
 | [National Bureau of Economic Research](https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100)                             | roundup_scripts/scrapers/NBER.py        | Interacts with NBER API and uses requests to parse the results  |
 
@@ -79,7 +82,7 @@ See below for instructions on how to run the project for the first time and any 
 
 7. **View results:**
 
-    Open in 'historic/weekly_data/YYYY-MM-DD-HHMM.html'. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
+    Navigate to [https://roundup.streamlit.app](https://roundup.streamlit.app/). Dashboard will automatically update with your results after a commit. Sometimes, it takes as long as 5 minutes to update. Alternatively, open in 'historic/weekly_data/YYYY-MM-DD-HHMM.html'. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
 
 ### If running again:
 1. **Set your working directory into the repository:**
@@ -101,7 +104,9 @@ See below for instructions on how to run the project for the first time and any 
 
 4. **View results:**
 
-    Open in `historic/weekly_data/YYYY-MM-DD-HHMM.html`. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
+   Navigate to [https://roundup.streamlit.app](https://roundup.streamlit.app/). Dashboard will automatically update with your results after a commit. Sometimes, it takes as long as 5 minutes to update.
+   Alternatively, view results in `historic/weekly_data/YYYY-MM-DD-HHMM.html`. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
+
 # Project Structure
 The schematic below illustrates the basic file structure of the project. 
 
