@@ -4,7 +4,7 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) This provides insight into what topics are currently being studied in economics. This website may be of use for those interested in understanding the most recent active areas of economics research, such as academic economists, policy-oriented researchers, and students. As of February 2024, the project incorporates data from 20 different sources.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) This provides insight into what topics are currently being studied in economics. This website may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of February 2024, the project incorporates data from 20 different sources.
 
 # How it works
 
@@ -18,6 +18,7 @@ The scripts in this project gather six pieces of information on the most recent 
 
 The primary script used in this project is `runall.py`. It cycles through a variety of Python scripts that are each catered to one individual website, such as the National Bureau of Economic Research or the International Monetary Fund. The number of scripts in this project is constantly expanding.
 
+# Data sources
 Websites that are scraped for data, as of February 2024, are:
 
 | Name of website                                                  | Name of script                          | Scraping method |
