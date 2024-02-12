@@ -82,7 +82,7 @@ See below for instructions on how to run the project for the first time and any 
 
 7. **View results:**
 
-    Navigate to roundup.streamlit.app. Dashboard will automatically update with your results after a commit. Sometimes, it takes as long as 5 minutes to update. Alternatively, open in 'historic/weekly_data/YYYY-MM-DD-HHMM.html'. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
+    Navigate to [https://roundup.streamlit.app](https://roundup.streamlit.app/). Dashboard will automatically update with your results after a commit. Sometimes, it takes as long as 5 minutes to update. Alternatively, open in 'historic/weekly_data/YYYY-MM-DD-HHMM.html'. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
 
 ### If running again:
 1. **Set your working directory into the repository:**
@@ -104,7 +104,7 @@ See below for instructions on how to run the project for the first time and any 
 
 4. **View results:**
 
-   Navigate to roundup.streamlit.app. Dashboard will automatically update with your results after a commit. Sometimes, it takes as long as 5 minutes to update.
+   Navigate to [https://roundup.streamlit.app](https://roundup.streamlit.app/). Dashboard will automatically update with your results after a commit. Sometimes, it takes as long as 5 minutes to update.
    Alternatively, view results in `historic/weekly_data/YYYY-MM-DD-HHMM.html`. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
 
 # Project Structure
