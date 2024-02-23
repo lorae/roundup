@@ -74,19 +74,16 @@ dfs = []
 # Progress bar 
 total_tasks = len(roundup_scripts)
 for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
-    if scraper_status[name] == "on":
-        try:
-            # Append the result of each scrape to the list
-            print(f"running {name}.py ...")
-            dfs.append(scraper.scrape())
-            print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
-        except Exception as e:
-            print(f"Error occurred while running {name}.py: {e}")
-            print(f"Turning off {name}.py for future runs.")
-            scraper_status[name] = "off"
-    else: # when scraper_status[name] == "off":
-        print(f"{name}.py: Skipped execution because script is turned off.")
+    try:
+        # Append the result of each scrape to the list
+        print(f"running {name}.py ...")
+        dfs.append(scraper.scrape())
         print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
+        scraper_status[name] = "on"
+    except Exception as e:
+        print(f"Error occurred while running {name}.py: {e}")
+        print(f"Turning off {name}.py for future runs.")
+        scraper_status[name] = "off"
 
 # Write the updated scraper_status back to the file
 write_scraper_status("scraper_status.txt", scraper_status)
