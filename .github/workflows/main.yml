@@ -29,6 +29,10 @@ jobs:
 
     - name: Removing previous chrome instances on runner 
       run: sudo apt purge google-chrome-stable 
+
+    - name: Install xvfb
+      run: sudo apt-get install xvfb
+
     - name: Run script
       run: python runall.py
 
