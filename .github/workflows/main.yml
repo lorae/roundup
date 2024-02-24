@@ -27,6 +27,8 @@ jobs:
     - name: Install Python dependencies
       run: pip install -r requirements.txt
 
+    - name: Removing previous chrome instances on runner 
+      run: sudo apt purge google-chrome-stable 
     - name: Run script
       run: python runall.py
 
