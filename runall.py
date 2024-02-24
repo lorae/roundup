@@ -27,7 +27,7 @@ def read_scraper_status(filename):
 def write_scraper_status(filename, scraper_status):
     with open(filename, 'w') as f:
         for name, status in scraper_status.items():
-            f.write(f"{name},{status}\n")
+            #f.write(f"{name},{status}\n")
 
 # Initialize scraper_status from file
 scraper_status = read_scraper_status("scraper_status.txt")
