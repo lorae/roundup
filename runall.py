@@ -63,6 +63,7 @@ roundup_scripts = {
     "NBER": NBER
 }
 roundup_scripts = {
+    "BFI": BFI,
     "ECB": ECB
 }
 
