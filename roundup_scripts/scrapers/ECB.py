@@ -10,14 +10,15 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.firefox.options import Options 
 import time
 from datetime import datetime
 import pandas as pd
 
 def get_soup(url): 
     # Create a new instance of the Firefox driver
-    driver = webdriver.FirefoxOptions()
-    options.add_argument("--headless")  # Run Firefox in headless mode.
+    options = Options() 
+    options.add_argument("-headless") 
     driver = webdriver.Firefox(options=options)
 
     # Go to the page
