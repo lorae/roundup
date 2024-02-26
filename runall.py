@@ -65,6 +65,7 @@ roundup_scripts = {
 }
 roundup_scripts = {
     "Fed_Boston": Fed_Boston,
+    "Fed_Cleveland": Fed_Cleveland,
     "ECB": ECB
 }
 
