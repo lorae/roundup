@@ -6,6 +6,7 @@
 import os
 import subprocess
 import traceback
+import sys
 import pandas as pd
 from roundup_scripts.compare import compare_historic # User-defined
 # Here, we import all the scripts from roundup_scripts/scrapers
@@ -63,7 +64,7 @@ roundup_scripts = {
     "NBER": NBER
 }
 roundup_scripts = {
-    "BFI": BFI,
+    #"BFI": BFI,
     "ECB": ECB
 }
 
@@ -95,13 +96,14 @@ for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
 write_scraper_status("scraper_status.txt", scraper_status)
 print("Scraper statuses successfully updated in scraper_status.txt")
 
-# If dfs nonempty, concatenate all data frames in the list dfs into a single data frame
-print(dfs)
+# If dfs nonempty, concatenate all data frames in the list dfs into a single data frame.
+# If dfs empty, terminate script with error code 1.
 if dfs:  # This will be True if dfs is not empty
     df = pd.concat(dfs, ignore_index=True)
     print(df)
 else:
-    print("No data frames to concatenate. dfs is empty.")
+    print("No data frames collected to concatenate. dfs is empty. Script terminating.")
+    sys.exit(1)
 
 # Part 2: Comparing to historical data
 print(f"--------------------\n Part 2: Comparing to Historical Data \n--------------------")
