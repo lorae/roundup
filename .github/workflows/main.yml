@@ -21,9 +21,18 @@ jobs:
     - name: Update system dependencies
       run: sudo apt-get update
 
-    - name: Download Gecko webdriver, unzip archive, add to path
-      run: curl -o ${GITHUB_WORKSPACE}/gecko.tar.gz -L https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz && tar -xvf gecko.tar.gz && export PATH=$PATH:${GITHUB_WORKSPACE}/
+   # - name: Download Gecko webdriver, unzip archive, add to path
+   #   run: curl -o ${GITHUB_WORKSPACE}/gecko.tar.gz -L https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz && tar -xvf gecko.tar.gz && export PATH=$PATH:${GITHUB_WORKSPACE}/
     
+    - name: Setup geckodriver
+      run: |
+        curl -s -L "https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz" | tar -xz -C .
+        sudo mv geckodriver /usr/local/bin/
+        sudo chmod +x /usr/local/bin/geckodriver
+
+    - name: Install Firefox
+      run: sudo apt-get install -y firefox
+
     - name: Install Python dependencies
       run: pip install -r requirements.txt
 
