@@ -15,7 +15,7 @@ from datetime import datetime
 
 def get_soup(url): # Used to get the initial soup from the main URL that lists all the papers
     # In order for the code to run, it is necessary to spoof a browser. Otherwise, the website will not provide the information
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
     page = requests.get(url, headers=headers) # Include headers in request
     soup = BeautifulSoup(page.content, 'html.parser') # Parse the HTML content using BeautifulSoup
     return soup
@@ -65,13 +65,19 @@ def scrape():
             abstract = el.find_all('p')[1].text.strip()
             Abstract.append(abstract)
             
+            # DOI links were originally used in this script, but DOI URLs on this page broke in February 2024. 
+            # They are still provided by the Fed but their URLs produce an 'Error: DOI Not Found' message. I've 
+            # notified the Fed Board of this issue and in the meantime have migrated to using the href URL that 
+            # accompanies the title of the paper, rather than the DOI.
             # second p element, slice off the first 4 chars (that say "DOI:")
-            link = el.find_all('p')[2].text[4:].strip()
-            Link.append(link)
+            doi_link = el.find_all('p')[2].text[4:].strip() # doi link
+            #Link.append(doi_link)
+            href_link = "https://www.federalreserve.gov/" + el.find('h5').find('a')['href'] # href link
+            Link.append(href_link)
             
             # These don't have numbers, so I will make them the end part of
             # the DOI url
-            number = link.split(".org")[1].replace(".", "").replace("/", "").replace("-", "").strip()
+            number = doi_link.split(".org")[1].replace(".", "").replace("/", "").replace("-", "").strip()
             Number.append(number)
             
     # Create a dictionary of the six lists, where the keys are the column names.

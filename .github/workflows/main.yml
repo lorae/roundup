@@ -2,7 +2,7 @@ name: Daily Run
 
 on:
   schedule:
-    - cron: '40 13 * * *'  # Runs every day at 8:40 AM EST (13:40 UTC)
+    - cron: '40 11 * * *'  # Runs every day at 6:40 AM EST (11:40 UTC)
   workflow_dispatch:
 
 jobs:
