@@ -33,6 +33,9 @@ jobs:
     - name: Install Firefox
       run: sudo apt-get install -y firefox
 
+    - name: Verify Firefox Installation
+      run: which firefox
+
     - name: Install Python dependencies
       run: pip install -r requirements.txt
 
