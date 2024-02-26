@@ -18,7 +18,6 @@ import time
 import pandas as pd
 
 def get_soup(url): 
-    #chrome_service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
     chrome_service = Service(ChromeDriverManager().install())
     
     chrome_options = Options()
