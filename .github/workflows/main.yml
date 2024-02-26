@@ -26,12 +26,18 @@ jobs:
     
     - name: Remove Chrome
       run: sudo apt purge google-chrome-stable
+    
+    - name: Install Google Chrome
+      run: |
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
 
-    - name: Remove default Chromium
-      run: sudo apt purge chromium-browser
 
-    - name: Install a new Chromium
-      run: sudo apt install -y chromium-browser
+#    - name: Remove default Chromium
+#      run: sudo apt purge chromium-browser
+
+#    - name: Install a new Chromium
+#      run: sudo apt install -y chromium-browser
 
     - name: Install xvfb
       run: sudo apt-get install xvfb
@@ -40,7 +46,7 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Install all (OTHER?) necessary packages
-      run: pip install requests beautifulsoup4 pandas webdriver-manager selenium chromedriver-autoinstaller pyvirtualdisplay
+      run: pip install requests beautifulsoup4 pandas selenium chromedriver-autoinstaller pyvirtualdisplay
   
     - name: Run script
       run: python runall.py
