@@ -18,7 +18,7 @@ import pandas as pd
 def get_soup(url): 
     # Create a new instance of the Firefox driver
     options = Options() 
-    options.add_argument("-headless") 
+    options.add_argument("--headless") 
     options.binary_location = "/usr/bin/firefox"
     driver = webdriver.Firefox(options=options)
 
