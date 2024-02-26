@@ -21,32 +21,17 @@ jobs:
     - name: Update system dependencies
       run: sudo apt-get update
 
-   # - name: Download Gecko webdriver, unzip archive, add to path
-   #   run: curl -o ${GITHUB_WORKSPACE}/gecko.tar.gz -L https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz && tar -xvf gecko.tar.gz && export PATH=$PATH:${GITHUB_WORKSPACE}/
+    - name: Remove Chrome
+      run: sudo apt purge google-chrome-stable
     
-    - name: Setup geckodriver
+    - name: Install Google Chrome
+    # Make sure google-chrome-stable_current_amd64.deb is in .gitignore to avoid cluttering the repo
       run: |
-        curl -s -L "https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz" | tar -xz -C .
-        sudo mv geckodriver /usr/local/bin/
-        sudo chmod +x /usr/local/bin/geckodriver
-
-    - name: Install Firefox
-      run: sudo apt-get install -y firefox
-
-    - name: Verify Firefox Installation
-      run: which firefox
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
 
     - name: Install Python dependencies
       run: pip install -r requirements.txt
-
-    - name: Removing previous chrome instances on runner 
-      run: sudo apt purge google-chrome-stable 
-    
-    - name: Installing all (OTHER?) necessary packages
-      run: pip install chromedriver-autoinstaller selenium pyvirtualdisplay
-
-    - name: Install xvfb
-      run: sudo apt-get install xvfb
 
     - name: Run script
       run: python runall.py

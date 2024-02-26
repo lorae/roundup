@@ -10,18 +10,34 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
 import requests
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import PyPDF2
 from io import BytesIO
-import io
 from datetime import datetime
 import pandas as pd
 
 def get_soup(url): 
-    # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox()
+    chrome_service = Service(ChromeDriverManager().install())
+    
+    chrome_options = Options()
+    options = [
+        "--headless",
+        "--disable-gpu",
+        "--window-size=1920,1200",
+        "--ignore-certificate-errors",
+        "--disable-extensions",
+        "--no-sandbox",
+        "--disable-dev-shm-usage"
+    ]
+    for option in options:
+        chrome_options.add_argument(option)
+
+    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 
     # Go to the page
     driver.get(url)
