@@ -24,30 +24,24 @@ jobs:
    # - name: Download Gecko webdriver, unzip archive, add to path
    #   run: curl -o ${GITHUB_WORKSPACE}/gecko.tar.gz -L https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz && tar -xvf gecko.tar.gz && export PATH=$PATH:${GITHUB_WORKSPACE}/
     
-    - name: Setup geckodriver
-      run: |
-        curl -s -L "https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz" | tar -xz -C .
-        sudo mv geckodriver /usr/local/bin/
-        sudo chmod +x /usr/local/bin/geckodriver
+    - name: Remove Chrome
+      run: sudo apt purge google-chrome-stable
 
-    - name: Install Firefox
-      run: sudo apt-get install -y firefox
+    - name: Remove default Chromium
+      run: sudo apt purge chromium-browser
 
-    - name: Verify Firefox Installation
-      run: which firefox
-
-    - name: Install Python dependencies
-      run: pip install -r requirements.txt
-
-    - name: Removing previous chrome instances on runner 
-      run: sudo apt purge google-chrome-stable 
-    
-    - name: Installing all (OTHER?) necessary packages
-      run: pip install chromedriver-autoinstaller selenium pyvirtualdisplay
+    - name: Install a new Chromium
+      run: sudo apt install -y chromium-browser
 
     - name: Install xvfb
       run: sudo apt-get install xvfb
 
+    - name: Install Python dependencies
+      run: pip install -r requirements.txt
+
+    - name: Install all (OTHER?) necessary packages
+      run: pip install requests beautifulsoup4 pandas webdriver-manager selenium chromedriver-autoinstaller pyvirtualdisplay
+  
     - name: Run script
       run: python runall.py
 
