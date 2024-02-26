@@ -45,9 +45,6 @@ jobs:
     - name: Install Python dependencies
       run: pip install -r requirements.txt
 
-    - name: Install all (OTHER?) necessary packages
-      run: pip install requests beautifulsoup4 pandas selenium chromedriver-autoinstaller pyvirtualdisplay
-  
     - name: Run script
       run: python runall.py
 
