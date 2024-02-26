@@ -5,6 +5,7 @@
 
 import os
 import subprocess
+import traceback
 import pandas as pd
 from roundup_scripts.compare import compare_historic # User-defined
 # Here, we import all the scripts from roundup_scripts/scrapers
