@@ -16,7 +16,9 @@ import pandas as pd
 
 def get_soup(url): 
     # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox()
+    driver = webdriver.FirefoxOptions()
+    options.add_argument("--headless")  # Run Firefox in headless mode.
+    driver = webdriver.Firefox(options=options)
 
     # Go to the page
     driver.get(url)
