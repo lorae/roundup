@@ -61,9 +61,9 @@ roundup_scripts = {
     "IMF": IMF, 
     "NBER": NBER
 }
-# roundup_scripts = {
-    # "Fed_KansasCity": Fed_KansasCity
-# }
+roundup_scripts = {
+    "ECB": ECB
+}
 
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")
