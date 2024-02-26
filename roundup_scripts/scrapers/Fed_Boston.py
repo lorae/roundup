@@ -18,7 +18,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import PyPDF2
 from io import BytesIO
-import io
 from datetime import datetime
 import pandas as pd
 
