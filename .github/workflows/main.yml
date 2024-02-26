@@ -21,9 +21,6 @@ jobs:
     - name: Update system dependencies
       run: sudo apt-get update
 
-   # - name: Download Gecko webdriver, unzip archive, add to path
-   #   run: curl -o ${GITHUB_WORKSPACE}/gecko.tar.gz -L https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz && tar -xvf gecko.tar.gz && export PATH=$PATH:${GITHUB_WORKSPACE}/
-    
     - name: Remove Chrome
       run: sudo apt purge google-chrome-stable
     
@@ -31,16 +28,6 @@ jobs:
       run: |
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo apt install ./google-chrome-stable_current_amd64.deb
-
-
-#    - name: Remove default Chromium
-#      run: sudo apt purge chromium-browser
-
-#    - name: Install a new Chromium
-#      run: sudo apt install -y chromium-browser
-
-    - name: Install xvfb
-      run: sudo apt-get install xvfb
 
     - name: Install Python dependencies
       run: pip install -r requirements.txt
