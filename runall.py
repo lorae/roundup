@@ -63,11 +63,15 @@ roundup_scripts = {
     "IMF": IMF, 
     "NBER": NBER
 }
-roundup_scripts = {
-    "Fed_Boston": Fed_Boston,
-    "Fed_Cleveland": Fed_Cleveland,
-    "ECB": ECB
-}
+
+# # This section is used to isolate individual web scrapers for testing on runall.py. It overwrites the roundup_scripts
+# # dictionary with a shorter dictionary, which contains only the scripts that are currently being tested. It helps 
+# # avoid waiting through long runtimes when testing.
+# roundup_scripts = {
+    # "Fed_Boston": Fed_Boston,
+    # "Fed_Cleveland": Fed_Cleveland,
+    # "ECB": ECB
+# }
 
 # Part 1: Scraping Data
 print(f"--------------------\n Part 1: Data Scrape \n--------------------")
