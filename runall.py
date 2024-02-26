@@ -91,12 +91,17 @@ for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
         scraper_status[name] = "off"
 
     
-
 # Write the updated scraper_status back to the file
 write_scraper_status("scraper_status.txt", scraper_status)
+print("Scraper statuses successfully updated in scraper_status.txt")
 
-# Concatenate all data frames in the list into a single data frame
-df = pd.concat(dfs, ignore_index=False)
+# If dfs nonempty, concatenate all data frames in the list dfs into a single data frame
+print(dfs)
+if dfs:  # This will be True if dfs is not empty
+    df = pd.concat(dfs, ignore_index=True)
+    print(df)
+else:
+    print("No data frames to concatenate. dfs is empty.")
 
 # Part 2: Comparing to historical data
 print(f"--------------------\n Part 2: Comparing to Historical Data \n--------------------")
