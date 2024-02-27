@@ -16,14 +16,31 @@
 # LE: 22 Aug 2023
 
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import time
 import pandas as pd
 
 
 def get_soup(url): 
-    # Create a new instance of the Firefox driver
-    driver = webdriver.Firefox()
+    chrome_service = Service(ChromeDriverManager().install())
+    
+    chrome_options = Options()
+    options = [
+        "--headless",
+        "--disable-gpu",
+        "--window-size=1920,1200",
+        "--ignore-certificate-errors",
+        "--disable-extensions",
+        "--no-sandbox",
+        "--disable-dev-shm-usage"
+    ]
+    for option in options:
+        chrome_options.add_argument(option)
+
+    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 
     # Go to the page
     driver.get(url)

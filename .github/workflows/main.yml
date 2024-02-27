@@ -18,8 +18,17 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install system dependencies
-      run: sudo apt-get update && sudo apt-get install -y libxml2-dev libxslt-dev
+    - name: Update system dependencies
+      run: sudo apt-get update
+
+    - name: Remove Chrome
+      run: sudo apt purge google-chrome-stable
+    
+    - name: Install Google Chrome
+    # Make sure google-chrome-stable_current_amd64.deb is in .gitignore to avoid cluttering the repo
+      run: |
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
 
     - name: Install Python dependencies
       run: pip install -r requirements.txt

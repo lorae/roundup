@@ -5,6 +5,8 @@
 
 import os
 import subprocess
+import traceback
+import sys
 import pandas as pd
 from roundup_scripts.compare import compare_historic # User-defined
 # Here, we import all the scripts from roundup_scripts/scrapers
@@ -61,8 +63,14 @@ roundup_scripts = {
     "IMF": IMF, 
     "NBER": NBER
 }
+
+# # This section is used to isolate individual web scrapers for testing on runall.py. It overwrites the roundup_scripts
+# # dictionary with a shorter dictionary, which contains only the scripts that are currently being tested. It helps 
+# # avoid waiting through long runtimes when testing.
 # roundup_scripts = {
-    # "Fed_KansasCity": Fed_KansasCity
+    # "Fed_Boston": Fed_Boston,
+    # "Fed_Cleveland": Fed_Cleveland,
+    # "ECB": ECB
 # }
 
 # Part 1: Scraping Data
@@ -77,19 +85,30 @@ for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
     try:
         # Append the result of each scrape to the list
         print(f"running {name}.py ...")
-        dfs.append(scraper.scrape())
+        scrape_results = scraper.scrape()
+        print(scrape_results)
+        dfs.append(scrape_results)
         print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
-        scraper_status[name] = "on"
     except Exception as e:
-        print(f"Error occurred while running {name}.py: {e}")
-        print(f"Turning off {name}.py for future runs.")
+        stack_trace = traceback.format_exc()  # Get the full stack trace
+        print(f"Error occurred while running {name}.py: {e}\n"
+        f"{stack_trace}")
+        print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
         scraper_status[name] = "off"
 
+    
 # Write the updated scraper_status back to the file
 write_scraper_status("scraper_status.txt", scraper_status)
+print("Scraper statuses successfully updated in scraper_status.txt")
 
-# Concatenate all data frames in the list into a single data frame
-df = pd.concat(dfs, ignore_index=False)
+# If dfs nonempty, concatenate all data frames in the list dfs into a single data frame.
+# If dfs empty, terminate script with error code 1.
+if dfs:  # This will be True if dfs is not empty
+    df = pd.concat(dfs, ignore_index=True)
+    print(df)
+else:
+    print("No data frames collected to concatenate. dfs is empty. Script terminating.")
+    sys.exit(1)
 
 # Part 2: Comparing to historical data
 print(f"--------------------\n Part 2: Comparing to Historical Data \n--------------------")
