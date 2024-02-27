@@ -1,19 +1,16 @@
 # Fed_SanFrancisco.py
 # The purpose of this script is to scrape metadata from the most recent San Francisco Fed working papers. This script uses
-# the SF Fed's Working Paper landing page.
+# the SF Fed's API.
 # Lorae Stojanovic
 #
 # Special thanks to ChatGPT for coding assistance in this project.
 # LE: 21 Aug 2023
 
-
 from bs4 import BeautifulSoup
-import time
 from requests_html import HTMLSession
 from selenium import webdriver
 import pandas as pd
 import requests
-import re
 import json
 
 def scrape():
