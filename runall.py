@@ -89,6 +89,7 @@ for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
         print(scrape_results)
         dfs.append(scrape_results)
         print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
+        scraper_status[name] = "on"
     except Exception as e:
         stack_trace = traceback.format_exc()  # Get the full stack trace
         print(f"Error occurred while running {name}.py: {e}\n"
