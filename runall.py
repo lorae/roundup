@@ -84,6 +84,7 @@ for i, (name, scraper) in enumerate(roundup_scripts.items(), start=0):
         # Append the result of each scrape to the list
         print(f"running {name}.py ...")
         scrape_results = scraper.scrape()
+        print(scrape_results)
         dfs.append(scrape_results)
         print(f"-----\n Data Scrape: ({i+1}/{total_tasks}) tasks done\n-----")
         scraper_status[name] = "on"
