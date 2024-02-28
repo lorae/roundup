@@ -10,6 +10,7 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import pandas as pd
 
 def scrape():
     url = "https://www.kansascityfed.org/research/research-working-papers/research-working-paper-archive/"
@@ -53,8 +54,10 @@ def scrape():
         title = el.text.strip()
         Title.append(title)
         
-        # Link to landing page: We will ultimately use the DOI link, found on the landing page
-        # for the "Link" entry of each source
+        # Link to landing page: Used to navigate to the landing page to collect more data. This script
+        # ultimately records the paper link as the DOI link, collected from the landing page later in 
+        # this script.
+
         link_to_landing_page = "https://www.kansascityfed.org" + el.find('a')['href']
         
         # Navigate to landing page for date, abstract, authors, link, and number
@@ -84,9 +87,24 @@ def scrape():
         number = link.split('RWP')[1].strip()
         Number.append(number)
         
-    print(Title)
-    print(Date)
-    print(Author)
-    print(Abstract)
-    print(Link)
-    print(Number)
+    # Create a dictionary of the six lists, where the keys are the column names.
+    data = {'Title': Title,
+            'Link': Link,
+            'Date': Date,
+            'Author': Author,
+            'Number': Number,
+            'Abstract': Abstract}
+
+    # Create a DataFrame from the dictionary.
+    df = pd.DataFrame(data)
+
+    # Instead of the data frame having row names (indices) equalling 1, 2, etc,
+    # we set them to be an identifier that is unique. In the case of Chicago, we combine
+    # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+    # is completely unique across all papers scraped.
+    df["Source"] = "FED-KANSASCITY"
+    df.index = df["Source"] + df['Number'].astype(str)
+    df.index.name = None
+
+    print(df)
+    return(df)            
