@@ -30,7 +30,7 @@ def scrape():
         # about how to download the pdf appendix).
         'Abstract': [BeautifulSoup(d['content']['rendered'], 'html.parser').find('p').text.strip() for d in data],
         'Author': [d['meta']['publication_authors'] for d in data],
-        'Number': [d['id'] for d in data]
+        'Number': [d["meta"]["publication_volume"] + "-" + d["meta"]["publication_issue"] for d in data]
     }).sort_values(by='Number')
 
 
