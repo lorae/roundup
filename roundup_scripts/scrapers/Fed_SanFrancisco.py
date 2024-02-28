@@ -1,88 +1,46 @@
 # Fed_SanFrancisco.py
 # The purpose of this script is to scrape metadata from the most recent San Francisco Fed working papers. This script uses
-# the SF Fed's Working Paper landing page.
+# the SF Fed's API.
 # Lorae Stojanovic
 #
 # Special thanks to ChatGPT for coding assistance in this project.
 # LE: 21 Aug 2023
 
-
 from bs4 import BeautifulSoup
-import time
-import requests
 from requests_html import HTMLSession
 from selenium import webdriver
 import pandas as pd
-
-# Function to check if a URL exists by checking the HTTP status code
-def url_exists(url):
-    response = requests.get(url)
-    return response.status_code == 200
-
+import requests
+import json
 
 def scrape():
-    url = "https://www.frbsf.org/economic-research/publications/working-papers/"
-    
-    # This page is java rendered, so we are using the requests_html package.
-    session = HTMLSession()
-    
-    print(f"Scraping {url}")
+    # Define the URL for the SF Fed working papers API
+    URL = 'https://www.frbsf.org/wp-json/wp/v2/sffed_publications?publication-type=1979&per_page=10'
 
-    # Send a GET request and render the JavaScript
-    r = session.get(url)
-    r.html.render(sleep=5, keep_page=True, scrolldown=1)
+    # Make a GET request to the SF Fed working paper API and parse the JSON response
+    data = json.loads(requests.get(URL).text)
 
-    # Use BeautifulSoup to parse the page
-    soup = BeautifulSoup(r.html.html, 'html.parser')
+    # Create a Pandas DataFrame from the extracted data, with the "Long Abstract" extracted from the paper's URL using XPath
+    df = pd.DataFrame({
+        'Title': [d['title']['rendered'] for d in data],
+        'Link': [d['link'] for d in data],
+        'Date': [d['date'].split('T')[0] for d in data], # Extract only the date, not the time
+        # Select d['content']['rendered'], which is an HTML object. Parse with Beautiful Soup and then only keep
+        # the text within the first <p> tag. (Sometimes there is a second <p> tag, usually containing information
+        # about how to download the pdf appendix).
+        'Abstract': [BeautifulSoup(d['content']['rendered'], 'html.parser').find('p').text.strip() for d in data],
+        'Author': [d['meta']['publication_authors'] for d in data],
+        'Number': [d["meta"]["publication_volume"] + "-" + d["meta"]["publication_issue"] for d in data]
+    }).sort_values(by='Number')
 
-    # We only need the most recent 40 or so working papers... no need to get them all the way back from 2001.
-    elements = soup.find_all('article', {'class': 'cf'})[1:30]
-
-    # Initialize lists
-    Title = []
-    Link = []
-    Number = []
-    Author = []
-    Date = []
-    Abstract = []
-
-    for el in elements:
-        title = el.find('a')['title'].strip()
-        Title.append(title)
-            
-        link = "https://www.frbsf.org" + el.find('a')['href']
-        Link.append(link)
-        
-        number = link.split("working-papers/")[1][:-1].replace("/", "-")
-        Number.append(number)
-        
-        date = el.find('meta', itemprop = 'datePublished')['content']
-        Date.append(date)
-        
-        author = el.find('meta', itemprop = 'name')['content']
-        Author.append(author)
-        
-        abstract = el.find('div', class_= 'collapsible').get_text().strip()
-        Abstract.append(abstract)
-
-    # Create a dictionary of the six lists, where the keys are the column names.
-    data = {'Title': Title,
-            'Link': Link,
-            'Date': Date,
-            'Author': Author,
-            'Number': Number,
-            'Abstract': Abstract}
-
-    # Create a DataFrame from the dictionary.
-    df = pd.DataFrame(data)
 
     # Instead of the data frame having row names (indices) equalling 1, 2, etc,
-    # we set them to be an identifier that is unique. In the case of Chicago, we combine
-    # Chicago with the number of the paper (eg. 999) to get an identifier Chicago999 that
+    # we set them to be an identifier that is unique. In the case of NBER, we combine
+    # NBER with the number of the paper (eg. 999) to get an identifier NBER999 that
     # is completely unique across all papers scraped.
     df["Source"] = "FED-SANFRANCISCO"
     df.index = df["Source"] + df['Number'].astype(str)
     df.index.name = None
-
+        
     print(df)
     return(df)
