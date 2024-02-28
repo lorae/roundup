@@ -103,7 +103,7 @@ print("Scraper statuses successfully updated in scraper_status.txt")
 # If dfs nonempty, concatenate all data frames in the list dfs into a single data frame.
 # If dfs empty, terminate script with error code 1.
 if dfs:  # This will be True if dfs is not empty
-    df = pd.concat(dfs, ignore_index=True)
+    df = pd.concat(dfs)
     print(df)
 else:
     print("No data frames collected to concatenate. dfs is empty. Script terminating.")
