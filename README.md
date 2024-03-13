@@ -119,6 +119,7 @@ The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Ac
 # Project Structure
 The schematic below illustrates the basic file structure of the project. 
 
+```
 roundup/
 │
 ├── .gitignore
@@ -143,7 +144,7 @@ roundup/
 │ └── main.yml # Runs `Daily Run` GitHub Actions workflow
 │
 └── requirements.txt # Project dependencies
-
+```
 
 **roundup**
 
