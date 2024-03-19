@@ -4,7 +4,7 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from 20 different websites at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of February 2024, the project incorporates data from 20 different sources.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from 20 different websites at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of March 2024, the project incorporates data from 21 different sources.
 
 # How it works
 
