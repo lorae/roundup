@@ -11,6 +11,7 @@ Fed_Chicago,on
 Fed_Cleveland,on
 Fed_Dallas,on
 Fed_KansasCity,on
+Fed_Minneapolis,on
 Fed_NewYork,on
 Fed_Philadelphia,on
 Fed_Richmond,on
