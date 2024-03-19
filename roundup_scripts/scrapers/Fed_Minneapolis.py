@@ -1,6 +1,9 @@
 # Fed_Minneapolis.py
 # The purpose of this script is to scrape metadata from the most recent Minneapolis Fed working papers,
-# found at https://www.minneapolisfed.org/economic-research/working-papers. This script uses xxx to do yyy.
+# found at https://www.minneapolisfed.org/economic-research/working-papers. This script uses the main landing
+# page to gather titles, paper URLs, and paper numbers. It then visits landing pages to gather
+# authors, abstracts, and publication dates.
+#
 # Note: This script does not distinguish between scripts that are first published and those that have been
 # revised. It simply gathers both. The step where this happens is when the "date" entry is gathered. The 
 # element containing the date is either split using the term "Published" or "Revised" without distinguishing
