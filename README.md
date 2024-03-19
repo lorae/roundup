@@ -23,7 +23,7 @@ The `streamlit_app.py` script produces the [project dashboard](https://roundup.s
 The purpose of this repository is to maintain and improve the [project dashboard](https://roundup.streamlit.app/). The `runall.py` script and its underlying web scrapers are run remotely using a GitHub Actions. However, the repo may also be run locally on your personal computer. Instructions for local setup may be found in the `Getting Started` section of this document.
 
 # Data sources
-Websites that are scraped for data, as of February 2024, are:
+Websites that are scraped for data, as of March 2024, are:
 
 | Name of website                                                  | Name of script                          | Scraping method |
 |------------------------------------------------------------------|-----------------------------------------|-----------------|
