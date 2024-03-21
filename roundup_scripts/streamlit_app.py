@@ -118,13 +118,13 @@ for _, row in df_filtered.iterrows():
     
     with text_col: # Column containing title, author, source, date, etc
         st.markdown(f"###  `{row['Source']}` [{row['Title']}]({row['Link']})")
-        st.markdown(f"#### **Authors:** {row['Author']}")
+        st.markdown(f"##### {row['Author']}")
         # Display est pub date and posted pub date side-by-side
         colA, colB = st.columns([1,1])
         with colA:
-            st.markdown(f"**Est Pub Date:** {row['est_PubDate'].strftime('%Y-%m-%d')}")
+            st.markdown(f"###### **Estimated Pub Date:** {row['est_PubDate'].strftime('%Y-%m-%d')}")
         with colB:
-            st.markdown(f"**Posted Pub Date:** {row['Date']}")
+            st.markdown(f"###### **Posted Pub Date:** {row['Date']}")
         st.markdown(f"**Abstract:** {row['Abstract']}")
     
     entry_number += 1
