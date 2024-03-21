@@ -53,9 +53,8 @@ total_scrapers = status_df.shape[0]
 active_scrapers = (status_df['Status'] == 'on').sum()
 
 ########## Sidebar ##########
-# OPTIONS
 st.sidebar.header("Options")
-# Configuring options
+# Configure options
 all_sources_option = "All"
 source_options_with_all = [all_sources_option] + list(source_options)
 # Source selection
@@ -66,7 +65,7 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             max_value=30,
                             value=7,
                             step=1)
-# WEB SCRAPER STATUS
+# Display web scraper status
 st.sidebar.header("Web Scraper Status")
 # Display number of active web scrapers
 st.sidebar.write(f"{active_scrapers} of {total_scrapers} web scrapers currently active")
@@ -82,7 +81,7 @@ with st.sidebar.expander("Show/Hide Status", expanded=False):
 
 ########## Main ##########
 
-# Get the minimum date based on the slider input
+## Get the minimum date based on the slider input
 min_date = current_date - timedelta(days=(slider_selection))
 
 ## Apply user selected options from sidebar menu
@@ -104,8 +103,7 @@ st.write("")
 st.header("Results")
 st.write(f"{num_results} entries found")
 
-
-
+## Display contents of df_filtered using for loop, Streamlit columns
 # Initialize a counter before the loop
 entry_number = 1
 
