@@ -85,13 +85,10 @@ with st.sidebar.expander("Show/Hide Status", expanded=False):
 # Get the minimum date based on the slider input
 min_date = current_date - timedelta(days=(slider_selection))
 
-# Apply user selected options
-# Check if "All" is selected or individual sources are selected
-if all_sources_option in source_selection:
-    # If "All" is selected, use the whole DataFrame
+## Apply user selected options from sidebar menu
+if all_sources_option in source_selection: # If "All" is selected, filter above min_date
     df_filtered = df[df['est_PubDate'] >= min_date]
-else:
-    # Otherwise, filter by the selected sources
+else: # Otherwise, filter by the selected sources, and filter above min_date
     df_filtered = df[(df['est_PubDate'] >= min_date) & (df['Source'].isin(source_selection))]
 
 
