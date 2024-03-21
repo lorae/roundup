@@ -59,7 +59,7 @@ st.sidebar.header("Options")
 all_sources_option = "All"
 source_options_with_all = [all_sources_option] + list(source_options)
 # Source selection
-source_selection = st.sidebar.multiselect("Select Source(s)", source_options_with_all, default=[all_sources_option])
+source_selection = st.sidebar.multiselect("Select source(s)", source_options_with_all, default=[all_sources_option])
 # Recency selection
 slider_selection = st.sidebar.slider("How many days of data would you like to view?",
                             min_value=1,
@@ -71,11 +71,13 @@ st.sidebar.header("Web Scraper Status")
 # Display number of active web scrapers
 st.sidebar.write(f"{active_scrapers} of {total_scrapers} web scrapers currently active")
 # Web scraper status drop down
-with st.sidebar.expander("Show/Hide Status", expanded=False):  # This line creates a collapsible section
-    # Convert DataFrame to HTML, remove index and borders
-    html_status_table = status_df.to_html(index=False, border=0)
-    # Display HTML table using st.markdown
-    st.markdown(html_status_table, unsafe_allow_html=True)
+with st.sidebar.expander("Show/Hide Status", expanded=False):
+    for _, row in status_df.iterrows():
+        # Specify the column widths where the first column is 3 times wider than the second
+        col1, col2 = st.columns([3, 1])
+        # Write the values to the columns
+        col1.write(row[0])
+        col2.write(row[1])
 
 
 ########## Main ##########
