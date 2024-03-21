@@ -92,25 +92,12 @@ else: # Otherwise, filter by the selected sources, and filter above min_date
     df_filtered = df[(df['est_PubDate'] >= min_date) & (df['Source'].isin(source_selection))]
 
 
-# Adjust the DataFrame before converting it to HTML
-df_novel = df_filtered.reset_index(drop=True)  # Reset the index and drop the old index
-# Add hyperlinks to the titles
-df_novel['Title'] = df_novel.apply(lambda row: f'<a href="{row["Link"]}">{row["Title"]}</a>', axis=1)
-# Drop the 'Link' and 'Number' columns
-df_novel = df_novel.drop(['Link', 'Number'], axis=1)
-
-# create a custom order for sources
+## Sort results before displaying df_filtered
 source_order = ['NBER', 'FED-BOARD', 'FED-BOARD-NOTES', 'FED-ATLANTA', 'FED-BOSTON', 'FED-CHICAGO', 'FED-CLEVELAND', 'FED-DALLAS', 'FED-KANSASCITY', 'FED_MINNEAPOLIS', 'FED-NEWYORK', 'FED-PHILADELPHIA', 'FED-RICHMOND', 'FED-SANFRANCISCO', 'FED-STLOUIS', 'BEA', 'BFI', 'BIS', 'BOE', 'ECB', 'IMF']
-# convert 'source' column to 'Categorical' data type with custom order
-df_novel['Source'] = pd.Categorical(df_novel['Source'], categories=source_order, ordered=True)
-# sort the dataframe by 'source' column
-df_novel = df_novel.sort_values(by='Source')
-# Reset the index of df_novel after sorting, and drop the old index
-#df_novel = df_novel.reset_index(drop=True)
-df_novel.index = range(1, len(df_novel) + 1)
-
-# calculate the number of results
-num_results = len(df_novel)
+# Map each source to its corresponding index in 'source_order' to use as a sort key
+sort_key = df_filtered['Source'].map(lambda x: source_order.index(x))
+# Sort df_novel by this sort key
+df_filtered = df_filtered.iloc[sort_key.argsort()]
 
 st.write("")
 st.write("")
