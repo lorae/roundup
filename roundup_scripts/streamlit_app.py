@@ -67,10 +67,10 @@ slider_selection = st.sidebar.slider("How many days of data would you like to vi
                             step=1)
 # Display web scraper status
 st.sidebar.header("Web Scraper Status")
-# Display number of active web scrapers
-st.sidebar.write(f"{active_scrapers} of {total_scrapers} web scrapers currently active")
 # Web scraper status drop down
-with st.sidebar.expander("Show/Hide Status", expanded=False):
+scraper_expander_message = f"{active_scrapers} of {total_scrapers} web scrapers active"
+with st.sidebar.expander(scraper_expander_message, # Display # active scrapers
+                         expanded=False):
     for _, row in status_df.iterrows():
         # Specify the column widths where the first column is 3 times wider than the second
         col1, col2 = st.columns([3, 1])
