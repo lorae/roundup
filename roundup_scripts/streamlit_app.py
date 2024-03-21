@@ -27,7 +27,7 @@ def check_rows(column, options):
     return res.loc[res[column].isin(options)]
 
 st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="wide")    
-st.title('Roundup: The Latest Economics Research')
+st.title('Roundup: Aggregating the Latest Economics Research')
 
 st.write(
     "What are economists researching? We aggregate recent economics working papers from "
