@@ -41,6 +41,7 @@ st.write(
     "See the source code and replicate the project at: "
     "https://github.com/lorae/roundup"
 )
+st.divider()
 
 # Load data
 df, source_options, current_date = load_df()
