@@ -98,9 +98,8 @@ sort_key = df_filtered['Source'].map(lambda x: source_order.index(x))
 # Sort df_novel by this sort key
 df_filtered = df_filtered.iloc[sort_key.argsort()]
 
-st.write("")
-st.write("")
-st.header("Results")
+## Calculate the number of results
+num_results = len(df_filtered)
 st.write(f"{num_results} entries found")
 
 ## Display contents of df_filtered using for loop, Streamlit columns
@@ -109,7 +108,9 @@ entry_number = 1
 
 # Displaying each entry vertically
 for _, row in df_filtered.iterrows():
-    col1, col2 = st.columns([1, 15])
+    # Column containing the index number is 1/15th the width of the column containing the 
+    # text (title, authors, etc)
+    index_col, text_col = st.columns([1, 15])
 
     with index_col: # Column containing the index number of the paper
         # Format number as heading to ensure consistent alignment with the title
@@ -117,7 +118,8 @@ for _, row in df_filtered.iterrows():
     
     with text_col: # Column containing title, author, source, date, etc
         st.markdown(f"###  `{row['Source']}` [{row['Title']}]({row['Link']})")
-        st.markdown(f"**Authors:** {row['Author']}")
+        st.markdown(f"#### **Authors:** {row['Author']}")
+        # Display est pub date and posted pub date side-by-side
         colA, colB = st.columns([1,1])
         with colA:
             st.markdown(f"**Est Pub Date:** {row['est_PubDate'].strftime('%Y-%m-%d')}")
