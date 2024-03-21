@@ -113,11 +113,11 @@ entry_number = 1
 for _, row in df_filtered.iterrows():
     col1, col2 = st.columns([1, 15])
 
-    with col1:
-        # Use markdown for the number to ensure consistent styling with the title
+    with index_col: # Column containing the index number of the paper
+        # Format number as heading to ensure consistent alignment with the title
         st.markdown(f"### {entry_number}")
     
-    with col2:
+    with text_col: # Column containing title, author, source, date, etc
         st.markdown(f"###  `{row['Source']}` [{row['Title']}]({row['Link']})")
         st.markdown(f"**Authors:** {row['Author']}")
         colA, colB = st.columns([1,1])
