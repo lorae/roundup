@@ -27,13 +27,19 @@ def check_rows(column, options):
     return res.loc[res[column].isin(options)]
 
 st.set_page_config(page_title="Roundup Data Viewer", page_icon="📖", layout="wide")    
-st.header('The latest economics working papers')
+st.header('Roundup: The Latest Economics Research')
 
 st.write(
-    "The following table contains an aggregation of titles, authors, abstracts, source, dates of publication of economics working papers "
-    "from 20+ different websites. Working papers, also known as pre-print papers, are articles that have not yet been vetted by the "
-    "peer-review process at an academic journal.\n  "
-    "See the source code and replicate the project at: https://github.com/lorae/roundup"
+    "What are economists researching? We aggregate recent economics working papers from "
+    "21 sources, with results updated daily at 7:00 AM EST. "
+    "Working papers, also known as pre-print papers, are recently-written research "
+    "articles that have not yet been vetted by the peer-review process at an academic "
+    "journal."
+)
+st.write("")
+st.write(
+    "See the source code and replicate the project at: "
+    "https://github.com/lorae/roundup"
 )
 
 # Load data
