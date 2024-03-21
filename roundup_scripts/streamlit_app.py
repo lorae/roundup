@@ -103,33 +103,37 @@ df_novel = df_novel.sort_values(by='Source')
 #df_novel = df_novel.reset_index(drop=True)
 df_novel.index = range(1, len(df_novel) + 1)
 
-# Convert to HTML, set escape=False to prevent HTML syntax from being escaped
-html = df_novel.to_html(escape=False)
-# Define custom CSS style
-css_style = """
-<style>
-    table.customTable {
-        display: inline-block;
-    }
-    table.customTable td {
-        word-wrap: break-word;
-        word-break: break-all;
-    }
-    table.customTable td:nth-child(3) {  # Assuming 'Abstract' is the 3rd column
-        font-size: 6px;  # Set to desired font size
-        max-width: 500px;  # Set to desired column width
-    }
-</style>
-"""
+# calculate the number of results
+num_results = len(df_novel)
 
-# Print number of data frame entries
-num_entries = len(df_novel)
-st.write(f"{num_entries} results")
+st.write("")
+st.write("")
+st.header("Results")
+st.write(f"{num_results} entries found")
 
 
-# Apply custom CSS style
-st.markdown(css_style, unsafe_allow_html=True)
 
-# Convert DataFrame to HTML and display
-st.markdown(html, unsafe_allow_html=True)
+# Initialize a counter before the loop
+entry_number = 1
+
+# Displaying each entry vertically
+for _, row in df_filtered.iterrows():
+    col1, col2 = st.columns([1, 15])
+
+    with col1:
+        # Use markdown for the number to ensure consistent styling with the title
+        st.markdown(f"### {entry_number}")
+    
+    with col2:
+        st.markdown(f"###  `{row['Source']}` [{row['Title']}]({row['Link']})")
+        st.markdown(f"**Authors:** {row['Author']}")
+        colA, colB = st.columns([1,1])
+        with colA:
+            st.markdown(f"**Est Pub Date:** {row['est_PubDate'].strftime('%Y-%m-%d')}")
+        with colB:
+            st.markdown(f"**Posted Pub Date:** {row['Date']}")
+        st.markdown(f"**Abstract:** {row['Abstract']}")
+    
+    entry_number += 1
+
 
