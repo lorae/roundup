@@ -1,3 +1,5 @@
+# Potentially deprecate in facor of get_soup and related functions for selenium and API requests.
+
 import requests
 from requests.exceptions import HTTPError
 
