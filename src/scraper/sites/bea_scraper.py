@@ -1,4 +1,4 @@
-from src.scraper.session import web_session
+from src.scraper.session import web_session # may be deprecated soon
 from src.scraper.get_soup import get_soup
 import requests
 from bs4 import BeautifulSoup
@@ -14,6 +14,14 @@ class BEAScraper(GenericScraper):
         }
 
     # Public method which is called from outside the class.
+    '''This function works uses the get_soup function to access and parse the bea.gov
+    main webpage. Prior to collecting data, it visits each individul paper's landing page 
+    to ascertain whether that paper is a working paper (or a paper of another genre, like
+    a report). If the paper is indeed a working paper, the paper number and abstract are 
+    collected from the landing page. If not, the function skips that iteration of data
+    collection before information is stored. The function then proceeds by extracting the 
+    remaining data - title, author, abstract, etc - by looping through elements of the
+    main webpage.'''    
     def collect_data(self):
         url = "https://www.bea.gov/research/papers"
         # Bundle the arguments together for requests module
@@ -52,6 +60,5 @@ class BEAScraper(GenericScraper):
                         'Abstract': abstract
                 })
                 
-            
         # Use the inherited process_data method to create and return the DataFrame
         return self.process_data(data)
