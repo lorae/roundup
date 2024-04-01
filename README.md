@@ -186,3 +186,14 @@ The project directory.
     
   - **scrapers_archive**:  
     A folder that contains potentially useful archived scraper code.
+
+# Disclaimer on Web Scraping
+
+This code accesses remote data via network requests. The scripts are programmed to make minimal and spaced-out requests to avoid putting undue load on the servers of the data sources. Our goal is to collect data responsibly without disrupting the services of the websites we access. The collected data is intended for academic and research purposes only.
+
+At the time of development, all efforts were made to ensure that the scraping activities comply with the terms of service and /robots.txt directives of the websites from which data is being collected. However, terms of service can change, and it is the sole responsibility of users of this code to ensure ongoing compliance.  The developers of this project accept no liability for any misuse of the data or any damages that might arise from the use of this code.
+
+By using this code, you agree to abide by these principles and to regularly check the terms of service of the websites you are scraping to ensure compliance.
+
+
+
