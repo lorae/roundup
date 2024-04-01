@@ -4,7 +4,7 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from 20 different websites at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of March 2024, the project incorporates data from 21 different sources.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from over 20 different websites at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of March 2024, the project incorporates data from 21 different sources.
 
 # How it works
 
@@ -16,7 +16,7 @@ The web scrapers in this project gather six pieces of information on each econom
 - URL
 - Paper ID number (according to each website's own numbering system)
 
-Each website has a bespoke module, located in `roundup-scripts/scrapers`. When the GitHub Actions project workflow, `.github/workflows/main.yml` is activated at 6:40 AM EST every morning, it runs the main python script of the project - `runall.py` - which cycles through each of the 20 web scraping modules. After the data are collected, it runs `roundup_scripts/compare.py`, which compares the recently-gathered data to a set of working papers already seen. All those that are truly novel are assigned an estimated publication date of the day that they were first identified, and appended to the `historic/papers-we-have-seen-metadata` file.
+Each website has a bespoke module, located in `roundup-scripts/scrapers`. When the GitHub Actions project workflow, `.github/workflows/main.yml` is activated at 6:40 AM EST every morning, it runs the main python script of the project - `runall.py` - which cycles through each of the 20+ web scraping modules. After the data are collected, it runs `roundup_scripts/compare.py`, which compares the recently-gathered data to a set of working papers already seen. All those that are truly novel are assigned an estimated publication date of the day that they were first identified, and appended to the `historic/papers-we-have-seen-metadata` file.
 
 The `streamlit_app.py` script produces the [project dashboard](https://roundup.streamlit.app/), which is a user-friendly aggregation of the most recent economics research. The app draws primarily from the `historic/papers-we-have-seen-metadata` file to populate itself with information.
 
