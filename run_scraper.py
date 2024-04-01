@@ -1,4 +1,4 @@
-from src.scraper.sites.bea_gov import BEAScraper
+from src.scraper.sites.bea_scraper import BEAScraper
 
 if __name__ == "__main__":
     scraper = BEAScraper()  # Instantiate the scraper
