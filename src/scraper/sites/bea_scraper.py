@@ -1,7 +1,6 @@
 from src.scraper.session import web_session # may be deprecated soon
 from src.scraper.get_soup import get_soup
 import requests
-from bs4 import BeautifulSoup
 from ..generic_scraper import GenericScraper
 
 class BEAScraper(GenericScraper):
