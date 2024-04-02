@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 class BFIScraper(GenericScraper):
     def __init__(self):
-        super().__init__("BFI")
+        super().__init__('BFI')
         # Define headers once and use them throughout the class
         self.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.112 Safari/537.36',
@@ -14,7 +14,7 @@ class BFIScraper(GenericScraper):
     
     # Public method which is called from outside the class.
     def collect_data(self):
-        url = "https://bfi.uchicago.edu/working-papers/"
+        url = 'https://bfi.uchicago.edu/working-papers/'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
         # Send request and get soup
@@ -43,7 +43,7 @@ class BFIScraper(GenericScraper):
             Abstracts.append(abstract)
             
             # Get the href attribute of 'a.button'
-            number = soup.select('a.button')[0]['href'].split("BFI_WP_")[1].replace('.pdf', '')
+            number = soup.select('a.button')[0]['href'].split('BFI_WP_')[1].replace('.pdf', '')
             Numbers.append(number)
             
         # Create a dictionary of the six lists, where the keys are the column names.

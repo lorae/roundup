@@ -4,11 +4,11 @@ from bs4 import BeautifulSoup
 
 
 def get_soup(session_args: requests.Request) -> requests.Response:
-    """Requests an arbitrary remote resource using the provided `Request`-formatted object.
+    '''Requests an arbitrary remote resource using the provided `Request`-formatted object.
 
     :param sessionArgs : Requests-formatted session arguments.
     :raises HTTPError: If the response status code is not 200.
-    """
+    '''
 
     session = requests.Session()
     prepared_request = session.prepare_request(session_args)

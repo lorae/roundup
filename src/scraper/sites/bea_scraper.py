@@ -6,7 +6,7 @@ from ..generic_scraper import GenericScraper
 
 class BEAScraper(GenericScraper):
     def __init__(self):
-        super().__init__("BEA")
+        super().__init__('BEA')
         # Define headers once and use them throughout the class
         self.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.112 Safari/537.36',
@@ -23,7 +23,7 @@ class BEAScraper(GenericScraper):
     remaining data - title, author, abstract, etc - by looping through elements of the
     main webpage.'''    
     def collect_data(self):
-        url = "https://www.bea.gov/research/papers"
+        url = 'https://www.bea.gov/research/papers'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
         # Send request and get soup
@@ -33,7 +33,7 @@ class BEAScraper(GenericScraper):
         data = []
         for element in elements:
                 # Get the link to the landing page of the working paper. Bundle request arguments and parse as soup.
-                landing_url = "https://www.bea.gov/" + element.find('h2', {'class': 'paper-title'}).find('a')['href']
+                landing_url = 'https://www.bea.gov/' + element.find('h2', {'class': 'paper-title'}).find('a')['href']
                 session_arguments = requests.Request(method='GET', url=landing_url, headers=self.headers)
                 landing_soup = get_soup(session_arguments)
 
@@ -43,7 +43,7 @@ class BEAScraper(GenericScraper):
                 if "BEA-WP" in number_url:
                         # Split the url to pieces before and after characters "BEA-". Keep only the piece following "BEA-" which
                         # contains the working paper number. Remove the ".pdf" at the end.
-                        number = number_url.split("BEA-")[1].replace('.pdf', '')
+                        number = number_url.split('BEA-')[1].replace('.pdf', '')
                 else:
                         # skip to the next iteration of the for loop. Do not log data for this entry
                         continue
