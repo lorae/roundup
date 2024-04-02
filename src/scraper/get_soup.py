@@ -3,7 +3,7 @@ from requests.exceptions import HTTPError
 from bs4 import BeautifulSoup
 
 
-def get_soup(session_args: requests.Request) -> requests.Response:
+def request_soup(session_args: requests.Request) -> requests.Response:
     '''Requests an arbitrary remote resource using the provided `Request`-formatted object.
 
     :param sessionArgs : Requests-formatted session arguments.

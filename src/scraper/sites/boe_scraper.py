@@ -1,4 +1,4 @@
-from src.scraper.get_soup import get_soup
+from src.scraper.get_soup import request_soup
 import feedparser
 import requests
 import pandas as pd
@@ -34,8 +34,8 @@ class BOEScraper(GenericScraper):
                 # Bundle the arguments together for requests module
                 session_arguments = requests.Request(method='GET', url=entry.link, headers=self.headers)
                 # Send request and get soup from landing page
-                soup = get_soup(session_arguments)
-                
+                soup = request_soup(session_arguments)
+
                 # Extract remaining data on abstract, authors, number from landing page soup
                 abstract = self.get_abstract(soup)
                 authors = self.get_authors(soup)

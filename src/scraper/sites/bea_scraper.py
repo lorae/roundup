@@ -1,5 +1,5 @@
 from src.scraper.session import web_session # may be deprecated soon
-from src.scraper.get_soup import get_soup
+from src.scraper.get_soup import request_soup
 import requests
 from ..generic_scraper import GenericScraper
 
@@ -26,7 +26,7 @@ class BEAScraper(GenericScraper):
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
         # Send request and get soup
-        soup = get_soup(session_arguments)
+        soup = request_soup(session_arguments)
         
         elements = soup.select('div.view-content div.card')
         data = []
@@ -34,7 +34,7 @@ class BEAScraper(GenericScraper):
                 # Get the link to the landing page of the working paper. Bundle request arguments and parse as soup.
                 landing_url = 'https://www.bea.gov/' + element.find('h2', {'class': 'paper-title'}).find('a')['href']
                 session_arguments = requests.Request(method='GET', url=landing_url, headers=self.headers)
-                landing_soup = get_soup(session_arguments)
+                landing_soup = request_soup(session_arguments)
 
                 # The number_url is the URL of a PDF on the landing page which will contain the working paper number
                 number_url = landing_soup.find('h2', class_='card-title').find('a')['href'] # the URL containing the number

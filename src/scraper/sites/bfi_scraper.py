@@ -1,4 +1,4 @@
-from src.scraper.get_soup import get_soup
+from src.scraper.get_soup import request_soup
 from ..generic_scraper import GenericScraper
 import requests
 from bs4 import BeautifulSoup
@@ -18,7 +18,7 @@ class BFIScraper(GenericScraper):
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
         # Send request and get soup
-        soup = get_soup(session_arguments)
+        soup = request_soup(session_arguments)
 
         elements = soup.select('div.teaser.teaser--working-paper ')
 
@@ -36,7 +36,7 @@ class BFIScraper(GenericScraper):
             # Bundle the arguments together for requests module
             session_arguments = requests.Request(method='GET', url=link, headers=self.headers)
             # Send request and get soup
-            soup = get_soup(session_arguments)
+            soup = request_soup(session_arguments)
             
             # Get the abstracts
             abstract = soup.select('div.textblock')[0].text.strip()
