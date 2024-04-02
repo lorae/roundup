@@ -10,7 +10,7 @@ class BISScraper(GenericScraper):
     def collect_data(self):
         # RSS feed URL
         url = 'https://www.bis.org/doclist/wppubls.rss?from=&till=&objid=wppubls&page=&paging_length=10&sort_list=date_desc&theme=wppubls&ml=false&mlurl=&emptylisttext='
-        # Use feedparser to request url, parse rss feed contents
+        # Request and parse RSS feed contents
         f = feedparser.parse(url)
 
         data = {
