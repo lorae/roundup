@@ -1,11 +1,13 @@
 from src.scraper.sites.bea_scraper import BEAScraper
 from src.scraper.sites.bfi_scraper import BFIScraper
 from src.scraper.sites.bis_scraper import BISScraper
+from src.scraper.sites.boe_scraper import BOEScraper
 
 # List of scraper classes
-scrapers = [#BEAScraper, 
-            #BFIScraper,
-            BISScraper]  
+scrapers = [BEAScraper, 
+            BFIScraper,
+            BISScraper,
+            BOEScraper]  
 
 # Progress bar 
 total_tasks = len(scrapers)
