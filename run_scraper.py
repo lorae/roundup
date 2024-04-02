@@ -14,11 +14,10 @@ scrapers = [BEAScraper,
 # Progress bar 
 total_tasks = len(scrapers)
 for ScraperClass in scrapers:
-    # Append the result of each scrape to the list
-    print(f"running {ScraperClass} ...")
-    scraper = ScraperClass()  # Instantiate the scraper
-    df = scraper.collect_data()  # Collect the data and process it into a pandas df
-    print(df)
+    scraper_instance = ScraperClass()  # Instantiate the scraper
+    print(f"scraping {scraper_instance.source} using {ScraperClass.__name__} ...")
+    df = scraper_instance.fetch_and_process_data()  # Fetch and process data into standardized pandas df
+    print(df) # Print output from scraper_instance.process_data()
 
 '''if __name__ == "__main__":
     scraper = BFIScraper()  # Instantiate the scraper

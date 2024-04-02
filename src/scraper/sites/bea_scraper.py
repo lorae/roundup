@@ -1,7 +1,7 @@
-from src.scraper.session import web_session # may be deprecated soon
 from src.scraper.get_soup import request_soup
-import requests
 from ..generic_scraper import GenericScraper
+import requests
+
 
 class BEAScraper(GenericScraper):
     def __init__(self):
@@ -21,7 +21,7 @@ class BEAScraper(GenericScraper):
     collection before information is stored. The function then proceeds by extracting the 
     remaining data - title, author, abstract, etc - by looping through elements of the
     main webpage.'''    
-    def collect_data(self):
+    def fetch_data(self):
         url = 'https://www.bea.gov/research/papers'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
@@ -44,7 +44,7 @@ class BEAScraper(GenericScraper):
                         # contains the working paper number. Remove the ".pdf" at the end.
                         number = number_url.split('BEA-')[1].replace('.pdf', '')
                 else:
-                        # skip to the next iteration of the for loop. Do not log data for this entry
+                        # Skip to the next iteration of the for loop. Do not log data for this entry
                         continue
                 # Abstract
                 abstract = landing_soup.find('p', {'class': 'card-abstract'}).get_text(strip=True)
@@ -60,4 +60,4 @@ class BEAScraper(GenericScraper):
                 })
                 
         # Use the inherited process_data method to create and return the DataFrame
-        return self.process_data(data)
+        return data

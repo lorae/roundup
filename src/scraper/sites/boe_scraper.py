@@ -16,7 +16,7 @@ class BOEScraper(GenericScraper):
 
 
     # Public method which is called from outside the class.
-    def collect_data(self):
+    def fetch_data(self):
         # Request and parse RSS feed contents
         url = "https://www.bankofengland.co.uk/rss/publications"
         f = feedparser.parse(url)
@@ -55,7 +55,7 @@ class BOEScraper(GenericScraper):
                 continue
 
         # Use the inherited process_data method to create and return the DataFrame
-        return self.process_data(data)
+        return data
 
     # Private method used to get abstract
     def get_abstract(self, soup):

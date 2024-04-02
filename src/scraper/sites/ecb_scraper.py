@@ -6,7 +6,7 @@ class ECBScraper(GenericScraper):
         super().__init__('ECB')
     
     # Public method which is called from outside the class.
-    def collect_data(self):
+    def fetch_data(self):
         url = 'https://www.ecb.europa.eu/pub/research/working-papers/html/index.en.html'
         # Send request and get soup
         soup = selenium_soup(url)
@@ -75,4 +75,4 @@ class ECBScraper(GenericScraper):
                 'Abstract': Abstract}
         
         # Use the inherited process_data method to create and return the DataFrame
-        return self.process_data(data)
+        return data

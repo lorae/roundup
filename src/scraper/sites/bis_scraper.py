@@ -1,5 +1,4 @@
 import feedparser
-import pandas as pd
 from ..generic_scraper import GenericScraper
 
 class BISScraper(GenericScraper):
@@ -7,7 +6,7 @@ class BISScraper(GenericScraper):
         super().__init__("BIS")
 
     # Public method which is called from outside the class.
-    def collect_data(self):
+    def fetch_data(self):
         # RSS feed URL
         url = 'https://www.bis.org/doclist/wppubls.rss?from=&till=&objid=wppubls&page=&paging_length=10&sort_list=date_desc&theme=wppubls&ml=false&mlurl=&emptylisttext='
         # Request and parse RSS feed contents
@@ -38,4 +37,4 @@ class BISScraper(GenericScraper):
             })
 
         # Use the inherited process_data method to create and return the DataFrame
-        return self.process_data(data)
+        return data

@@ -13,7 +13,7 @@ class BFIScraper(GenericScraper):
         }
     
     # Public method which is called from outside the class.
-    def collect_data(self):
+    def fetch_data(self):
         url = 'https://bfi.uchicago.edu/working-papers/'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
@@ -55,4 +55,4 @@ class BFIScraper(GenericScraper):
                 'Abstract': Abstracts}
         
         # Use the inherited process_data method to create and return the DataFrame
-        return self.process_data(data)
+        return data
