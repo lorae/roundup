@@ -3,7 +3,7 @@ from ..generic_scraper import GenericScraper
 
 class BISScraper(GenericScraper):
     def __init__(self):
-        super().__init__("BIS")
+        super().__init__(source = "BIS")
 
     # Public method which is called from outside the class.
     def fetch_data(self):

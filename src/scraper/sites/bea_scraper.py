@@ -5,7 +5,7 @@ import requests
 
 class BEAScraper(GenericScraper):
     def __init__(self):
-        super().__init__('BEA')
+        super().__init__(source = 'BEA')
         # Define headers once and use them throughout the class
         self.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.112 Safari/537.36',

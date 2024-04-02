@@ -3,7 +3,7 @@ from ..generic_scraper import GenericScraper
 
 class ECBScraper(GenericScraper):
     def __init__(self):
-        super().__init__('ECB')
+        super().__init__(source = 'ECB')
     
     # Public method which is called from outside the class.
     def fetch_data(self):
