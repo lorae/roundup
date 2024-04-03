@@ -16,7 +16,8 @@ def request_soup(session_args: requests.Request) -> BeautifulSoup:
     Requests an arbitrary remote resource using the provided `Request`-formatted object and 
     parses it using BeautifulSoup.
 
-    :param sessionArgs : Requests-formatted session arguments.
+    :param session_args : Requests-formatted session arguments.
+    :type session_args: requests.Request
     :raises HTTPError: If the response status code is not 200.
     :return: BeautifulSoup object containing the parsed page source.
     '''
