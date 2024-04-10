@@ -14,7 +14,6 @@ class FedBoardNotesScraper(GenericScraper):
 
     def fetch_data(self):
         url_list = ['https://www.federalreserve.gov/econres/notes/feds-notes/default.htm']
-        print(url_list)
         # Get the current year and month
         current_year = datetime.now().year
         current_month = datetime.now().month
