@@ -7,7 +7,7 @@ from src.scraper.sites.fed_atlanta_scraper import FedAtlantaScraper
 from src.scraper.sites.fed_board_notes_scraper import FedBoardNotesScraper
 from src.scraper.sites.fed_board_scraper import FedBoardScraper
 from src.scraper.sites.fed_boston_scraper import FedBostonScraper
-# fed chicago
+from src.scraper.sites.fed_chicago_scraper import FedChicagoScraper
 from src.scraper.sites.fed_cleveland_scraper import FedClevelandScraper
 # fed dallas
 
@@ -22,7 +22,7 @@ scrapers = [
             FedBoardNotesScraper,
             FedBoardScraper,
             FedBostonScraper,
-            #fed chicago
+            FedChicagoScraper,
             FedClevelandScraper
             #fed dallas
             ]
