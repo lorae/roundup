@@ -23,6 +23,7 @@ class BFIScraper(GenericScraper):
         elements = soup.select('div.teaser.teaser--working-paper ')
 
         # Get titles, links, dates, and authors from the main website
+        # TODO: refactor so this loops only once, rather than 4x
         Titles = [el.select('h2.teaser__title')[0].text.strip() for el in elements]
         Links = [el.select('h2.teaser__title a')[0]['href'] for el in elements]
         Dates = [el.select('span.meta__date')[0].text.strip() for el in elements]
