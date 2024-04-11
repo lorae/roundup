@@ -26,7 +26,7 @@ scrapers = [
             FedChicagoScraper,
             FedClevelandScraper,
             FedDallasScraper,
-            FedKansasCityScraper
+            FedKansasCityScraper,
             FedMinneapolisScraper
             ]
 
