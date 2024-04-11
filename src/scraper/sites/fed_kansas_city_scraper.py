@@ -14,15 +14,15 @@ class FedKansasCityScraper(GenericScraper):
         }
 
     def fetch_data(self):
-        # Get the current year
+        # Define the current and last year
         current_year = datetime.now().year
         last_year = current_year - 1
 
         # Prepare the contents of the network request using dynamically
         # generated current_year and last_year. This type of current and last
         # year data request is useful in the edge case when the current date
-        # is in early January and recently published papers could belong
-        # have been published last year.
+        # is in early January and recently published papers could have been
+        # published last year.
         url = 'https://www.kansascityfed.org/research/research-working-papers/research-working-paper-archive/'
         payload = {'csrfmiddlewaretoken': '',
         'archive-topics-search-input': '',
