@@ -18,6 +18,7 @@ from src.scraper.sites.fed_philadelphia_scraper import FedPhiladelphiaScraper
 from src.scraper.sites.fed_richmond_scraper import FedRichmondScraper
 from src.scraper.sites.fed_st_louis_scraper import FedStLouisScraper
 from src.scraper.sites.imf_scraper import IMFScraper
+from src.scraper.sites.nber_scraper import NBERScraper
 
 # List of scraper classes
 scrapers = [
@@ -40,7 +41,8 @@ scrapers = [
             FedPhiladelphiaScraper,
             FedRichmondScraper,
             FedStLouisScraper,
-            IMFScraper
+            IMFScraper,
+            NBERScraper
             ]
 
 # Progress bar 
