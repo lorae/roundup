@@ -9,7 +9,7 @@ from src.scraper.sites.fed_board_scraper import FedBoardScraper
 from src.scraper.sites.fed_boston_scraper import FedBostonScraper
 from src.scraper.sites.fed_chicago_scraper import FedChicagoScraper
 from src.scraper.sites.fed_cleveland_scraper import FedClevelandScraper
-# fed dallas
+from src.scraper.sites.fed_dallas_scraper import FedDallasScraper
 
 # List of scraper classes
 scrapers = [
@@ -23,8 +23,8 @@ scrapers = [
             FedBoardScraper,
             FedBostonScraper,
             FedChicagoScraper,
-            FedClevelandScraper
-            #fed dallas
+            FedClevelandScraper,
+            FedDallasScraper
             ]
 
 # Progress bar 
