@@ -16,6 +16,7 @@ from src.scraper.sites.fed_new_york_scraper import FedNewYorkScraper
 from src.scraper.sites.fed_san_francisco_scraper import FedSanFranciscoScraper
 from src.scraper.sites.fed_philadelphia_scraper import FedPhiladelphiaScraper
 from src.scraper.sites.fed_richmond_scraper import FedRichmondScraper
+from src.scraper.sites.fed_st_louis_scraper import FedStLouisScraper
 
 # List of scraper classes
 scrapers = [
@@ -36,7 +37,8 @@ scrapers = [
             FedNewYorkScraper,
             FedSanFranciscoScraper,
             FedPhiladelphiaScraper,
-            FedRichmondScraper
+            FedRichmondScraper,
+            FedStLouisScraper
             ]
 
 # Progress bar 
@@ -53,8 +55,3 @@ for ScraperClass in scrapers:
     print(f'{scraper_instance.source} scraped. {i} of {total_tasks} tasks complete.')
     print('----------')
     i += 1 #update counter
-
-'''if __name__ == "__main__":
-    scraper = BFIScraper()  # Instantiate the scraper
-    df = scraper.collect_data()  # Collect the data and process it into a pandas df
-    print(df)'''
