@@ -5,6 +5,9 @@ import requests
 import warnings
 
 class FedBostonScraper(GenericScraper):
+    # TODO: Consider rewriting so that current and prior year are 
+    # always scraped. May increase computing time but also increase 
+    # simplicity for future development.
     def __init__(self):
         super().__init__(source = 'FED-BOSTON')
 
