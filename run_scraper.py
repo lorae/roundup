@@ -12,6 +12,7 @@ from src.scraper.sites.fed_cleveland_scraper import FedClevelandScraper
 from src.scraper.sites.fed_dallas_scraper import FedDallasScraper
 from src.scraper.sites.fed_kansas_city_scraper import FedKansasCityScraper
 from src.scraper.sites.fed_minneapolis_scraper import FedMinneapolisScraper
+from src.scraper.sites.fed_new_york_scraper import FedNewYorkScraper
 
 # List of scraper classes
 scrapers = [
@@ -29,6 +30,7 @@ scrapers = [
             FedDallasScraper,
             FedKansasCityScraper,
             FedMinneapolisScraper,
+            FedNewYorkScraper
             ]
 
 # Progress bar 
