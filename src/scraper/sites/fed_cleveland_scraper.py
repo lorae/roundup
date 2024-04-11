@@ -5,7 +5,17 @@ class FedClevelandScraper(GenericScraper):
     def __init__(self):
         super().__init__(source = 'FED-CLEVELAND')
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Uses Selenium to access the source's main page and parses the 
+        output using BeautifulSoup to get title, link, author, date, 
+        number, and abstract for each working paper entry. 
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url = "https://www.clevelandfed.org/publications/working-paper"
         # Use Selenium to parse the webpage, return soup
         soup = selenium_soup(url=url)
@@ -37,7 +47,8 @@ class FedClevelandScraper(GenericScraper):
             authors_list = el.find('div', {'class': 'authors'}).get_text().strip().split('\n')
             authors_string = ", ".join(authors_list)
 
-            # Populate `data` with new entries
+            # Append title, link, number, date, author, and abstract to the
+            # `data` dictionary list
             data.append({'Title': title,
                     'Link': link,
                     'Number': number,

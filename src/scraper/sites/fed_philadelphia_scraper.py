@@ -13,7 +13,20 @@ class FedPhiladelphiaScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's main page and parses the 
+        response using BeautifulSoup and then as JSON data to get title,
+        link, author, and number for each working paper entry. 
+        A secondary GET request is made to each working paper's 
+        landing page and parsed using BeautifulSoup to extract
+        date and abstract data.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url = 'https://www.philadelphiafed.org/search-results/all-work?searchtype=working-papers'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', 
@@ -88,7 +101,6 @@ class FedPhiladelphiaScraper(GenericScraper):
 
             # Append title, author_string, number, link, abstract, and date
             # to `data`
-
             data.append({
                 'Title': title,
                 'Author': author_string,

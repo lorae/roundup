@@ -14,9 +14,22 @@ class BOEScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
-
     # Public method which is called from outside the class.
     def fetch_data(self):
+        # TODO: get_number() and get_authors() logic is simple enough to
+        #  be refactored into the main body of fetch_data, while 
+        # get_abstract() should remain its own private method.
+        '''
+        Requests and parses the source's main RSS feed using feedparser
+        to get title, link, and date for each working paper entry.
+        A secondary GET request is made to each working paper's landing
+        page and parsed using BeautifulSoup to extract author, number, 
+        and abstract data.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         # Request and parse RSS feed contents
         url = "https://www.bankofengland.co.uk/rss/publications"
         f = feedparser.parse(url)
@@ -41,7 +54,8 @@ class BOEScraper(GenericScraper):
                 authors = self.get_authors(soup)
                 number = self.get_number(soup)
                                 
-                # Append this data to `data`
+                # Append title, link, date, abstract, author, and number to the
+                # `data` dictionary list
                 data.append({
                     'Title': title,
                     'Link': link,

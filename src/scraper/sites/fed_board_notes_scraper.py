@@ -12,7 +12,19 @@ class FedBoardNotesScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's main page and parses the 
+        response using BeautifulSoup. If the current month is January,
+        also will request a URL corresponding to the previous year's 
+        entries. From these main landing pages, extracts title, link, 
+        author, date, number, and abstract for each working paper entry. 
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url_list = ['https://www.federalreserve.gov/econres/notes/feds-notes/default.htm']
         # Get the current year and month
         current_year = datetime.now().year
@@ -55,7 +67,8 @@ class FedBoardNotesScraper(GenericScraper):
                 # This website doesn't number papers, so I designate numbers to be the end part of the DOI url
                 number = doi_link.split('.org')[1].replace('.', '').replace('/', '').replace('-', '').strip()        
                 
-                # Populate `data` with new entries
+                # Append title, author, date, abstract, link, and number to the
+                # `data` dictionary list
                 data.append({'Title': title,
                              'Author': author,
                              'Date': date,

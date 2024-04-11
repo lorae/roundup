@@ -12,7 +12,20 @@ class NBERScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's API and parses the JSON
+        response to get title, link, date, and number for each working
+        paper entry. 
+        A secondary GET request is made to each working paper's 
+        landing page and parsed using BeautifulSoup to extract working
+        paper authors and abstracts.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url = 'https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100'
         # Send request and parse JSON-formatted response
         response = request_json(method = 'GET',

@@ -6,7 +6,17 @@ class FedAtlantaScraper(GenericScraper):
     def __init__(self):
         super().__init__(source = 'FED-ATLANTA')
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Requests and parses the source's main RSS feed using feedparser
+        to get title, link, author, date, number, and abstract for
+        each working paper entry.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         # RSS feed URL
         url = "https://www.atlantafed.org/rss/wps"
         # Request and parse RSS feed contents
@@ -42,7 +52,8 @@ class FedAtlantaScraper(GenericScraper):
             # before the string "Working Paper".
             author = entry.description.split("Working Paper")[0].strip()
 
-            # Populate `data`
+            # Append title, link, date, abstract, number, and author
+            # `data` dictionary list
             data.append({'Title': title,
                     'Link': link,
                     'Date': date,

@@ -5,13 +5,28 @@ import requests
 import warnings
 
 class FedBostonScraper(GenericScraper):
-    # TODO: Consider rewriting so that current and prior year are 
-    # always scraped. May increase computing time but also increase 
-    # simplicity for future development.
-    def __init__(self):
+
+    def __nit__(self):
         super().__init__(source = 'FED-BOSTON')
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's API and parses the JSON-
+        formatted response to get title, link, and author for each
+        working paper entry. If the current month is January, also will
+        send a GET request corresponding to the previous year's data.
+        A secondary GET request is made to each working paper's 
+        landing page and parsed using BeautifulSoup to extract
+        date, number, and abstract data.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
+        # TODO: Consider rewriting so that current and prior year are 
+        # always scraped. May increase computing time but also increase 
+        # simplicity for future development.
         # We may need to make two API calls, one for each year, if the month is close enough to the prior year (i.e.,
         # if the current month is January).
         url = 'https://www.bostonfed.org/api/pubsanddata/publications'
@@ -69,20 +84,25 @@ class FedBostonScraper(GenericScraper):
                 'pgSz': '20',
                 'pgN': '1'
                 }
-            # Send request and get soup from landing page
-            response = request_json(method = 'GET', url = url, headers = headers, params = payload)
+            # Send API request and parse JSON response
+            response = request_json(method = 'GET', 
+                                    url = url, 
+                                    headers = headers, 
+                                    params = payload)
             entries = response['publications']
 
             for entry in entries:
+                # Title
                 title = entry['title']
 
                 # Author names are stored within itemAuthors attribute. Loop through itemAuthors
                 # and join each author fullName with ", " to generate one `authors` string.
                 authors = ", ".join([author['fullName'] for author in entry['itemAuthors']])
 
+                # Link
                 link = 'https://www.bostonfed.org/' + entry['url']
 
-                # Now we visit the individual entry page to extract authors, abstract, and number.
+                # Now we visit the individual entry page to extract abstract, number, and date.
                 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"}
                 # Bundle the arguments together for requests module
                 session_arguments = requests.Request(method='GET', url=link, headers=headers)
@@ -104,6 +124,8 @@ class FedBostonScraper(GenericScraper):
                     date = None
                     warnings.warn("Meta tag not found or doesn't have a 'content' attribute.")
 
+                # Append title, author, link, abstract, number, date to the
+                # `data` dictionary list
                 data.append({
                     'Title': title,
                     'Author': authors,

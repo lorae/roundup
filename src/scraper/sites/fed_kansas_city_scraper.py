@@ -13,7 +13,23 @@ class FedKansasCityScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a POST request to the source's API and parses the JSON
+        response to get titles for each working paper entry. 
+        A secondary GET request is made to each working paper's 
+        landing page and parsed using BeautifulSoup to extract
+        link, author, date, number, and abstract data.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
+        # TODO: What's even the point of the API request if we only get
+        # paper titles out of it? Consider exploring other scraping 
+        # options or building out the API request.
+
         # Define the current and last year
         current_year = datetime.now().year
         last_year = current_year - 1
@@ -93,6 +109,8 @@ class FedKansasCityScraper(GenericScraper):
             # Number (from DOI link): Use the last few characters `link` to reliably procure the number
             number = link.split('RWP')[1].strip()
 
+            # Append title, date, author, abstract, link, and number to the
+            # `data` dictionary list
             data.append({
                 'Title': title,
                 'Date': date,

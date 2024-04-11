@@ -12,7 +12,17 @@ class FedStLouisScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's main page and parses the 
+        response using BeautifulSoup to get title, link, author, date,
+        and number for each working paper entry. 
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url = 'https://research.stlouisfed.org/wp/'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', 

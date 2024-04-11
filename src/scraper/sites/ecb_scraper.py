@@ -7,6 +7,17 @@ class ECBScraper(GenericScraper):
     
     # Public method which is called from outside the class.
     def fetch_data(self):
+        # TODO: Store data in list of dictionaries like most of the 
+        # other fetch_data() methods.
+        '''
+        Uses Selenium to access the source's main page and parses the 
+        output using BeautifulSoup to get title, link, author, date, 
+        number, and abstract for each working paper entry. 
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url = 'https://www.ecb.europa.eu/pub/research/working-papers/html/index.en.html'
         # Send request and get soup
         soup = selenium_soup(url)

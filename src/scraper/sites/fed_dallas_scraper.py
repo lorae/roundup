@@ -17,6 +17,19 @@ class FedDallasScraper(GenericScraper):
     
     # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's main page and parses the 
+        response using BeautifulSoup to get title, link, author, date,
+        and number for each working paper entry. 
+        A secondary GET request is used to access the working paper 
+        itself, with content parsed using made to each working paper's 
+        landing page and parsed using PyPDF2 and io to extract working
+        paper abstracts.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url = "https://www.dallasfed.org/research/papers"
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
@@ -99,6 +112,8 @@ class FedDallasScraper(GenericScraper):
             text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
             date = self.extract_date(text)
 
+            # Append number, title, link, author, abstract, and date to the
+            # `data` dictionary list
             data.append({
                 'Number': number,
                 'Title': title,

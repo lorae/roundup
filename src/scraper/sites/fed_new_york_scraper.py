@@ -14,7 +14,22 @@ class FedNewYorkScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's main page and parses the 
+        response using BeautifulSoup. Method also will send a similar 
+        GET request corresponding to the previous year's entries. From 
+        these main landing pages, extracts title, link, 
+        author, date, and number for each working paper entry. 
+        A secondary GET request is made to each working paper's 
+        landing page and parsed using BeautifulSoup to extract working
+        paper abstracts.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         # Define the current and last year
         current_year = datetime.now().year
         last_year = current_year - 1
@@ -71,7 +86,8 @@ class FedNewYorkScraper(GenericScraper):
                 landing_soup = request_soup(session_arguments)
                 abstract = landing_soup.select('div.ts-article-text')[1].text.strip().replace('\n', ' ')
 
-                # Append title, author, date, link, number, abstract to `data`
+                # Append title, author, date, link, number, and abstract to the
+                # `data` dictionary list
                 data.append({
                     'Title': title,
                     'Author': author,

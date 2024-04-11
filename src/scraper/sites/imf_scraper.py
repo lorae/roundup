@@ -13,7 +13,20 @@ class IMFScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
+    # Public method which is called from outside the class.
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's main page and parses the 
+        response using BeautifulSoup to get title, link, and date
+        for each working paper entry. 
+        A secondary GET request is made to each working paper's 
+        landing page and parsed using BeautifulSoup to extract working 
+        paper abstracts, authors, and numbers.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         # TODO: Refactor this section using IMF API.
         # Example URL:
         # https://www.imf.org/en/Publications/Search#sort=relevancy&numberOfResults=20&f:series=[WRKNGPPRS]&DateTo=12%2F31%2F2024&DateFrom=1%2F1%2F2024
