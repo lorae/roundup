@@ -1,5 +1,5 @@
 from ..generic_scraper import GenericScraper
-from src.scraper.get_soup import request_soup
+from src.scraper.external_requests import request_soup
 import requests
 
 class FedBoardScraper(GenericScraper):

@@ -1,4 +1,4 @@
-from src.scraper.get_soup import request_soup
+from src.scraper.external_requests import request_soup
 import feedparser
 import requests
 import pandas as pd

@@ -1,5 +1,5 @@
 from ..generic_scraper import GenericScraper
-from src.scraper.get_soup import selenium_soup
+from src.scraper.external_requests import selenium_soup
 
 class FedClevelandScraper(GenericScraper):
     def __init__(self):

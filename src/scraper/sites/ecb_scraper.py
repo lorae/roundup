@@ -1,4 +1,4 @@
-from src.scraper.get_soup import selenium_soup
+from src.scraper.external_requests import selenium_soup
 from ..generic_scraper import GenericScraper
 
 class ECBScraper(GenericScraper):
