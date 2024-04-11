@@ -12,16 +12,20 @@ class BEAScraper(GenericScraper):
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
         }
 
-    # Public method which is called from outside the class.
-    '''This function works uses the get_soup function to access and parse the bea.gov
-    main webpage. Prior to collecting data, it visits each individul paper's landing page 
-    to ascertain whether that paper is a working paper (or a paper of another genre, like
-    a report). If the paper is indeed a working paper, the paper number and abstract are 
-    collected from the landing page. If not, the function skips that iteration of data
-    collection before information is stored. The function then proceeds by extracting the 
-    remaining data - title, author, abstract, etc - by looping through elements of the
-    main webpage.'''    
+    # Public method which is called from outside the class. 
     def fetch_data(self):
+        '''
+        Sends a GET request to the source's main page and parses the 
+        response using BeautifulSoup to get title, link, author, and date
+        for each working paper entry. 
+        A secondary GET request is made to each working paper's
+        landing page and parsed using BeautifulSoup to extract
+        number and abstract data.
+
+        :return: A list of dictionaries containing Title, Author, Link, 
+        Abstract, Number and Date for each working paper entry 
+        :rtype: list
+        '''
         url = 'https://www.bea.gov/research/papers'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', url=url, headers=self.headers)
