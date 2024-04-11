@@ -24,6 +24,7 @@ class FedBoardScraper(GenericScraper):
         elements = soup.select('div.col-xs-12.col-md-9.heading:not([style])')
 
         # Get titles, links, dates, and authors from the main website. Format them as a dictionary.
+        # TODO: refactor this as one for loop to avoid redundant computation.
         data = {
             'Title': [el.select_one('h5 > a').text.strip() for el in elements],
             'Link': ["https://www.federalreserve.gov" + el.select_one('h5 > a')['href'] for el in elements],
