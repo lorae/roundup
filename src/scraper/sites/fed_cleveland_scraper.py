@@ -16,11 +16,9 @@ class FedClevelandScraper(GenericScraper):
         for el in elements:
             # Get the title
             title = el.find('h5').text.strip()
-            print(title)
            
             # Get the link
             link = 'https://www.clevelandfed.org' + el.find('h5').find('a')['href']
-            print(link)
             
             # Get the number
             # I'd use the link for this, since the links do contain the number, but sometimes the urls
@@ -28,20 +26,16 @@ class FedClevelandScraper(GenericScraper):
             # element to get the number.
             date_number = el.find('div', {'class': 'date-reference'}).get_text().split("|")
             number = date_number[1].replace("WP", "").strip()
-            print(number)
             
             # Get the date. Use above defined `date_number` to get the date
             date = date_number[0].strip()
-            print(date)
             
             # Get the abstract
             abstract = el.find('div', {'class': 'page-description'}).get_text().strip()
-            print(abstract)
             
             # Get the authors
             authors_list = el.find('div', {'class': 'authors'}).get_text().strip().split('\n')
             authors_string = ", ".join(authors_list)
-            print(authors_string)
 
             # Populate `data` with new entries
             data.append({'Title': title,
