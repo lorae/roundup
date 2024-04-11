@@ -69,7 +69,6 @@ class FedNewYorkScraper(GenericScraper):
                 session_arguments = requests.Request(method='GET', url=link, headers=self.headers)
                 # Send request and get landing_soup
                 landing_soup = request_soup(session_arguments)
-                response = requests.get(link)
                 abstract = landing_soup.select('div.ts-article-text')[1].text.strip().replace('\n', ' ')
 
                 # Append title, author, date, link, number, abstract to `data`
