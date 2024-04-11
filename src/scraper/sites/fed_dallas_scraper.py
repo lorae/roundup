@@ -29,6 +29,8 @@ class FedDallasScraper(GenericScraper):
         h3_tags = soup.find_all('h3')[:20]
         count = 0
 
+        # Initialize `data`
+        data = []
         for h3 in h3_tags:
             
             # Get the number from the h3 tag.
@@ -36,17 +38,14 @@ class FedDallasScraper(GenericScraper):
             # Check if 'Globalization Institute' is in the number string. Replace with "GI"
             if 'Globalization Institute' in number:
                 number = number.replace('Globalization Institute No. ', 'GI')
-            print(number)
 
             # Get the title from the first p tag that follows the h3 tag.
             next_p = h3.find_next_sibling('p')
             title = next_p.find('strong').text if next_p.find('strong') else None
-            print(title)
 
             # Get the link from the first p tag that follows the h3 tag. Note that this is a link to a pdf, NOT 
             # a landing page. Some working papers have landing pages, but it is inconsistent.
             link = "https://www.dallasfed.org" + next_p.find('a')['href']
-            print(link)
 
             # The author also comes from the first p tag that follows the h3 tag. But it is 
             # complicated to extract since it doesn't have its own element. The cleanest way to extract
@@ -66,7 +65,6 @@ class FedDallasScraper(GenericScraper):
             author_tag = br_tag_after_last_a.find_next('strong')
             # 7. Extract the text.
             author = author_tag.text
-            print(author)
 
             # Get the abstract. Methodology similar to author above.
             # There's room for improvement in this code, and perhaps a better solution is using the PDF,
@@ -86,7 +84,6 @@ class FedDallasScraper(GenericScraper):
             abstract_html = substring_after_abstract[:abstract_end].strip()
             abstract_soup = BeautifulSoup(abstract_html, 'html.parser')
             abstract = abstract_soup.get_text()
-            print(abstract)
 
             # Get the date from PDF file. Complicated.
             # Link = ["https://www.dallasfed.org/-/media/documents/research/papers/2023/wp2305.pdf"]
@@ -101,9 +98,17 @@ class FedDallasScraper(GenericScraper):
             # Extract the text from the second page
             text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
             date = self.extract_date(text)
-            print(date)
 
-            print()
+            data.append({
+                'Number': number,
+                'Title': title,
+                'Link': link,
+                'Author': author,
+                'Abstract': abstract,
+                'Date': date
+            })
+
+        return data
 
     # Private method used to extract date from parsed pdf content   
     def extract_date(self, text):
