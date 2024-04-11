@@ -14,7 +14,7 @@ class FedRichmondScraper(GenericScraper):
 
     # Public method which is called from outside the class.
     def fetch_data(self):
-        url = "https://www.richmondfed.org/publications/research/working_papers"
+        url = 'https://www.richmondfed.org/publications/research/working_papers'
         # Bundle the arguments together for requests module
         session_arguments = requests.Request(method='GET', 
                                              url=url, 
@@ -27,16 +27,16 @@ class FedRichmondScraper(GenericScraper):
         data = []
         for el in elements:
             # Title
-            title = el.find('div', {'class': 'data__title'}).get_text().replace("\n", "").strip()
+            title = el.find('div', {'class': 'data__title'}).get_text().replace('\n', '').strip()
             
             # Author
-            author = el.find('div', {'class': 'data__authors'}).get_text().replace("\n", "").strip()
+            author = el.find('div', {'class': 'data__authors'}).get_text().replace('\n', '').strip()
             
             # Number
-            number = el.find('span', {'class': 'data__issue'}).get_text().split("No. ")[1].strip()
+            number = el.find('span', {'class': 'data__issue'}).get_text().split('No. ')[1].strip()
             
             #Link
-            link = "https://www.richmondfed.org" + el.find('div', {'class': 'data__title'}).find('a')['href']
+            link = 'https://www.richmondfed.org' + el.find('div', {'class': 'data__title'}).find('a')['href']
 
             # Date. This used to be gathered with more precise information
             # from the PDF for the working paper on the landing page, but the
