@@ -27,6 +27,7 @@ scrapers = [
             FedClevelandScraper,
             FedDallasScraper,
             FedKansasCityScraper
+            FedMinneapolisScraper
             ]
 
 # Progress bar 
