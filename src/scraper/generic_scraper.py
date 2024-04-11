@@ -34,9 +34,23 @@ class GenericScraper(ABC):
         :return: A DataFrame containing the processed data, with 'Source' column and unique index.
         :rtype: pandas.DataFrame
         '''
-        data = self.fetch_data()  # Call the subclass-specific data fetching method
+        # Call the subclass-specific data fetching method
+        data = self.fetch_data() 
+        # Format the resulting dictionary `data` as a dataframe and name
+        # `df`
         df = pd.DataFrame(data)
+        # Append a source column using `Source` attribute of the subclass
         df['Source'] = self.source
+
+        # Define the desired column order and reorder columns
+        column_order = ['Title', 'Author', 'Link', 'Abstract', 'Number', 'Date', 'Source']
+        df = df[column_order]
+
+        # Create unique ID index for each working paper entry by 
+        # combining `Source` and `Number` columns
         df.index = df['Source'] + df['Number'].astype(str)
+        
+        # Ensure that the index column remains unnamed
         df.index.name = None
+        
         return df
