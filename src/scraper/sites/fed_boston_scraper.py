@@ -33,8 +33,6 @@ class FedBostonScraper(GenericScraper):
         # the current year - if the current month is NOT January. If the current month IS Janury, both this year's
         # and last year's main pages will be scraped.
         for year in url_year_list:
-            print(year)
-            print(year - 1)
             # These headers (and params) are highly specific to the API call, so unlike some other subclasses of GenericScraper, 
             # in this class, the headers are defined within fetch_data.
             headers = {
@@ -71,7 +69,6 @@ class FedBostonScraper(GenericScraper):
                 'pgSz': '20',
                 'pgN': '1'
                 }
-            print(payload)
             # Send request and get soup from landing page
             response = request_json(method = 'GET', url = url, headers = headers, params = payload)
             entries = response['publications']

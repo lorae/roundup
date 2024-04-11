@@ -32,6 +32,5 @@ class FedBoardScraper(GenericScraper):
             'Abstract': [el.select_one('div.collapse > p').text.strip().replace('Abstract: ', '') for el in elements],
             'Date': [el.select_one('time')['datetime'] for el in elements]
         }
-        print(data)
 
         return data
