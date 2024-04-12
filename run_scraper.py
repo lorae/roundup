@@ -51,7 +51,7 @@ scrapers = [
             ]
 
 ########## Part 1: Scraping Data ##########
-print(f"--------------------\n Part 1: Data Scrape \n--------------------")
+print(f'--------------------\n Part 1: Data Scrape \n--------------------')
 
 # Progress counters
 total_tasks = len(scrapers)
@@ -85,7 +85,7 @@ for ScraperClass in scrapers:
         print(f'{scraper_instance.source} scraped. ')
     
     except Exception as e:
-        print(f"Error with {ScraperClass.__name__}: {str(e)}")
+        print(f'Error with {ScraperClass.__name__}: {str(e)}')
         
         # Update succeeded counter (or, in this case, don't: the 
         # attempt failed)
@@ -109,11 +109,11 @@ if dfs:  # This will be True if dfs is not empty
     df = pd.concat(dfs, ignore_index=False) # Purposefully keep indices
     print(df)
 else:
-    print("No data frames to concatenate. dfs is empty. Script terminating.")
+    print('No data frames to concatenate. dfs is empty. Script terminating.')
     sys.exit(1)
 
 # Part 2: Comparing to historical data
-print(f"--------------------\n Part 2: Comparing to Historical Data \n--------------------")
+print(f'--------------------\n Part 2: Comparing to Historical Data \n--------------------')
 
 # Instantiate the HistoricDataComparer class
 comparer = HistoricDataComparer()
@@ -129,4 +129,6 @@ if not novel_df.empty: # If novel entries exist...
     comparer.save_results(novel_df = novel_df)
     # ...Update the historic set
     comparer.update_historic_set(novel_df = novel_df)
+
+print(f'--------------------\n Script has completed running. \n--------------------')
 
