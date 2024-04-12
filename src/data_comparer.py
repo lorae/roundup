@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import ast
 from datetime import datetime
+import warnings
 
 
 class HistoricDataComparer:
@@ -18,11 +19,17 @@ class HistoricDataComparer:
     Constants:
         HISTORIC_IDS_FILEPATH (str): Filepath to the historic working paper identifiers. 
             This is where the historic registry of paper IDs is stored.
+
+        HISTORIC_DATA_FILEPATH (str): Filepath to the historic working paper data. 
+            This is where the titles, authors, abstracts, etc. of previously scraped working
+             papers are stored.
     '''
     # Class level constant signifying the file path to the historic working paper
-    # identifiers data. This is the filepath where the historic registry of paper 
-    # ids is stored
+    # identifiers data. 
     HISTORIC_IDS_FILEPATH = 'data/historic_wp_ids.txt'
+    # Class level constant signifying the file path to the historic working paper
+    # data.  
+    HISTORIC_DATA_FILEPATH = 'data/historic/wp/data.csv'   
 
     def __init__(self):
         '''
@@ -143,14 +150,15 @@ class HistoricDataComparer:
         with open(f'{filepath}-ids.txt', 'w') as file:
             file.write(str(novel_ids))
 
-    def update_historic_set(self, novel_df):
+    def append_ids_to_historic(self, novel_df):
         '''
-        Updates the historic set with new identifiers and writes it back 
-        to the historic file.
+        Appends newly scraped working paper identifiers to the historic 
+        identifiers, then saves as a .txt file in `self.HISTORIC_IDS_FILEPATH`.
+        File content is formatted as a Python set for easy retrieval and 
+        comparison.
 
         Parameters:
-            novel_df (pd.DataFrame): Data frame containing the novel entries, which are
-            produced by applying the compare() method in this class to a data frame of recently
+            novel_df (pd.DataFrame): Data frame containing the novel entries, which are produced by applying the compare() method in this class to a data frame of recently
             scraped data.
         '''
         # Define novel_ids using indices from novel_df
@@ -160,4 +168,29 @@ class HistoricDataComparer:
             self.historic_ids |= novel_ids
             file.write(str(self.historic_ids))
 
+    def append_data_to_historic(self, novel_df):
+        '''
+        Appends newly scraped working paper rows - containing Title, Author, Link,
+        Date, Link, Number, Abstract, estPubDate, Source, and unique identifier 
+        index - to the historic data. Saves as a .csv file in 
+        `self.HISTORIC_DATA_FILEPATH`.
+
+        Parameters:
+            novel_df (pd.DataFrame): Data frame containing the novel entries, which are
+            produced by applying the compare() method in this class to a data frame of recently
+            scraped data.
+        '''
+        try:
+            # Read in the existing historic data
+            existing_df = pd.read_csv(self.HISTORIC_DATA_FILEPATH)
+            # Map the column order of historic data to column_order variable
+            column_order = existing_df.columns.tolist()
+            # Apply the column order to novel_df
+            novel_df = novel_df[column_order]
+            # Append novel_df rows to csv file self.HISTORIC_DATA_FILEPATH
+            novel_df.to_csv(self.HISTORIC_DATA_FILEPATH, mode='a', header=False, index=False, encoding='utf-8-sig')
+        except FileNotFoundError: 
+            # If file not found, write a new file
+            novel_df.to_csv(self.HISTORIC_DATA_FILEPATH, mode='w', header=True, index=False, encoding='utf-8-sig')
+            warnings.warn(f'No existing file found at {self.HISTORIC_DATA_FILEPATH}. New file created.')
 
