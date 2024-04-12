@@ -5,8 +5,7 @@ import requests
 import warnings
 
 class FedBostonScraper(GenericScraper):
-
-    def __nit__(self):
+    def __init__(self):
         super().__init__(source = 'FED-BOSTON')
 
     # Public method which is called from outside the class.
