@@ -117,18 +117,22 @@ print(f'--------------------\n Part 2: Comparing to Historical Data \n----------
 
 # Instantiate the HistoricDataComparer class
 comparer = HistoricDataComparer()
+print('HistoricDataComparer class instantiated.')
 
 # Use the compare method within the HistoricDataComparer class to
 # determine which of the data in `df` is novel. Save these entries
 # in novel_df
 novel_df = comparer.compare(df)
+print('novel_df: ')
 print(novel_df)
 
 if not novel_df.empty: # If novel entries exist...
     # ...Save them
     comparer.save_results(novel_df = novel_df)
+    print(f'Results saved in {comparer.HISTORIC_IDS_FILEPATH}')
     # ...Update the historic set
     comparer.update_historic_set(novel_df = novel_df)
+    print(f'Historic set updated in {comparer.HISTORIC_IDS_FILEPATH}')
 
 print(f'--------------------\n Script has completed running. \n--------------------')
 
