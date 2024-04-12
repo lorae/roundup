@@ -1,6 +1,7 @@
 import traceback
 import sys
 import pandas as pd
+from src.data_comparer import HistoricDataComparer
 
 from src.scraper.sites.bea_scraper import BEAScraper
 from src.scraper.sites.bfi_scraper import BFIScraper
@@ -105,9 +106,27 @@ for ScraperClass in scrapers:
 print('Concatenating all newly scraped data into one data frame...')
 
 if dfs:  # This will be True if dfs is not empty
-    df = pd.concat(dfs)
+    df = pd.concat(dfs, ignore_index=False) # Purposefully keep indices
     print(df)
 else:
     print("No data frames to concatenate. dfs is empty. Script terminating.")
     sys.exit(1)
+
+# Part 2: Comparing to historical data
+print(f"--------------------\n Part 2: Comparing to Historical Data \n--------------------")
+
+# Instantiate the HistoricDataComparer class
+comparer = HistoricDataComparer()
+
+# Use the compare method within the HistoricDataComparer class to
+# determine which of the data in `df` is novel. Save these entries
+# in novel_df
+novel_df = comparer.compare(df)
+print(novel_df)
+
+if not novel_df.empty: # If novel entries exist...
+    # ...Save them
+    comparer.save_results(novel_df = novel_df)
+    # ...Update the historic set
+    comparer.update_historic_set(novel_df = novel_df)
 
