@@ -1,3 +1,7 @@
+import traceback
+import sys
+import pandas as pd
+
 from src.scraper.sites.bea_scraper import BEAScraper
 from src.scraper.sites.bfi_scraper import BFIScraper
 from src.scraper.sites.bis_scraper import BISScraper
@@ -45,17 +49,65 @@ scrapers = [
             NBERScraper
             ]
 
-# Progress bar 
+########## Part 1: Scraping Data ##########
+print(f"--------------------\n Part 1: Data Scrape \n--------------------")
+
+# Progress counters
 total_tasks = len(scrapers)
-i = 1 # counter
+attempted = 0
+succeeded = 0
+
+# Initialize an empty list to hold all data frames from individual
+# scrapes
+dfs = []
 
 # Loop through each scraper class and instantiate
 for ScraperClass in scrapers:
-    # Instantiate the scraper
-    scraper_instance = ScraperClass()  
-    print(f'scraping {scraper_instance.source} using {ScraperClass.__name__} ...')
-    df = scraper_instance.fetch_and_process_data()  # Fetch and process data into standardized pandas df
-    print(df) # Print output from scraper_instance.process_data()
-    print(f'{scraper_instance.source} scraped. {i} of {total_tasks} tasks complete.')
-    print('----------')
-    i += 1 #update counter
+    scraper_instance = ScraperClass()
+    
+    # Update attempted counter
+    attempted += 1
+
+    # 'try' and 'except' syntax allows an instance of all scraper 
+    # classes to be attempted, even if some fail. 
+    try:
+        print(f'Scraping {scraper_instance.source} using {ScraperClass.__name__} ...')
+        df = scraper_instance.fetch_and_process_data()
+        print(df)
+
+        # Append the new df to dfs
+        dfs.append(df)
+        
+        # Update succeeded counter
+        succeeded += 1
+
+        print(f'{scraper_instance.source} scraped. ')
+    
+    except Exception as e:
+        print(f"Error with {ScraperClass.__name__}: {str(e)}")
+        
+        # Update succeeded counter (or, in this case, don't: the 
+        # attempt failed)
+        succeeded += 0
+
+        # Print the full traceback
+        traceback.print_exc()
+
+    # Print progress message
+    print(
+        f'\n{attempted} of {total_tasks} tasks attempted. {succeeded} of {total_tasks} tasks succeeded.'
+        f'\n----------------------------------------'
+        )
+    
+# Combine all data frames in df into one large data frame
+# If dfs nonempty, concatenate all data frames in the list dfs into a single data frame.
+# If dfs empty, terminate script with error code 1.
+print('Concatenating all newly scraped data into one data frame...')
+
+if dfs:  # This will be True if dfs is not empty
+    df = pd.concat(dfs)
+    print(df)
+else:
+    print("No data frames to concatenate. dfs is empty. Script terminating.")
+    sys.exit(1)
+
