@@ -26,10 +26,10 @@ class HistoricDataComparer:
     '''
     # Class level constant signifying the file path to the historic working paper
     # identifiers data. 
-    HISTORIC_IDS_FILEPATH = 'data/historic_wp_ids.txt'
+    HISTORIC_IDS_FILEPATH = 'data/wp_ids.txt'
     # Class level constant signifying the file path to the historic working paper
     # data.  
-    HISTORIC_DATA_FILEPATH = 'data/historic_wp_data.csv'   
+    HISTORIC_DATA_FILEPATH = 'data/wp_data.csv'   
 
     def __init__(self):
         '''
