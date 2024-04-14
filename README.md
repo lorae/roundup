@@ -26,7 +26,7 @@ A variety of methods are used to access web-based data, including PDF rendering,
 
 This project is maintained in an object-oriented format. Each website has a bespoke method, called `fetch_data()`, designed to scrape it and defined in a website-specific class located in `src/scraper/sites`. To impose order on the 20+ web scrapers involved in this project, each website-specific scraper class is a child of the `GenericScraper` abstract base class, defined in `src/scraper/generic_scraper.py`.
 
-All 20+ websites can be scraped by running the `run_scraper.py` script, located in the root directory. It instantiates each scraper class sequentially and saves the collected data in uniformly-structured Pandas data frames. This list of data frames is then combined into one resultant data frame of all scraped working paper entries in a given run.
+All 20+ websites can be scraped by running the `run_scraper.py` script, located in the root directory. It instantiates each scraper class sequentially and saves the collected data in uniformly-structured Pandas data frames. It also records whether the scrape was successful or unsuccessful in `streamlit/scraper_status.txt`. This list of scraped data frames is then combined into one resultant data frame of all scraped working paper entries in a given run.
 
 The data frame of web scrape results is then passed to various methods in the `HistoricDataComparer` class from `src/scraper/data_comparer.py`. These methods identify novel (versus previously encountered) data by comparing the newly-scraped paper identifiers to old identifiers. All those that are truly novel are assigned an estimated publication date of the day that they were first identified, and appended to the `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` files, which are used in identifying and maintaining a record of data encountered so far. 
 
@@ -36,7 +36,7 @@ The web scraping activity in this repository is fully automated through a GitHub
 
 ### StreamLit Dashboard
 
-The `streamlit_app.py` script produces the [project website](https://roundup.streamlit.app/), which is a user-friendly aggregation of the most recent economics research. The app draws primarily from the `data/historic-wp-data.csv` file to populate itself with information. StreamLit automatically refreshes its data display roughly every 5 minutes. Thus, within 5 minutes of a daily commit made by GitHub Actions, changes to `data/historic-wp-data.csv` should be reflected on the website.
+The `streamlit_app.py` script produces the [project website](https://roundup.streamlit.app/), which is a user-friendly aggregation of the most recent economics research. The app draws primarily from the `data/historic-wp-data.csv` file to populate itself with information. StreamLit automatically refreshes its data display roughly every 5 minutes. Thus, within 5 minutes of a daily commit made by GitHub Actions, changes to `data/historic-wp-data.csv` should be reflected on the website. The app also uses information from `streamlit/scraper_status.txt` to display active and inactive scrapers in the sidebar.
 
 GitHub Actions are initiated at 6:40 AM EST and take roughly 4-6 minutes to run. With an additional 5 minutes of time built in for StreamLit to update, all newly scraped information should be reflected on the project dashboard by 7:00 AM EST daily.
 
@@ -180,7 +180,11 @@ roundup/
 │   ├── YYYY-MM-DD-HHMM-ids.txt
 │   └── ...
 │
-└── .github/workflows/
-  └── main.yml # Runs `Daily Run` GitHub Actions workflow
-  
+├──.github/workflows/
+│ └── main.yml # Runs `Daily Run` GitHub Actions workflow
+│
+└── streamlit
+  ├── app.py # Creates Streamlit website
+  └── scraper_status.txt # Tracks active and inactive web scrapers
+
 ```
