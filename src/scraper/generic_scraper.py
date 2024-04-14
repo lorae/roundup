@@ -54,3 +54,35 @@ class GenericScraper(ABC):
         df.index.name = None
         
         return df
+    
+    def read_scraper_status(self, filename="scraper_status.txt"):
+        '''Reads the status of each scraper from a given file.'''
+        try:
+            with open(filename, 'r') as file:
+                status_dict = {line.split(',')[0]: line.strip().split(',')[1] for line in file if line.strip()}
+            return status_dict
+        except FileNotFoundError:
+            return {}
+
+    def write_scraper_status(self, status_dict, filename="scraper_status.txt"):
+        '''Writes the updated status of each scraper to a given file.'''
+        with open(filename, 'w') as file:
+            for scraper, status in status_dict.items():
+                file.write(f"{scraper},{status}\n")
+
+    def update_scraper_status(self, source, is_successful, filename='streamlit/scraper_status.txt'):
+        '''
+        Updates the status of a scraper based on its success or failure.
+        
+        :param source: The name of the scraper (source of the data).
+        :param is_successful: Boolean flag indicating whether the scrape was successful.
+        :param filename: Filename where the scraper statuses are stored.
+        '''
+        # Read the current statuses
+        status_dict = self.read_scraper_status(filename)
+        
+        # Update the status based on the recent scrape result
+        status_dict[source] = 'on' if is_successful else 'off'
+        
+        # Write the updated statuses back to the file
+        self.write_scraper_status(status_dict, filename)

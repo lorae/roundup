@@ -66,23 +66,27 @@ dfs = []
 for ScraperClass in scrapers:
     scraper_instance = ScraperClass()
     
-    # Update attempted counter
-    attempted += 1
-
     # 'try' and 'except' syntax allows an instance of all scraper 
     # classes to be attempted, even if some fail. 
     try:
         print(f'Scraping {scraper_instance.source} using {ScraperClass.__name__} ...')
         df = scraper_instance.fetch_and_process_data()
-        print(df)
+        if df is not None:
 
-        # Append the new df to dfs
-        dfs.append(df)
-        
-        # Update succeeded counter
-        succeeded += 1
+            # Append the new df to dfs
+            dfs.append(df)
+            print(df)
 
-        print(f'{scraper_instance.source} scraped. ')
+            # Update succeeded counter
+            succeeded += 1
+
+            # Update scraper status
+            scraper_instance.update_scraper_status(source = scraper_instance.source, 
+                                                   is_successful = True, 
+                                                   filename='streamlit/scraper_status.txt')
+            print(f"{scraper_instance.source} scraped successfully.")
+        else:
+            raise Exception("No data returned")
     
     except Exception as e:
         print(f'Error with {ScraperClass.__name__}: {str(e)}')
@@ -91,8 +95,16 @@ for ScraperClass in scrapers:
         # attempt failed)
         succeeded += 0
 
+        # Update scraper status
+        scraper_instance.update_scraper_status(source = scraper_instance.source, 
+                                                   is_successful = False, 
+                                                   filename='streamlit/scraper_status.txt')
+
         # Print the full traceback
         traceback.print_exc()
+
+    # Update attempted counter
+    attempted += 1
 
     # Print progress message
     print(
