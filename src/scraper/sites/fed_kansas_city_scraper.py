@@ -6,7 +6,7 @@ import requests
 
 class FedKansasCityScraper(GenericScraper):
     def __init__(self):
-        super().__init__(source = 'FED-KANSAS-CITY')
+        super().__init__(source = 'FED-KANSASCITY')
         # Define generic headers to be used later in the class
         self.headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.112 Safari/537.36',
