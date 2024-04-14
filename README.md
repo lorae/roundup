@@ -160,8 +160,8 @@ roundup/
 ├── src/
 │ ├── data_comparer.py # Defines `HistoricDataComparer` class for data comparison and saving
 │ └── scraper/ # Web scraping modules
-│   ├── generic_scraper.py # Defines `GenericScraper` class, used as a template for site-specific scrapers
-│   ├── external_requests.py # Methods for accessing and parsing remote data, such as `selenium_soup` and `request_json`
+│   ├── generic_scraper.py # Defines `GenericScraper` class
+│   ├── external_requests.py # Methods for accessing and parsing remote data
 │   └── sites/ # Website-specific scraping modules
 |     ├── bea_scraper.py
 |     ├── bfi_scraper.py
