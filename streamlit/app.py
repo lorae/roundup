@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 # Cache our data
 def load_df():
-    csv_url = 'https://raw.githubusercontent.com/lorae/roundup/refactor/generic-scraper/data/wp_data.csv'
+    csv_url = 'https://raw.githubusercontent.com/lorae/roundup/main/data/wp_data.csv'
     df = pd.read_csv(csv_url, parse_dates=['est_PubDate'])
     source_options = df.Source.unique()
     
@@ -17,7 +17,7 @@ def load_df():
     return df, source_options, current_date
 
 def load_status():
-    txt_url = 'https://raw.githubusercontent.com/lorae/roundup/refactor/generic-scraper/streamlit/scraper_status.txt'
+    txt_url = 'https://raw.githubusercontent.com/lorae/roundup/main/streamlit/scraper_status.txt'
     status_df = pd.read_csv(txt_url, names=["Source", "Status"])
     
     return status_df
