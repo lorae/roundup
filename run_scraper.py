@@ -139,14 +139,14 @@ print('novel_df: ')
 print(novel_df)
 
 if not novel_df.empty: # If novel entries exist...
-    # ...Save them
-    comparer.save_results(novel_df = novel_df)
+    # ...Save them locally
+    comparer.save_local_results(novel_df = novel_df)
     # ...Append the newly scraped ids the historic set of ids
     comparer.append_ids_to_historic(novel_df = novel_df)
-    print(f'Historic set updated in {comparer.HISTORIC_IDS_FILEPATH}')
+    print(f'Historic set updated in {comparer.WP_IDS_FILEPATH}')
     # ...Append the newly scraped data rows to the historic data table
     comparer.append_data_to_historic(novel_df = novel_df)
-    print(f'Results saved in {comparer.HISTORIC_DATA_FILEPATH}')
+    print(f'Results saved in {comparer.WP_DATA_FILEPATH}')
 
 print(f'--------------------\n Script has completed running. \n--------------------')
 

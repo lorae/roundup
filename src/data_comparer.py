@@ -17,48 +17,54 @@ class HistoricDataComparer:
         current_date (str): Current date, formatted for data tagging.
     
     Constants:
-        HISTORIC_IDS_FILEPATH (str): Filepath to the historic working paper identifiers. 
+        WP_IDS_FILEPATH (str): Filepath to the historic working paper identifiers. 
             This is where the historic registry of paper IDs is stored.
 
-        HISTORIC_DATA_FILEPATH (str): Filepath to the historic working paper data. 
+        WP_DATA_FILEPATH (str): Filepath to the historic working paper data. 
             This is where the titles, authors, abstracts, etc. of previously scraped working
              papers are stored.
+
+        LOCAL_SCRAPE_OUTCOMES_FILEPATH (str): Filepath to the local scrape outcomes folder. 
+            This is where the data and ids of newly scraped working papers are stored. This
+            folder is for local debugging and web scraping use only. It is not read by
+            other portions of the repository.
     '''
-    # Class level constant signifying the file path to the historic working paper
-    # identifiers data. 
-    HISTORIC_IDS_FILEPATH = 'data/wp_ids.txt'
-    # Class level constant signifying the file path to the historic working paper
-    # data.  
-    HISTORIC_DATA_FILEPATH = 'data/wp_data.csv'   
+    # Class level constants 
+    # File path to the historic working paper identifiers 
+    WP_IDS_FILEPATH = 'data/wp_ids.txt'
+    # File path to the historic working paper data  
+    WP_DATA_FILEPATH = 'data/wp_data.csv' 
+    # File path to the local scrape outcomes
+    LOCAL_SCRAPE_OUTCOMES_FILEPATH = 'data/local_scrape_outcomes'  
 
     def __init__(self):
         '''
         Initializes the HistoricDataComparer. Loads the historic set of identifiers 
-        from the file specified by HISTORIC_IDS_FILEPATH.
+        from the file specified by WP_IDS_FILEPATH.
         '''
         # This attribute loads the contents of the historic working paper ids file,
         # which are stored as a Python sets
         self.historic_ids = self.load_historic_ids()
-        # Defining current dates and times for use in save_results() and
+        # Defining current dates and times for use in save_local_results() and
         # compare() methods
         self.current_datetime = datetime.now().strftime('%Y-%m-%d-%H%M')
         self.current_date = datetime.now().strftime('%m/%d/%Y')
 
     def load_historic_ids(self):
         '''
-        Loads the set of historical identifiers from the file specified by HISTORIC_IDS_FILEPATH.
+        Loads the set of historical identifiers from the file specified by WP_IDS_FILEPATH.
 
         Returns:
             set: A set of strings representing historic identifiers.
 
         Raises:
-            FileNotFoundError: If the file specified by HISTORIC_IDS_FILEPATH does not exist.
+            FileNotFoundError: If the file specified by WP_IDS_FILEPATH does not exist.
         '''
         try:
-            with open(self.HISTORIC_IDS_FILEPATH, 'r') as file:
+            with open(self.WP_IDS_FILEPATH, 'r') as file:
                 return ast.literal_eval(file.read())
         except FileNotFoundError:
-            raise FileNotFoundError(f'File {self.HISTORIC_IDS_FILEPATH} not found.')
+            raise FileNotFoundError(f'File {self.WP_IDS_FILEPATH} not found.')
 
     def compare(self, df):
         '''
@@ -88,12 +94,12 @@ class HistoricDataComparer:
         # Return an empty DataFrame if there are no novel entries to ensure the method always returns a DataFrame
             return pd.DataFrame()
 
-    def save_results(self, novel_df, base_path = 'data/local_scrape_outcomes'):
+    def save_local_results(self, novel_df):
         '''
-        Saves the novel entries in .csv, .txt, and .html formats into the specified base_path.
+        Saves the novel entries in .csv, .txt, and .html formats into the specified `LOCAL_SCRAPE_OUTCOMES_FILEPATH`.
 
         Note:
-            Output files are saved in a directory specified by `base_path`, which 
+            Output files are saved in a directory specified by `LOCAL_SCRAPE_OUTCOMES_FILEPATH`, which 
             is typically configured to be ignored by version control (.gitignore). 
             This setup is intended for local debugging and temporary storage. 
             See README for more details.
@@ -103,25 +109,22 @@ class HistoricDataComparer:
             produced by applying the compare() method in this class to a data frame of recently
             scraped data.
 
-            base_path (string): File path specifying the target directory for this method's
-            output files.
-
         Outputs:
-            .csv: Contains all novel entries with metadata. File is saved in `base_path`
+            .csv: Contains all novel entries with metadata. File is saved in `LOCAL_SCRAPE_OUTCOMES_FILEPATH`
             directory with name `YYYY-MM-DD-HHMM-data.csv`.
 
             .html: Browser-viewable dashboard file with clickable links for each entry 
-            title. File is saved in `base_path` directory with name 
+            title. File is saved in `LOCAL_SCRAPE_OUTCOMES_FILEPATH` directory with name 
             `YYYY-MM-DD-HHMM-dashboard.html`.
 
             .txt: Contains the set of unique identifiers of the novel entries, formatted 
-            as a Python set for potential future debugging. File is saved in `base_path` 
+            as a Python set for potential future debugging. File is saved in `LOCAL_SCRAPE_OUTCOMES_FILEPATH` 
             directory with name `YYYY-MM-DD-HHMM-ids.txt`.
         '''
 
         # Create a template filepath, which will be used to save the below
         # .csv, .html, and .txt files
-        filepath = os.path.join(base_path, self.current_datetime)
+        filepath = os.path.join(self.LOCAL_SCRAPE_OUTCOMES_FILEPATH, self.current_datetime)
 
         # Save .csv
         # Write novel_df to file. Use utf-8 encoding to ensure special
@@ -153,7 +156,7 @@ class HistoricDataComparer:
     def append_ids_to_historic(self, novel_df):
         '''
         Appends newly scraped working paper identifiers to the historic 
-        identifiers, then saves as a .txt file in `self.HISTORIC_IDS_FILEPATH`.
+        identifiers, then saves as a .txt file in `self.WP_IDS_FILEPATH`.
         File content is formatted as a Python set for easy retrieval and 
         comparison.
 
@@ -164,7 +167,7 @@ class HistoricDataComparer:
         # Define novel_ids using indices from novel_df
         novel_ids = set(novel_df.index)
 
-        with open(self.HISTORIC_IDS_FILEPATH, 'w') as file:
+        with open(self.WP_IDS_FILEPATH, 'w') as file:
             self.historic_ids |= novel_ids
             file.write(str(self.historic_ids))
 
@@ -173,7 +176,7 @@ class HistoricDataComparer:
         Appends newly scraped working paper rows - containing Title, Author, Link,
         Date, Link, Number, Abstract, estPubDate, Source, and unique identifier 
         index - to the historic data. Saves as a .csv file in 
-        `self.HISTORIC_DATA_FILEPATH`.
+        `self.WP_DATA_FILEPATH`.
 
         Parameters:
             novel_df (pd.DataFrame): Data frame containing the novel entries, which are
@@ -182,15 +185,15 @@ class HistoricDataComparer:
         '''
         try:
             # Read in the existing historic data
-            existing_df = pd.read_csv(self.HISTORIC_DATA_FILEPATH)
+            existing_df = pd.read_csv(self.WP_DATA_FILEPATH)
             # Map the column order of historic data to column_order variable
             column_order = existing_df.columns.tolist()
             # Apply the column order to novel_df
             novel_df = novel_df[column_order]
-            # Append novel_df rows to csv file self.HISTORIC_DATA_FILEPATH
-            novel_df.to_csv(self.HISTORIC_DATA_FILEPATH, mode='a', header=False, index=False, encoding='utf-8-sig')
+            # Append novel_df rows to csv file self.WP_DATA_FILEPATH
+            novel_df.to_csv(self.WP_DATA_FILEPATH, mode='a', header=False, index=False, encoding='utf-8-sig')
         except FileNotFoundError: 
             # If file not found, write a new file
-            novel_df.to_csv(self.HISTORIC_DATA_FILEPATH, mode='w', header=True, index=False, encoding='utf-8-sig')
-            warnings.warn(f'No existing file found at {self.HISTORIC_DATA_FILEPATH}. New file created.')
+            novel_df.to_csv(self.WP_DATA_FILEPATH, mode='w', header=True, index=False, encoding='utf-8-sig')
+            warnings.warn(f'No existing file found at {self.WP_DATA_FILEPATH}. New file created.')
 
