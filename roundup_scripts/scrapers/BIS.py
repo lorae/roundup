@@ -31,7 +31,7 @@ def scrape():
              entry.description.split("<br />")[0].replace("by", ""),
              # The paper number is contained in the "link" element. Remove the leading and trailing elements
              # of the URL.
-             entry.link.replace("http://www.bis.org/publ/work", "").replace(".htm", "")) # number
+             entry.link.replace("https://www.bis.org/publ/work", "").replace(".htm", "")) # number
             #creates a tuple containing all of the above for the current entry
             for entry in f.entries]
 

@@ -1,7 +1,3 @@
-# This is where the app will be.
-# Helpful tutorial: https://python-textbook.pythonhumanities.com/05_streamlit/05_01_03_displaying_data.html
-# table styling: https://www.w3schools.com/html/html_table_styling.asp
-
 import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
@@ -92,7 +88,8 @@ else: # Otherwise, filter by the selected sources, and filter above min_date
 
 
 ## Sort results before displaying df_filtered
-source_order = ['NBER', 'FED-BOARD', 'FED-BOARD-NOTES', 'FED-ATLANTA', 'FED-BOSTON', 'FED-CHICAGO', 'FED-CLEVELAND', 'FED-DALLAS', 'FED-KANSASCITY', 'FED_MINNEAPOLIS', 'FED-NEWYORK', 'FED-PHILADELPHIA', 'FED-RICHMOND', 'FED-SANFRANCISCO', 'FED-STLOUIS', 'BEA', 'BFI', 'BIS', 'BOE', 'ECB', 'IMF']
+print(sorted(df['Source'].unique())) #temporary print statement for debugging
+source_order = ['NBER', 'FED-BOARD', 'FED-BOARD-NOTES', 'FED-ATLANTA', 'FED-BOSTON', 'FED-CHICAGO', 'FED-CLEVELAND', 'FED-DALLAS', 'FED-KANSASCITY', 'FED-MINNEAPOLIS', 'FED-NEWYORK', 'FED-PHILADELPHIA', 'FED-RICHMOND', 'FED-SANFRANCISCO', 'FED-STLOUIS', 'BEA', 'BFI', 'BIS', 'BOE', 'ECB', 'IMF']
 # Map each source to its corresponding index in 'source_order' to use as a sort key
 sort_key = df_filtered['Source'].map(lambda x: source_order.index(x))
 # Sort df_novel by this sort key
