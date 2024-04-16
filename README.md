@@ -122,7 +122,7 @@ However, the web scrapers may also be operated on your local machine. See below 
 
     Results will also be appended to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` with each run of `run_scraper.py`. However, these files are more difficult to comfortably view directly, as they contain *all* working papers *ever encountered* by the web scrapers.
 
-    Note that the results in `data/local_scrape_outcomes/` are local only, and ignored by GitHub (`.gitignore`). The interactive project dashboard on [https://roundup.streamlit.app](https://roundup.streamlit.app/) will not be updated with results from you local run unless you commit your changes to `data/historic-wp-data.csv` to the `main` branch of the repository. 
+    Note that the results in `data/local_scrape_outcomes/` are local only, and ignored by GitHub (`.gitignore`). The interactive project dashboard on [https://roundup.streamlit.app](https://roundup.streamlit.app/) will not be updated with results from your local run unless you commit your changes to `data/historic-wp-data.csv` to the `main` branch of the repository. 
 
 ### If running a local instance again:
 1. **Set your working directory into the repository:**
