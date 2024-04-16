@@ -4,56 +4,77 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from over 20 different websites at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of March 2024, the project incorporates data from 21 different sources.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from working paper publishers at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of April 2024, the project incorporates data from 21 different sources.
 
 # How it works
 
-The web scrapers in this project gather six pieces of information on each economics working paper:
-- Title
-- Authors
-- Abstract
-- Date published (If it was posted and re-posted, the most recent date of publication is used.)
-- URL
-- Paper ID number (according to each website's own numbering system)
+The primary purpose of this repository is to maintain and improve the [project dashboard](https://roundup.streamlit.app/). A detailed summary of the web scraping, GitHub Actions, and StreamLit components of this project follow.
 
-Each website has a bespoke module, located in `roundup-scripts/scrapers`. When the GitHub Actions project workflow, `.github/workflows/main.yml` is activated at 6:40 AM EST every morning, it runs the main python script of the project - `runall.py` - which cycles through each of the 20+ web scraping modules. After the data are collected, it runs `roundup_scripts/compare.py`, which compares the recently-gathered data to a set of working papers already seen. All those that are truly novel are assigned an estimated publication date of the day that they were first identified, and appended to the `historic/papers-we-have-seen-metadata` file.
+### Web Scraping
 
-The `streamlit_app.py` script produces the [project dashboard](https://roundup.streamlit.app/), which is a user-friendly aggregation of the most recent economics research. The app draws primarily from the `historic/papers-we-have-seen-metadata` file to populate itself with information.
+The web scrapers in this project gather eight pieces of information on each economics working paper:
+- **Title**
+- **Author(s)**
+- **Abstract**: A one-paragraph long summary of the paper.
+- **Date published**: As reported by the website of origin. If the paper was posted and re-posted, the most recent date of publication is used.
+- **estPubDate**: Our best estimate for when the paper was posted: Sometimes this may differ from the official publication date by a few days. We define estPubDate as the first date that the paper was encountered by our web scrapers.
+- **URL**: URLs to working paper landing pages, rather than direct links to PDFs, are preferred. However, with some sources, this is not possible, and PDF URLs are provided instead.
+- **Paper ID number**: According to each website's own numbering system.
+- **Source**: Name of the website where the paper was published.
 
-The purpose of this repository is to maintain and improve the [project dashboard](https://roundup.streamlit.app/). The `runall.py` script and its underlying web scrapers are run remotely using a GitHub Actions. However, the repo may also be run locally on your personal computer. Instructions for local setup may be found in the `Getting Started` section of this document.
+A variety of methods are used to access web-based data, including PDF rendering, direct requests to hidden APIs, use of Selenium to read Java-rendered content, HTML parsing, and more. A high-level summary of the methods used to scrape each website can be found in the `Data Sources` section of this document.
 
-# Data sources
-Websites that are scraped for data, as of March 2024, are:
+This project is maintained in an object-oriented format. Each website has a bespoke method, called `fetch_data()`, designed to scrape it and defined in a website-specific class located in `src/scraper/sites`. To impose order on the 20+ web scrapers involved in this project, each website-specific scraper class is a child of the `GenericScraper` abstract base class, defined in `src/scraper/generic_scraper.py`.
+
+All 20+ websites can be scraped by running the `run_scraper.py` script, located in the root directory. It instantiates each scraper class sequentially and saves the collected data in uniformly-structured Pandas data frames. It also records whether the scrape was successful or unsuccessful in `streamlit/scraper_status.txt`. This list of scraped data frames is then combined into one resultant data frame of all scraped working paper entries in a given run.
+
+The data frame of web scrape results is then passed to various methods in the `HistoricDataComparer` class from `src/scraper/data_comparer.py`. These methods identify novel (versus previously encountered) data by comparing the newly-scraped paper identifiers to old identifiers. All those that are truly novel are assigned an estimated publication date of the day that they were first identified, and appended to the `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` files, which are used in identifying and maintaining a record of data encountered so far. 
+
+### GitHub Actions Automated Workflow
+
+The web scraping activity in this repository is fully automated through a GitHub Actions project workflow. When `.github/workflows/main.yml` is activated at 6:40 AM Eastern Standard Time every day, it runs the main script of the project - `run_scraper.py` - which cycles through each of the 20+ web scraping modules, and then through data comparison modules that identify and store newly-encountered data. The project workflow concludes by committing its changes to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` under the alias `actions-user`. These commits are given the description, "run (DD/MM/YYYY)", with "DD/MM/YYYY" populated by the day, month, and year the action was initiated.
+
+### StreamLit Dashboard
+
+The `streamlit_app.py` script produces the [project website](https://roundup.streamlit.app/), which is a user-friendly aggregation of the most recent economics research. The app draws primarily from the `data/historic-wp-data.csv` file to populate itself with information. StreamLit automatically refreshes its data display roughly every 5 minutes. Thus, within 5 minutes of a daily commit made by GitHub Actions, changes to `data/historic-wp-data.csv` should be reflected on the website. The app also uses information from `streamlit/scraper_status.txt` to display active and inactive scrapers in the sidebar.
+
+GitHub Actions are initiated at 6:40 AM EST and take roughly 4-6 minutes to run. With an additional 5 minutes of time built in for StreamLit to update, all newly scraped information should be reflected on the project dashboard by 7:00 AM EST daily.
+
+
+# Data Sources
+Websites that are scraped for data, as of April 2024, are:
 
 | Name of website                                                  | Name of script                          | Scraping method |
 |------------------------------------------------------------------|-----------------------------------------|-----------------|
-| [Bureau of Economic Analysis](https://www.bea.gov/research/papers)                                      | roundup_scripts/scrapers/BEA.py         | Scrapes main landing page and each individual WP's landing page using Requests and BeautifulSoup           |
-| [Becker Friedman Institute](https://www.bea.gov/research/papers) (at the University of Chicago)       | roundup_scripts/scrapers/BFI.py         | Scrapes main landing page and each individual WP's landing page using Requests and BeautifulSoup         |
-| [Bank for International Settlements](https://www.bis.org/doclist/wppubls.rss?from=&till=&objid=wppubls&page=&paging_length=10&sort_list=date_desc&theme=wppubls&ml=false&mlurl=&emptylisttext=)                                | roundup_scripts/scrapers/BIS.py         | Scrapes RSS feed using Feedparser     |
-| [Bank of England](https://www.bankofengland.co.uk/rss/publications)                                                  | roundup_scripts/scrapers/BOE.py         | Scrapes RSS feed using Feedparser and each individual WP's landing page using Requests and BeautifulSoup           |
-| [European Central Bank](https://www.ecb.europa.eu/pub/research/working-papers/html/index.en.html)                                            | roundup_scripts/scrapers/ECB.py         | Reads main landing page using a headless instance of Chrome via Selenium, and parses using BeautifulSoup          |
-| [Federal Reserve Bank of Atlanta](https://www.atlantafed.org/rss/wps)                                 | roundup_scripts/scrapers/Fed_Atlanta.py     | Scrapes RSS feed using Feedparser             |
-| [Federal Reserve Board of Governors](https://www.federalreserve.gov/econres/feds/index.htm) (of the United States): working papers | roundup_scripts/scrapers/Fed_Board.py       | Scrapes main landing page using Requests and BeautifulSoup             |
-| [Federal Reserve Board of Governors](https://www.federalreserve.gov/econres/notes/feds-notes/default.htm) (of the United States): Fed Notes | roundup_scripts/scrapers/Fed_Board_Notes.py       | Scrapes main landing page using Requests and BeautifulSoup             |
-| [Federal Reserve Bank of Atlanta](https://www.atlantafed.org/rss/wps)                                      | roundup_scripts/scrapers/Fed_Atlanta.py         | Scrapes RSS feed using Feedparser.            |
-| [Federal Reserve Bank of Boston](https://www.bostonfed.org/publications/research-department-working-paper/)                               | roundup_scripts/scrapers/Fed_Boston.py     | Reads main landing page using a headless instance of a Chrome via Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
-| [Federal Reserve Bank of Chicago](https://www.chicagofed.org/publications/publication-listing?filter_series=18)                                | roundup_scripts/scrapers/Fed_Chicago.py     | Scrapes main landing page and each individual WP's landing page using Requests and BeautifulSoup            |
-| [Federal Reserve Bank of Cleveland](https://www.clevelandfed.org/publications/working-paper)                                 | roundup_scripts/scrapers/Fed_Cleveland.py     | Reads main landing page using a headless instance of Chrome via Selenium, and parses using BeautifulSoup.   |
-| [Federal Reserve Bank of Dallas](https://www.dallasfed.org/research/papers)                                 | roundup_scripts/scrapers/Fed_Dallas.py     | Scrapes main landing page using Requests and BeautifulSoup and also reads data from PDFs using PyPDF and io     |
-| [Federal Reserve Bank of Kansas City](https://www.kansascityfed.org/research/research-working-papers/)                                 | roundup_scripts/scrapers/Fed_KansasCity.py     | Reads main landing page using Requests and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup    |
-| [Federal Reserve Bank of Minneapolis](https://www.minneapolisfed.org/economic-research/working-papers)                                      | roundup_scripts/scrapers/Fed_Minneapolis.py         | Scrapes main landing page and each individual WP's landing page using Requests and BeautifulSoup           |
-| [Federal Reserve Bank of New York](https://www.newyorkfed.org/research/staff_reports/index.html)                                 | roundup_scripts/scrapers/Fed_NewYork.py     | Uses Requests to access New York Fed API for JSON-formatted data on recent publications. Scrapes each individual WP's landing page using Requests and BeautifulSoup            |
-| [Federal Reserve Bank of Philadelphia](https://www.philadelphiafed.org/search-results/all-work?searchtype=working-papers)                               | roundup_scripts/scrapers/Fed_Philadelphia.py     | Reads main landing page using Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
-| [Federal Reserve Bank of Richmond](https://www.richmondfed.org/publications/research/working_papers)                               | roundup_scripts/scrapers/Fed_Richmond.py     | Reads main landing page using Selenium and parses with BeautifulSoup. Extracts data from each individual WP's landing page using Requests and BeautifulSoup and reads PDF metadata using PyPDF2 and io       |
-| [Federal Reserve Bank of San Francisco](https://www.frbsf.org/economic-research/publications/working-papers/)                                | roundup_scripts/scrapers/Fed_SanFrancisco.py     | Uses Requests to acccess San Francisco Fed's API for JSON-formatted data on recent publications.   |
-| [Federal Reserve Bank of St. Louis](https://research.stlouisfed.org/wp)                                | roundup_scripts/scrapers/Fed_StLouis.py     | Scrapes main landing page using Requests and BeautifulSoup.   |
-| [International Monetary Fund](https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers)                                      | roundup_scripts/scrapers/IMF.py         | Scrapes RSS feed using Feedparser. Scrapes each individual WP's landing page using Requests and BeautifulSoup            |
-| [National Bureau of Economic Research](https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100)                             | roundup_scripts/scrapers/NBER.py        | Interacts with NBER API and uses requests to parse the results  |
+| [Bureau of Economic Analysis](https://www.bea.gov/research/papers)                                      | src/scraper/sites/bea_scraper.py         | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.           |
+| [Becker Friedman Institute](https://www.bea.gov/research/papers) (at the University of Chicago)       | src/scraper/sites/bfi_scraper.py         |         Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.         |
+| [Bank for International Settlements](https://www.bis.org/doclist/wppubls.rss?from=&till=&objid=wppubls&page=&paging_length=10&sort_list=date_desc&theme=wppubls&ml=false&mlurl=&emptylisttext=)                                | src/scraper/sites/bis_scraper.py         |   Requests and parses the source's main RSS feed using feedparser.     |
+| [Bank of England](https://www.bankofengland.co.uk/rss/publications)                                                  | src/scraper/sites/boe_scraper.py         |         Requests and parses the source's main RSS feed using feedparser. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.           |
+| [European Central Bank](https://www.ecb.europa.eu/pub/research/working-papers/html/index.en.html)                                            | src/scraper/sites/ecb_scraper.py         |  Uses Selenium to access the source's main page and parses the output using BeautifulSoup. 
+| [Federal Reserve Bank of Atlanta](https://www.atlantafed.org/rss/wps)                                 | src/scraper/sites/fed_atlanta_scraper.py     | Requests and parses the source's main RSS feed using feedparser.            |
+| [Federal Reserve Board of Governors](https://www.federalreserve.gov/econres/feds/index.htm) (of the United States): working papers | src/scraper/sites/fed_board_scraper.py       |         Sends a GET request to the source's main page and parses the response using BeautifulSoup.             |
+| [Federal Reserve Board of Governors](https://www.federalreserve.gov/econres/notes/feds-notes/default.htm) (of the United States): Fed Notes | src/scraper/sites/fed_board_notes_scraper.py       | Sends GET requests to the source's main pages and parses the  responses using BeautifulSoup.              |
+| [Federal Reserve Bank of Atlanta](https://www.atlantafed.org/rss/wps)                                      | src/scraper/sites/fed_atlanta_scraper.py         | Requests and parses the source's main RSS feed using feedparser.            |
+| [Federal Reserve Bank of Boston](https://www.bostonfed.org/publications/research-department-working-paper/)                               | src/scraper/sites/fed_boston_scraper.py     | Sends a GET request to the source's API and parses the JSON-formatted response. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.       |
+| [Federal Reserve Bank of Chicago](https://www.chicagofed.org/publications/publication-listing?filter_series=18)                                | src/scraper/sites/fed_chicago_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.            |
+| [Federal Reserve Bank of Cleveland](https://www.clevelandfed.org/publications/working-paper)                                 | src/scraper/sites/fed_cleveland_scraper.py     | Uses Selenium to access the source's main page and parses the output using BeautifulSoup.    |
+| [Federal Reserve Bank of Dallas](https://www.dallasfed.org/research/papers)                                 | src/scraper/sites/fed_dallas_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is used to access the working paper itself, with content parsed using made to each working paper's landing page and parsed using PyPDF2 and io.     |
+| [Federal Reserve Bank of Kansas City](https://www.kansascityfed.org/research/research-working-papers/)                                 | src/scraper/sites/fed_kansas_city_scraper.py     | Sends a POST request to the source's API and parses the JSON response to get titles for each working paper entry. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.    |
+| [Federal Reserve Bank of Minneapolis](https://www.minneapolisfed.org/economic-research/working-papers)                                      | src/scraper/sites/fed_minneapolis_scraper.py         | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.           |
+| [Federal Reserve Bank of New York](https://www.newyorkfed.org/research/staff_reports/index.html)                                 | src/scraper/sites/fed_new_york_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup. Method also will send a similar GET request corresponding to the previous year's entries. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup to extract working paper abstracts.            |
+| [Federal Reserve Bank of Philadelphia](https://www.philadelphiafed.org/search-results/all-work?searchtype=working-papers)                               | src/scraper/sites/fed_philadelphia_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup and then as JSON data. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.       |
+| [Federal Reserve Bank of Richmond](https://www.richmondfed.org/publications/research/working_papers)                               | src/scraper/sites/fed_richmond_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.      |
+| [Federal Reserve Bank of San Francisco](https://www.frbsf.org/economic-research/publications/working-papers/)                                | src/scraper/sites/fed_san_francisco_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup.    |
+| [Federal Reserve Bank of St. Louis](https://research.stlouisfed.org/wp)                                | src/scraper/sites/fed_st_louis_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup.    |
+| [International Monetary Fund](https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers)                                      | src/scraper/sites/imf_scraper.py         | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.            |
+| [National Bureau of Economic Research](https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100)                             | src/scraper/sites/nber_scraper.py        | Sends a GET request to the source's API and parses the JSON response. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.  |
 
 
 # Getting Started
 
-The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Actions workflow located in `.github/workflows/main`. However, the web scrapers may also be operated on your local machine. See below for instructions on how to run the project for the first time on your local machine and any subsequent time.
+The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Actions workflow located in `.github/workflows/main.yml`. No additional action is required to initiate this process.
+
+However, the web scrapers may also be operated on your local machine. See below for instructions on how to run the project for the first time on your local machine and any subsequent time.
 
 ### If running a local instance for the first time:
 
@@ -61,9 +82,9 @@ The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Ac
   
     `git clone https://github.com/lorae/roundup`
 
-2. **Set your working directory into the repository:**
+2. **Set your working directory in the repository:**
 
-   `cd ~/roundup`
+   `cd your/path/to/roundup`
 
 3. **Create a [virtual environment](https://docs.python.org/3/library/venv.html):** 
 
@@ -85,18 +106,28 @@ The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Ac
 
 6. **Start the script**
 
-    `python runall.py`
+    `python run_scraper.py`
 
 7. **View results:**
 
-    Local unique results will be stored in `historic/weekly_data/YYYY-MM-DD-HHMM.html`. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
+    Local unique results will be stored in `data/local_scrape_outcomes`. Three files are created with each run:
 
-    The interactive project dashboard on [https://roundup.streamlit.app](https://roundup.streamlit.app/) will not be updated unless you commit your changes to the main branch of the project. 
+    - `YYYY-MM-DD-HHMM-data.csv`: Contains all novel working paper entries with metadata.
+
+    - `YYYY-MM-DD-HHMM-dashboard.html`: Browser-viewable dashboard file with clickable links for each entry.
+
+    - `YYYY-MM-DD-HHMM-ids.txt`: Unique identifiers of the novel entries, formatted as a Python set.
+    
+    Note that "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you instantiated the HistoricDataComparer class, which contains the `save_results` method that produces these files.
+
+    Results will also be appended to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` with each run of `run_scraper.py`. However, these files are more difficult to comfortably view directly, as they contain *all* working papers *ever encountered* by the web scrapers.
+
+    Note that the results in `data/local_scrape_outcomes/` are local only, and ignored by GitHub (`.gitignore`). The interactive project dashboard on [https://roundup.streamlit.app](https://roundup.streamlit.app/) will not be updated with results from you local run unless you commit your changes to `data/historic-wp-data.csv` to the `main` branch of the repository. 
 
 ### If running a local instance again:
 1. **Set your working directory into the repository:**
 
-   `cd ~/roundup`
+   `cd your/path/to/roundup`
 
 2. **[Source](https://docs.python.org/3/library/venv.html#how-venvs-work) the virtual environment:**
 
@@ -113,10 +144,7 @@ The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Ac
 
 4. **View results:**
 
-    "New" results - those that have not yet appeared in `papers-we-have-seen.txt`, will be stored in `historic/weekly_data/YYYY-MM-DD-HHMM.html`. "YYYY-MM-DD-HHMM" will be populated with the day, hour and minute that you ran the code.
-
-    The interactive project dashboard on [https://roundup.streamlit.app](https://roundup.streamlit.app/) will not be updated unless you commit your changes to the main branch of the project. 
-
+    As above.
 
 # Project Structure
 The schematic below illustrates the basic file structure of the project. 
@@ -125,75 +153,38 @@ The schematic below illustrates the basic file structure of the project.
 roundup/
 │
 ├── .gitignore
-├── README.md
-├── runall.py # Main project script
+├── README.md # The file you are currently reading
+├── run_scraper.py # Main project script
+├── requirements.txt # Project dependencies
 │
 ├── src/
-│ ├── compare.py # Helper module for runall script
-│ ├── streamlit_app.py # Script for producing Streamlit app
-│ ├── scrapers_archive/ # Archival website-specific web scraping modules
-│ └── scrapers/ # Website-specific web scraping modules
-│   ├── BEA.py 
-│   ├── BFI.py
-│   ├── BIS.py
-│   └── ...
+│ ├── data_comparer.py # Defines `HistoricDataComparer` class for data comparison and saving
+│ └── scraper/ # Web scraping modules
+│   ├── generic_scraper.py # Defines `GenericScraper` class
+│   ├── external_requests.py # Methods for accessing and parsing remote data
+│   └── sites/ # Website-specific scraping modules
+|     ├── bea_scraper.py
+|     ├── bfi_scraper.py
+|     ├── bis_scraper.py
+|     ├── boe_scraper.py
+|     ├── ecb_scraper.py
+|     └── ...
 │
 ├── data/
-│ ├── papers-we-have-seen.txt/ # Set of unique IDs for data previously encountered
-│ └── papers-we-have-seen-metadata.csv/ # Processed data goes here
+│ ├── wp_ids.txt # Set of unique IDs for previously encountered data
+│ ├── wp_data.csv # Table of previously encountered data
+│ └── local_scrape_outcomes/ # Holds results of local scrapes
+│   ├── README.md
+│   ├── YYYY-MM-DD-HHMM-dashboard.html
+│   ├── YYYY-MM-DD-HHMM-data.csv
+│   ├── YYYY-MM-DD-HHMM-ids.txt
+│   └── ...
 │
-├── .github/workflows/
+├──.github/workflows/
 │ └── main.yml # Runs `Daily Run` GitHub Actions workflow
 │
-└── requirements.txt # Project dependencies
+└── streamlit
+  ├── app.py # Creates Streamlit website
+  └── scraper_status.txt # Tracks active and inactive web scrapers
+
 ```
-
-**roundup**
-
-The project directory.
-
-- **runall.py**:  
-  The main script in this project. It loops through each of the modules in `roundup_scripts/scrapers/XXX.py`, running their respective `XXX.scrape()` functions. This collects data from each website, which is then gathered into a large data frame.
-  If an individual `XXX.scrape()` function produces an error, then the `runall.py` script will update that module's entry in `scraper_status.txt` to "off". If a `XXX.scrape()` function does not produce and error, then the `runall.py` script will update that module's entry in `scraper_status.txt` to "on". 
-  
-  After all web scrapers have been run and their data aggregated into a large data frame, `runall.py` invokes the `compare_historic(df)` function from the `roundup_scripts/compare.py` module to isolate only those data which are truly novel. `compare_historic(df)` uses data from `papers_we_have_seen.txt` as the source of historical truth in order to make this determination. Once `compare_historic(df)` has been successfully executed, new date- and time- stamped files are saved as `historic/weekly_data/YYYY-MM-DD-HHMM.csv`, `historic/weekly_data/YYYY-MM-DD-HHMM.txt`, and `historic/weekly_data/YYYY-MM-DD-HHMM.html` which contain metadata (title, authors, abstract, URL, date published, paper number, and unique paper ID number) on only the working papers that have not previously been scraped by runall.py. It will also append these new entries to `historic/papers-we-have-seen-metadata.csv`.
-
-- **README.md**:  
-  The document you are currently reading.
-
-- **requirements.txt**:  
-  A list of libraries and modules .
-
-- **scraper_status.txt**:  
-  A file that lists whether each scraper is operational ("on") or not ("off"). This file is used as input for the Streamlit app (`src/streamlit_app.py`), which displays scraper statuses in the side panel. A scraper status helps visitors of the website determine which web scrapers are currently operational. It also allows project developers to target modules for maintenance. The changing nature of websites means that even the most well-coded web scrapers will fail eventually.
-
-- **historic**:  
-  A folder containing data that has been previously scraped in this project.
-
-    - **papers_we_have_seen.txt**:  
-  A file that can be considered the main historical record of the project. It tells `compare.py` which papers we have seen and which we haven’t by storing all of the index numbers of the papers that have been seen as a python set. Note that no data is stored here aside from index numbers (this is a memory-saving feature of the repository).
-
-    - **weekly_data**:  
-  A folder containing the data that is gathered in every scrape of the project. Files are stored in the format `YYYY-MM-DD-HHMM.csv`, `YYYY-MM-DD-HHMM.txt`, and `YYYY-MM-DD-HHMM.html` for the time the code was run. The `.csv` and `.html` files contain the actual data that was newly seen in a given run of `runall.py`. This new data can easily be viewed using Microsoft Excel or using a browser. The `.txt` files are intended more for reference. They contain only the ID numbers of the of the novel data.
-
-- **src**:  
-  A folder containing all of the code used in the project, except for `runall.py`.
-  - **compare.py**:  
-    A module used within `runall.py`. Primary function of interest is `compare_historic(df)`, which takes the most recently scraped data as its only input argument and compares it to the data in `papers_we_have_seen.txt`. It then outputs the unique ID numbers and data corresponding with papers that are newly seen and saves the new data in the main database of the project, `historic/papers-we-have-seen-metadata.csv`, as well as local copies, `historic/weekly_data/YYYY-MM-DD-HHMM.csv` and `historic/weekly_data/YYYY-MM-DD-HHMM.txt`.
-
-  - **scrapers**:  
-    A folder that contains each of the individual web scraping modules. Each one is customized to a specific website such as BIS, Chicago Fed, NBER, etc. The scripts are named accordingly. All modules in this folder have analogous functions called `scrape()`, which aggregate data from their respective websites to output data frames. So, for example, in `runall.py`, we can import BIS and run `BIS.scrape()` to get the most recent data (formatted as a pandas data frame) from the Bank for International Settlements, or we can import NBER and run `NBER.scrape()` to get a data frame of the most recent data scraped from the National Bureau of Economic Research.
-    
-  - **scrapers_archive**:  
-    A folder that contains potentially useful archived scraper code.
-
-# Disclaimer on Web Scraping
-
-This code accesses remote data via network requests. The scripts are programmed to make minimal and spaced-out requests to avoid putting undue load on the servers of the data sources. Our goal is to collect data responsibly without disrupting the services of the websites we access. The collected data is intended for academic and research purposes only.
-
-At the time of development, all efforts were made to ensure that the scraping activities comply with the terms of service and /robots.txt directives of the websites from which data is being collected. However, terms of service can change, and it is the sole responsibility of users of this code to ensure ongoing compliance.  The developers of this project accept no liability for any misuse of the data or any damages that might arise from the use of this code.
-
-By using this code, you agree to abide by these principles and to regularly check the terms of service of the websites you are scraping to ensure compliance.
-
-
-

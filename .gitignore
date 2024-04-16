@@ -1,3 +1,8 @@
+# Ignore everything in the local_scrape_outcomes directory
+data/local_scrape_outcomes/*
+# But do not ignore the README.md file
+!data/local_scrape_outcomes/README.md
+
 # Ignore downloaded Chrome package
 google-chrome-stable_current_amd64.deb
 
