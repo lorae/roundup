@@ -125,7 +125,9 @@ for _, row in df_filtered.iterrows():
             st.markdown(f"###### **Estimated Pub Date:** {row['est_PubDate'].strftime('%Y-%m-%d')}")
         with colB:
             st.markdown(f"###### **Posted Pub Date:** {row['Date']}")
-        st.markdown(f"**Abstract:** {row['Abstract']}")
+        # Replace $ with \\$ to avoid markdown formatting of literal dollar signs
+        st.markdown("**Abstract:** " + str(row['Abstract']).replace('$', '\\$'))
+
     
     entry_number += 1
 
