@@ -183,6 +183,7 @@ class HistoricDataComparer:
             produced by applying the compare() method in this class to a data frame of recently
             scraped data.
         '''
+        print("function initiated")
         try:
             # Read in the existing historic data
             existing_df = pd.read_csv(self.WP_DATA_FILEPATH)
