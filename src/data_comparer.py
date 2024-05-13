@@ -183,15 +183,20 @@ class HistoricDataComparer:
             produced by applying the compare() method in this class to a data frame of recently
             scraped data.
         '''
+        print("function initiated")
         try:
             # Read in the existing historic data
             existing_df = pd.read_csv(self.WP_DATA_FILEPATH)
+            print("existing_df read")
             # Map the column order of historic data to column_order variable
             column_order = existing_df.columns.tolist()
+            print("column order mapped")
             # Apply the column order to novel_df
             novel_df = novel_df[column_order]
+            print("column order applied to novel_df")
             # Append novel_df rows to csv file self.WP_DATA_FILEPATH
             novel_df.to_csv(self.WP_DATA_FILEPATH, mode='a', header=False, index=False, encoding='utf-8-sig')
+            print("csv written")
         except FileNotFoundError: 
             # If file not found, write a new file
             novel_df.to_csv(self.WP_DATA_FILEPATH, mode='w', header=True, index=False, encoding='utf-8-sig')
