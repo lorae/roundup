@@ -60,9 +60,10 @@ class ECBScraper(GenericScraper):
             Author.append(author)
 
             # Abstract
-            abstract_dd = dd.find('dd')
-            abstract = abstract_dd.text if abstract_dd else "No abstract"
-            Abstract.append(abstract)
+            # Find the dt tag with the text "Abstract" and then get the next dd sibling
+            abstract_marker = dd.find('dt', text='Abstract')
+            abstract_text = abstract_marker.find_next_sibling('dd').text if abstract_marker else 'No abstract'
+            Abstract.append(abstract_text)
 
             # Link
             if title_div:
