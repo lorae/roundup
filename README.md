@@ -22,17 +22,17 @@ The web scrapers in this project gather eight pieces of information on each econ
 - **Paper ID number**: According to each website's own numbering system.
 - **Source**: Name of the website where the paper was published.
 
-A variety of methods are used to access web-based data, including PDF rendering, direct requests to hidden APIs, use of Selenium to read Java-rendered content, HTML parsing, and more. A high-level summary of the methods used to scrape each website can be found in the `Data Sources` section of this document.
+A variety of methods are used to access web-based data, including PDF rendering, direct requests to hidden APIs, use of Selenium to read Java-rendered content, HTML parsing, and more. A high-level summary of the methods used to scrape each website can be found in the [Data Sources](#data-sources) section of this document.
 
 This project is maintained in an object-oriented format. Each website has a bespoke method, called `fetch_data()`, designed to scrape it and defined in a website-specific class located in `src/scraper/sites`. To impose order on the 20+ web scrapers involved in this project, each website-specific scraper class is a child of the `GenericScraper` abstract base class, defined in `src/scraper/generic_scraper.py`.
 
-All 20+ websites can be scraped by running the `run_scraper.py` script, located in the root directory. It instantiates each scraper class sequentially and saves the collected data in uniformly-structured Pandas data frames. It also records whether the scrape was successful or unsuccessful in `streamlit/scraper_status.txt`. This list of scraped data frames is then combined into one resultant data frame of all scraped working paper entries in a given run.
+All websites can be scraped by running the `run_scraper.py` script, located in the root directory. It instantiates each scraper class sequentially and saves the collected data in uniformly-structured Pandas data frames. It also records whether the scrape was successful or unsuccessful in `streamlit/scraper_status.txt`. This list of scraped data frames is then combined into one resultant data frame of all scraped working paper entries in a given run.
 
 The data frame of web scrape results is then passed to various methods in the `HistoricDataComparer` class from `src/scraper/data_comparer.py`. These methods identify novel (versus previously encountered) data by comparing the newly-scraped paper identifiers to old identifiers. All those that are truly novel are assigned an estimated publication date of the day that they were first identified, and appended to the `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` files, which are used in identifying and maintaining a record of data encountered so far. 
 
 ### GitHub Actions Automated Workflow
 
-The web scraping activity in this repository is fully automated through a GitHub Actions project workflow. When `.github/workflows/main.yml` is activated at 6:40 AM Eastern Standard Time every day, it runs the main script of the project - `run_scraper.py` - which cycles through each of the 20+ web scraping modules, and then through data comparison modules that identify and store newly-encountered data. The project workflow concludes by committing its changes to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` under the alias `actions-user`. These commits are given the description, "run (DD/MM/YYYY)", with "DD/MM/YYYY" populated by the day, month, and year the action was initiated.
+The web scraping activity in this repository is fully automated through a GitHub Actions project workflow. When `.github/workflows/main.yml` is activated at 6:40 AM Eastern Standard Time every day, it runs the main script of the project - `run_scraper.py` - which cycles through each of the web scraping modules, and then through data comparison modules that identify and store newly-encountered data. The project workflow concludes by committing its changes to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` under the alias `actions-user`. These commits are given the description, "run (DD/MM/YYYY)", with "DD/MM/YYYY" populated by the day, month, and year the action was initiated.
 
 ### StreamLit Dashboard
 
@@ -74,7 +74,7 @@ Websites that are scraped for data, as of April 2024, are:
 
 The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Actions workflow located in `.github/workflows/main.yml`. No additional action is required to initiate this process.
 
-However, the web scrapers may also be operated on your local machine. See below for instructions on how to run the project for the first time on your local machine and any subsequent time.
+However, the web scrapers may also be operated on your local machine. See below for instructions on how to run the project [for the first time](#if-running-a-local-instance-for-the-first-time) on your local machine and [any subsequent time](#if-running-a-local-instance-again).
 
 ### If running a local instance for the first time:
 
