@@ -75,13 +75,11 @@ class FedKansasCityScraper(GenericScraper):
         for el in elements:
             # Title
             title = el.text.strip()
-            print(title)
             
             # Link to landing page: Used to navigate to the landing page to collect more data. This script
             # ultimately records the paper link as the DOI link, collected from the landing page later in 
             # this script.
             link_to_landing_page = "https://www.kansascityfed.org" + el.find('a')['href']
-            print(link_to_landing_page)
             
             # Navigate to landing page for date, abstract, authors, link, and number
             # Bundle the arguments together for requests module
@@ -93,11 +91,9 @@ class FedKansasCityScraper(GenericScraper):
             
             # Date (from landing page)
             date = landing_soup.find('time').get('datetime').strip()
-            print(date)
             
             # Author (from landing page)
             author = landing_soup.find('div', {'class': 'article-author'}).get_text().split('by:')[1].strip()
-            print(author)
 
             # Abstract (from landing page)
             tags = landing_soup.find_all(attrs={"data-block-key": True})
@@ -105,14 +101,12 @@ class FedKansasCityScraper(GenericScraper):
                 abstract = tags[1].get_text(strip=True)
             else:
                 abstract = None
-            print(abstract)
                         
             # Link (from landing page): DOI link, is used to find the paper number
             try: 
                 doi_link = landing_soup.find('div', {'class': 'col-12 references citations'}).find('a')['href']
             except: # Sometimes the webpage has data issues, making this link unavailable
                 doi_link = None
-            print(doi_link)
 
             # Number (from DOI link): Use the last few characters `link` to reliably procure the number.
             # If doi_link is unavailable, use the paper publication date instead, replacing all spaces 
@@ -127,7 +121,6 @@ class FedKansasCityScraper(GenericScraper):
                 except IndexError:
                     # Fallback in case the split does not work as expected
                     number = date.replace(' ', '-')
-            print(number)
 
             # Append title, date, author, abstract, link, and number to the
             # `data` dictionary list
