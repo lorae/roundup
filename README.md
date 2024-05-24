@@ -78,35 +78,42 @@ However, the web scrapers may also be operated on your local machine. See below 
 
 ### If running a local instance for the first time:
 
-1. **Clone the repository:** 
-  
-    `git clone https://github.com/lorae/roundup`
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/lorae/roundup
+   ```
 
 2. **Set your working directory in the repository:**
+   ```sh
+   cd your/path/to/roundup
+   ```
 
-   `cd your/path/to/roundup`
-
-3. **Create a [virtual environment](https://docs.python.org/3/library/venv.html):** 
-
-   `python -m venv .venv`
+3. **Create a [virtual environment](https://docs.python.org/3/library/venv.html):**
+   ```sh
+   python -m venv .venv
+   ```
 
 4. **[Source](https://docs.python.org/3/library/venv.html#how-venvs-work) the virtual environment:**
 
     - **Using bash/zsh:**
-
-        `source .venv/bin/activate`
+      ```sh
+      source .venv/bin/activate
+      ```
 
     - **Using Windows PowerShell:**
-
-         `.venv/Scripts/activate`
+      ```sh
+      .venv/Scripts/activate
+      ```
 
 5. **Install dependencies**
-
-    `python -m pip install -r requirements.txt`
+   ```sh
+   python -m pip install -r requirements.txt
+   ```
 
 6. **Start the script**
-
-    `python run_scraper.py`
+    ```sh
+    python run_scraper.py
+    ```
 
 7. **View results:**
 
@@ -126,21 +133,26 @@ However, the web scrapers may also be operated on your local machine. See below 
 
 ### If running a local instance again:
 1. **Set your working directory into the repository:**
-
-   `cd your/path/to/roundup`
+   ```sh
+   cd your/path/to/roundup
+   ```
 
 2. **[Source](https://docs.python.org/3/library/venv.html#how-venvs-work) the virtual environment:**
 
     - **Using bash/zsh:**
-
-        `source .venv/bin/activate`
+      ```sh
+      source .venv/bin/activate
+      ```
 
     - **Using Windows PowerShell:**
-
-         `.venv/Scripts/activate`
+      ```sh
+      .venv/Scripts/activate
+      ```
+      
 3. **Start the script**
-
-    `python runall.py`
+   ```sh
+   python runall.py
+   
 
 4. **View results:**
 
