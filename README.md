@@ -151,8 +151,8 @@ However, the web scrapers may also be operated on your local machine. See below 
       
 3. **Start the script**
    ```sh
-   python runall.py
-   
+   python run_scraper.py
+   ```
 
 4. **View results:**
 
