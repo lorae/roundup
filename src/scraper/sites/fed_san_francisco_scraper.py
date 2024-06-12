@@ -1,5 +1,7 @@
 from ..generic_scraper import GenericScraper
 from src.scraper.external_requests import request_json
+from src.scraper.external_requests import request_soup
+import requests
 from bs4 import BeautifulSoup
 
 class FedSanFranciscoScraper(GenericScraper):
@@ -41,6 +43,27 @@ class FedSanFranciscoScraper(GenericScraper):
 
             # Author
             author = wp['meta']['publication_authors']
+            if author == "":
+                # The API no longer provides author names reliably;
+                # we must retrieve them from the landing page.
+                # Bundle the arguments together for requests module
+                session_arguments = requests.Request(method='GET', 
+                                                    url=link, 
+                                                    headers=self.headers)
+                # Send request and get parse soup using BeautifulSoup
+                soup = request_soup(session_arguments)
+                # Find all div elements: each one corresponds to one author of the paper
+                author_divs = soup.find_all('div', {'sffed-associated-person'})
+                # Loop through author_divs to extract text and put in a list
+                author_list = []
+                for div in author_divs:
+                    author_text = div.get_text().strip()
+                    # If author_text is nonempty (i.e. a name is listed for the author), add this
+                    # string to the author_list
+                    if author_text:
+                        author_list.append(author_text)
+                # Combine the author_list strings into one author string, separated by commas     
+                author = ", ".join(author_list)          
 
             # Number: Combine the volume and issue with a hyphen
             number = (wp["meta"]["publication_volume"].strip() 
