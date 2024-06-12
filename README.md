@@ -4,7 +4,7 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from working paper publishers at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of April 2024, the project incorporates data from 21 different sources.
+The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from working paper publishers at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of June 2024, the project incorporates data from 21 different sources.
 
 # How it works
 
@@ -42,7 +42,7 @@ GitHub Actions are initiated at 6:40 AM EST and take roughly 4-6 minutes to run.
 
 
 # Data Sources
-Websites that are scraped for data, as of April 2024, are:
+Websites that are scraped for data, as of June 2024, are:
 
 | Name of website                                                  | Name of script                          | Scraping method |
 |------------------------------------------------------------------|-----------------------------------------|-----------------|
@@ -64,7 +64,7 @@ Websites that are scraped for data, as of April 2024, are:
 | [Federal Reserve Bank of New York](https://www.newyorkfed.org/research/staff_reports/index.html)                                 | src/scraper/sites/fed_new_york_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup. Method also will send a similar GET request corresponding to the previous year's entries. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup to extract working paper abstracts.            |
 | [Federal Reserve Bank of Philadelphia](https://www.philadelphiafed.org/search-results/all-work?searchtype=working-papers)                               | src/scraper/sites/fed_philadelphia_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup and then as JSON data. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.       |
 | [Federal Reserve Bank of Richmond](https://www.richmondfed.org/publications/research/working_papers)                               | src/scraper/sites/fed_richmond_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.      |
-| [Federal Reserve Bank of San Francisco](https://www.frbsf.org/economic-research/publications/working-papers/)                                | src/scraper/sites/fed_san_francisco_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup.    |
+| [Federal Reserve Bank of San Francisco](https://www.frbsf.org/economic-research/publications/working-papers/)                                | src/scraper/sites/fed_san_francisco_scraper.py     | Sends a GET request to the source's API and collects data from the JSON response. If data for certain entries are missing, the working paper's landing page is requested and the HTML response is parsed using BeautifulSoup.    |
 | [Federal Reserve Bank of St. Louis](https://research.stlouisfed.org/wp)                                | src/scraper/sites/fed_st_louis_scraper.py     | Sends a GET request to the source's main page and parses the response using BeautifulSoup.    |
 | [International Monetary Fund](https://www.imf.org/en/Publications/RSS?language=eng&series=IMF%20Working%20Papers)                                      | src/scraper/sites/imf_scraper.py         | Sends a GET request to the source's main page and parses the response using BeautifulSoup. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.            |
 | [National Bureau of Economic Research](https://www.nber.org/api/v1/working_page_listing/contentType/working_paper/_/_/search?page=1&perPage=100)                             | src/scraper/sites/nber_scraper.py        | Sends a GET request to the source's API and parses the JSON response. A secondary GET request is made to each working paper's landing page and parsed using BeautifulSoup.  |

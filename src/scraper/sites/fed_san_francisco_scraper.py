@@ -1,5 +1,7 @@
 from ..generic_scraper import GenericScraper
 from src.scraper.external_requests import request_json
+from src.scraper.external_requests import request_soup
+import requests
 from bs4 import BeautifulSoup
 
 class FedSanFranciscoScraper(GenericScraper):
@@ -14,12 +16,13 @@ class FedSanFranciscoScraper(GenericScraper):
     # Public method which is called from outside the class.
     def fetch_data(self):
         '''
-        Sends a GET request to the source's main page and parses the 
-        response using BeautifulSoup to get title, link, author, date,
-        and number for each working paper entry. 
+        Sends a GET request to the source's API and parses the JSON response to get title, link,
+        author, date, and number for each working paper entry. If `author` entry is not populated
+        in the JSON data, this scraper visits the landing page for the working paper, parses the 
+        HTML using BeautifulSoup, and extracts the author names there.
 
-        :return: A list of dictionaries containing Title, Author, Link, 
-        Abstract, Number and Date for each working paper entry 
+        :return: A list of dictionaries containing Title, Author, Link, Abstract, Number, and Date 
+                 for each working paper entry.
         :rtype: list
         '''
         url = 'https://www.frbsf.org/wp-json/wp/v2/sffed_publications?publication-type=1979&per_page=10'
@@ -41,6 +44,27 @@ class FedSanFranciscoScraper(GenericScraper):
 
             # Author
             author = wp['meta']['publication_authors']
+            if author == "":
+                # The API no longer provides author names reliably;
+                # we must retrieve them from the landing page.
+                # Bundle the arguments together for requests module
+                session_arguments = requests.Request(method='GET', 
+                                                    url=link, 
+                                                    headers=self.headers)
+                # Send request and get parse soup using BeautifulSoup
+                soup = request_soup(session_arguments)
+                # Find all div elements: each one corresponds to one author of the paper
+                author_divs = soup.find_all('div', {'sffed-associated-person'})
+                # Loop through author_divs to extract text and put in a list
+                author_list = []
+                for div in author_divs:
+                    author_text = div.get_text().strip()
+                    # If author_text is nonempty (i.e. a name is listed for the author), add this
+                    # string to the author_list
+                    if author_text:
+                        author_list.append(author_text)
+                # Combine the author_list strings into one author string, separated by commas     
+                author = ", ".join(author_list)          
 
             # Number: Combine the volume and issue with a hyphen
             number = (wp["meta"]["publication_volume"].strip() 
