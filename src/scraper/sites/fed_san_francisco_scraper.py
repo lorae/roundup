@@ -16,12 +16,13 @@ class FedSanFranciscoScraper(GenericScraper):
     # Public method which is called from outside the class.
     def fetch_data(self):
         '''
-        Sends a GET request to the source's main page and parses the 
-        response using BeautifulSoup to get title, link, author, date,
-        and number for each working paper entry. 
+        Sends a GET request to the source's API and parses the JSON response to get title, link,
+        author, date, and number for each working paper entry. If `author` entry is not populated
+        in the JSON data, this scraper visits the landing page for the working paper, parses the 
+        HTML using BeautifulSoup, and extracts the author names there.
 
-        :return: A list of dictionaries containing Title, Author, Link, 
-        Abstract, Number and Date for each working paper entry 
+        :return: A list of dictionaries containing Title, Author, Link, Abstract, Number, and Date 
+                 for each working paper entry.
         :rtype: list
         '''
         url = 'https://www.frbsf.org/wp-json/wp/v2/sffed_publications?publication-type=1979&per_page=10'
