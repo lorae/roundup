@@ -161,8 +161,6 @@ However, the web scrapers may also be operated on your local machine. This may b
     As above.
 
 # Project file structure
-The schematic below illustrates the basic file structure of the project. 
-
 ```
 roundup/
 │
@@ -188,14 +186,14 @@ roundup/
 │ ├── wp_ids.txt # Set of unique IDs for previously encountered data
 │ ├── wp_data.csv # Table of previously encountered data
 │ └── local_scrape_outcomes/ # Holds results of local scrapes
-│   ├── README.md
+│   ├── README.md # Explains purpose and usage of the local scrape outcome directory
 │   ├── YYYY-MM-DD-HHMM-dashboard.html
 │   ├── YYYY-MM-DD-HHMM-data.csv
 │   ├── YYYY-MM-DD-HHMM-ids.txt
 │   └── ...
 │
 ├──.github/workflows/
-│ └── main.yml # Runs `Daily Run` GitHub Actions workflow
+│ └── main.yml # Defines `Daily Run` GitHub Actions workflow
 │
 └── streamlit
   ├── app.py # Creates Streamlit website
