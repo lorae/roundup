@@ -2,6 +2,8 @@
 
 View it here: https://roundup.streamlit.app/
 
+[![A screenshot of the website](streamlit-screenshot.jpg)](https://roundup.streamlit.app/)
+
 # About
 
 The purpose of this project is regularly track and present the most economics research on an [interactive, sortable feed](https://roundup.streamlit.app/). We do so by web scraping research daily from academic organizations' websites. The data we collect are titles, authors, summaries, and links of *working papers* (also known as *pre-print papers*), which present academic research that has not yet been vetted by the peer review process. The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students.
