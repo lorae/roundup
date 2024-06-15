@@ -2,19 +2,6 @@
 
 View it here: https://roundup.streamlit.app/
 
-# Table of contents
-1. [About](#about)
-2. [How it works](#how-it-works)
-   - [Web scraping](#web-scraping)
-   - [GitHub Actions automated workflow](#github-actions-automated-workflow)
-   - [Streamlit dashboard](#streamlit-dashboard)
-3. [Data sources](#data-sources)
-4. [Getting started](#getting-started)
-   - [If running a local instance for the first time](#if-running-a-local-instance-for-the-first-time)
-   - [If running a local instance again](#if-running-a-local-instance-again)
-5. [Project file structure](#project-file-structure)
-6. [Web scraping disclaimer](#web-scraping-disclaimer)
-
 # About
 
 The purpose of this project is regularly track and present the most economics research on an [interactive, sortable feed](https://roundup.streamlit.app/). We do so by web scraping research daily from academic organizations' websites. The data we collect are titles, authors, summaries, and links of *working papers* (also known as *pre-print papers*), which present academic research that has not yet been vetted by the peer review process. The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students.
