@@ -4,11 +4,13 @@ View it here: https://roundup.streamlit.app/
 
 # About
 
-The purpose of this project is regularly track and present the most recent working papers in economics. ('Working papers', also known as 'pre-print' papers, present academic research that has not yet been peer-reviewed.) Remotely run via GitHub Actions once daily, this project scrapes data from working paper publishers at 6:40 AM EST, compares newly collected data to a historic database of working papers, and presents only the most recent ones on the [project dashboard](https://roundup.streamlit.app/). The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students. As of June 2024, the project incorporates data from 21 different sources.
+The purpose of this project is regularly track and present the most economics research on an [interactive, sortable feed](https://roundup.streamlit.app/). We do so by web scraping research daily from academic organizations' websites. The data we collect are titles, authors, summaries, and links of *working papers* (also known as *pre-print papers*), which present academic research that has not yet been vetted by the peer review process. The dashboard may be of use for those interested in understanding the most recent active areas of economics research, such as economists, policy-oriented researchers, and students.
+
+Remotely run via GitHub Actions once daily, this project scrapes data from working paper publishers at 6:40 AM EST, compares newly collected data to a historic record of working papers, and presents the results on an interactive [website](https://roundup.streamlit.app/).  As of June 2024, the project incorporates data from 21 different sources.
 
 # How it works
 
-The primary purpose of this repository is to maintain and improve the [project dashboard](https://roundup.streamlit.app/). A detailed summary of the web scraping, GitHub Actions, and StreamLit components of this project follow.
+The primary purpose of this repository is to maintain and improve the [project dashboard](https://roundup.streamlit.app/). A detailed summary of the web scraping, GitHub Actions, and Streamlit components of this project follow.
 
 ### Web Scraping
 
@@ -17,9 +19,9 @@ The web scrapers in this project gather eight pieces of information on each econ
 - **Author(s)**
 - **Abstract**: A one-paragraph long summary of the paper.
 - **Date published**: As reported by the website of origin. If the paper was posted and re-posted, the most recent date of publication is used.
-- **estPubDate**: Our best estimate for when the paper was posted: Sometimes this may differ from the official publication date by a few days. We define estPubDate as the first date that the paper was encountered by our web scrapers.
+- **estPubDate**: Our best estimate for when the paper was posted. We define it as the first date that the paper was encountered by our web scrapers. Sometimes this may differ from the official publication date by a few days.
 - **URL**: URLs to working paper landing pages, rather than direct links to PDFs, are preferred. However, with some sources, this is not possible, and PDF URLs are provided instead.
-- **Paper ID number**: According to each website's own numbering system.
+- **Paper ID number**: According to each website's own numbering system. This information is crucial for uniquely identifying working papers that have been previously encountered by our web scrapers versus those that are novel.
 - **Source**: Name of the website where the paper was published.
 
 A variety of methods are used to access web-based data, including PDF rendering, direct requests to hidden APIs, use of Selenium to read Java-rendered content, HTML parsing, and more. A high-level summary of the methods used to scrape each website can be found in the [Data Sources](#data-sources) section of this document.
@@ -32,13 +34,13 @@ The data frame of web scrape results is then passed to various methods in the `H
 
 ### GitHub Actions Automated Workflow
 
-The web scraping activity in this repository is fully automated through a GitHub Actions project workflow. When `.github/workflows/main.yml` is activated at 6:40 AM Eastern Standard Time every day, it runs the main script of the project - `run_scraper.py` - which cycles through each of the web scraping modules, and then through data comparison modules that identify and store newly-encountered data. The project workflow concludes by committing its changes to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` under the alias `actions-user`. These commits are given the description, "run (DD/MM/YYYY)", with "DD/MM/YYYY" populated by the day, month, and year the action was initiated.
+The web scraping activity in this repository is run on the cloud and fully automated through a GitHub Actions project workflow. When `.github/workflows/main.yml` is activated at 6:40 AM Eastern Standard Time every day, it runs the main script of the project - `run_scraper.py` - which cycles through each of the web scraping modules, and then through data comparison modules that identify and store newly-encountered data. The project workflow concludes by committing its changes to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` under the alias `actions-user`. These commits are given the description, "run (DD/MM/YYYY)", with "DD/MM/YYYY" populated by the day, month, and year the action was initiated.
 
-### StreamLit Dashboard
+### Streamlit Dashboard
 
-The `streamlit_app.py` script produces the [project website](https://roundup.streamlit.app/), which is a user-friendly aggregation of the most recent economics research. The app draws primarily from the `data/historic-wp-data.csv` file to populate itself with information. StreamLit automatically refreshes its data display roughly every 5 minutes. Thus, within 5 minutes of a daily commit made by GitHub Actions, changes to `data/historic-wp-data.csv` should be reflected on the website. The app also uses information from `streamlit/scraper_status.txt` to display active and inactive scrapers in the sidebar.
+The `streamlit_app.py` script produces the [project website](https://roundup.streamlit.app/), which is a user-friendly, interactive aggregation of the most recent economics research. The app draws primarily from the `data/historic-wp-data.csv` file to populate itself with information. Streamlit automatically refreshes its data display roughly every five minutes. Thus, within five minutes of a daily commit made by GitHub Actions, changes to `data/historic-wp-data.csv` should be reflected on the website. The app also references `streamlit/scraper_status.txt` to indicate the status of each scraper. A scraper is marked as "inactive" if an error occurred during its most recent run.
 
-GitHub Actions are initiated at 6:40 AM EST and take roughly 4-6 minutes to run. With an additional 5 minutes of time built in for StreamLit to update, all newly scraped information should be reflected on the project dashboard by 7:00 AM EST daily.
+GitHub Actions are initiated at 6:40 AM EST and typically take between four and six minutes to run. With an additional five minutes of time built in for Streamlit to update, all newly scraped information should be reflected on the project dashboard by 7:00 AM EST daily.
 
 
 # Data Sources
@@ -74,7 +76,7 @@ Websites that are scraped for data, as of June 2024, are:
 
 The web scrapers are run remotely at 6:40 AM EST daily via the project GitHub Actions workflow located in `.github/workflows/main.yml`. No additional action is required to initiate this process.
 
-However, the web scrapers may also be operated on your local machine. See below for instructions on how to run the project [for the first time](#if-running-a-local-instance-for-the-first-time) on your local machine and [any subsequent time](#if-running-a-local-instance-again).
+However, the web scrapers may also be operated on your local machine. This may be useful for debugging purposes or for cloning the project for your own usage. See below for instructions on how to run the project [for the first time](#if-running-a-local-instance-for-the-first-time) on your local machine and [any subsequent time](#if-running-a-local-instance-again).
 
 ### If running a local instance for the first time:
 
@@ -129,7 +131,7 @@ However, the web scrapers may also be operated on your local machine. See below 
 
     Results will also be appended to `data/historic-wp-data.csv` and `data/historic-wp-ids.txt` with each run of `run_scraper.py`. However, these files are more difficult to comfortably view directly, as they contain *all* working papers *ever encountered* by the web scrapers.
 
-    Note that the results in `data/local_scrape_outcomes/` are local only, and ignored by GitHub (`.gitignore`). The interactive project dashboard on [https://roundup.streamlit.app](https://roundup.streamlit.app/) will not be updated with results from your local run unless you commit your changes to `data/historic-wp-data.csv` to the `main` branch of the repository. 
+    Note that the results in `data/local_scrape_outcomes/` are local only, and ignored by GitHub (`.gitignore`). The interactive project dashboard on [https://roundup.streamlit.app](https://roundup.streamlit.app/) will not be updated with results from your local run unless you commit your changes to `data/historic-wp-data.csv` to the `main` branch of the repository.
 
 ### If running a local instance again:
 1. **Set your working directory into the repository:**
@@ -203,8 +205,8 @@ roundup/
 
 # Web Scraping Disclaimer
 
-This code accesses remote data via network requests. The scripts are programmed to make minimal and spaced-out requests to avoid putting undue load on the servers of the data sources. Our goal is to collect data responsibly without disrupting the services of the websites we access. The collected data is intended for academic and research purposes only.
+This code accesses remote data via network requests. The scripts are programmed to make minimal and spaced-out requests to avoid putting undue load on the servers of the data sources. Our goal is to collect data responsibly. The collected data is intended for academic and research purposes only.
 
-All efforts have been made to ensure that the scraping activities comply with the terms of service and /robots.txt directives of the websites from which data is being collected. However, terms of service can change, and it is the sole responsibility of users of this code to ensure ongoing compliance.  The developers of this project accept no liability for any misuse of the data or any damages that might arise from the use of this code.
+All efforts have been made to ensure that the scraping activities comply with the terms of service and `robots.txt` directives of the websites from which data is being collected. However, terms of service can change, and it is the sole responsibility of users of this code to ensure ongoing compliance.  The developers of this project accept no liability for any misuse of the data or any damages that might arise from the use of this code.
 
 By using this code, you agree to abide by these principles and to regularly check the terms of service of the websites you are scraping to ensure compliance.
