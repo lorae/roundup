@@ -4,7 +4,7 @@
 
 This directory contains the output files from local data scraping operations, and provides a quick snapshot of what the web scraper has gathered (or if it worked at all). The contents of this directory - excluding this README that you are reading - are not tracked by version control (`.gitignore`), nor do they affect the database underlying this repository's Streamlit app. 
 
-Because of this repository's automated GitHub Actions workflow, this directory remains unaffected when webscrapers are auto-run each day. Instead, the directory is only changed on your local hard drive when you choose to run the script.
+Because of this repository's automated GitHub Actions workflow, this directory remains unaffected when web scrapers are auto-run each day. Instead, files are only saved to this directory when you choose to run the script locally.
 
 In prior iterations of this project, this functionality - particularly the HTML files - were produced weekly by manually running this repository's main script and presented as a weekly snapshot of economics research. Now that that process has been automated, this folder remains primarily for local usage and debugging.
 
