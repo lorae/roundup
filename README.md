@@ -203,10 +203,10 @@ roundup/
 
 ```
 
-# Web scraping disclaimer
+# Disclaimer
 
-This code accesses remote data via network requests. The scripts are programmed to make minimal and spaced-out requests to avoid putting undue load on the servers of the data sources. Our goal is to collect data responsibly. The collected data is intended for academic and research purposes only.
+This project is intended for research and educational purposes only. Our goal is to collect data responsibly. All efforts have been made to ensure that the scraping activities comply with the terms of service and `robots.txt` files from the websites we scrape. The web scrapers are programmed to make minimal and spaced-out requests to avoid putting undue load on the servers of the data sources. 
 
-All efforts have been made to ensure that the scraping activities comply with the terms of service and `robots.txt` directives of the websites from which data is being collected. However, terms of service can change, and it is the sole responsibility of users of this code to ensure ongoing compliance.  The developers of this project accept no liability for any misuse of the data or any damages that might arise from the use of this code.
+However, terms of service can change, and it is the sole responsibility of users of this code to ensure ongoing compliance. The developers of this project accept no liability for any misuse of the data or any damages that might arise from the use of this code. 
 
 By using this code, you agree to abide by these principles and to regularly check the terms of service of the websites you are scraping to ensure compliance.
