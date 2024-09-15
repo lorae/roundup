@@ -1,3 +1,4 @@
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -45,8 +46,28 @@ def selenium_soup(url: str) -> BeautifulSoup:
     :return: BeautifulSoup object containing the parsed page source.
     '''
 
-    chrome_service = Service(ChromeDriverManager().install())
+    # Determine if running in GitHub Actions by checking for the environment variable
+    if 'GITHUB_ACTIONS' in os.environ:
+        # Use the pre-installed chromedriver path from environment variable
+        chrome_driver_path = os.environ.get('CHROMEDRIVER_PATH', '/usr/local/bin/chromedriver')
+    else:
+        # Install ChromeDriver using webdriver_manager for local environment
+        chrome_driver_path = ChromeDriverManager().install()
+
+        # Due to a recent update in webdriver_manager, the ChromeDriver path may incorrectly point to a 
+        # non-executable file ('THIRD_PARTY_NOTICES.chromedriver') instead of the actual 'chromedriver.exe'.
+        # The following check ensures that the path is corrected to point to the executable.
+        if chrome_driver_path.endswith("THIRD_PARTY_NOTICES.chromedriver"):
+            chrome_driver_path = chrome_driver_path.replace(
+                "THIRD_PARTY_NOTICES.chromedriver", "chromedriver.exe"
+            )
+
+    print(f"Using ChromeDriver at: {chrome_driver_path}")  # Debugging line to check path
+
+    # Set up ChromeDriver service
+    chrome_service = Service(chrome_driver_path)
     
+    # Set up Chrome options
     chrome_options = Options()
     options = [
         "--headless",
@@ -60,6 +81,7 @@ def selenium_soup(url: str) -> BeautifulSoup:
     for option in options:
         chrome_options.add_argument(option)
 
+    # Initialize WebDriver with the service and options
     driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
     driver.get(url)  # Go to the page
     time.sleep(5)  # Pause to allow the page to fully load
