@@ -44,8 +44,21 @@ def selenium_soup(url: str) -> BeautifulSoup:
     :param url: URL of the webpage to fetch.
     :return: BeautifulSoup object containing the parsed page source.
     '''
+    
+    # Install ChromeDriver using webdriver_manager
+    chrome_driver_path = ChromeDriverManager().install()
 
-    chrome_service = Service(ChromeDriverManager().install())
+    # Due to a recent update in webdriver_manager, the ChromeDriver path may incorrectly point to a 
+    # non-executable file ('THIRD_PARTY_NOTICES.chromedriver') instead of the actual 'chromedriver.exe'.
+    # This check ensures that the path is pointed to the executable.
+    if chrome_driver_path.endswith("THIRD_PARTY_NOTICES.chromedriver"):
+        chrome_driver_path = chrome_driver_path.replace(
+            "THIRD_PARTY_NOTICES.chromedriver", "chromedriver.exe"
+        )
+    
+    print(f"Using ChromeDriver at: {chrome_driver_path}") 
+
+    chrome_service = Service(chrome_driver_path)
     
     chrome_options = Options()
     options = [
