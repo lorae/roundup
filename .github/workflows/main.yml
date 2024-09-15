@@ -22,28 +22,21 @@ jobs:
       run: sudo apt-get update
 
     - name: Remove Chrome
-      run: sudo apt purge google-chrome-stable -y
+      run: sudo apt purge google-chrome-stable
     
-    - name: Install Chrome and Chromedriver
+    - name: Install Google Chrome
       run: |
-        sudo apt-get install -y google-chrome-stable
-        CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-        CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-        wget -N https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip -d /usr/local/bin/
-        sudo chmod +x /usr/local/bin/chromedriver
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+
+    # Set up Chromedriver to match the installed version of Chrome
+    - name: Setup Chromedriver
+      uses: nanasess/setup-chromedriver@v2
 
     - name: Install Python dependencies
       run: pip install -r requirements.txt
 
-    - name: Check Chrome and Chromedriver Versions
-      run: |
-        google-chrome --version
-        chromedriver --version
-
     - name: Run script
-      env:
-        CHROMEDRIVER_PATH: "/usr/local/bin/chromedriver"
       run: python run_scraper.py
 
     - name: Configure git
