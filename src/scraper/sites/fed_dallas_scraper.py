@@ -36,12 +36,21 @@ class FedDallasScraper(GenericScraper):
         # Send request and get soup
         soup = request_soup(session_arguments)
 
-        # Find all the h3 tags. These act as signposts that definitively separate working
-        # paper entries. We limit ourselves to only the first 20 h3 tags since they entries
-        # go all the way back to the 1980s.
-        h3_tags = soup.find_all('h3')[:20]
-        count = 0
+        # Find the p tags in the table with class
+        table = soup.find('div', {'class': 'dal-tab__pane'})
 
+        elements = table.find_all('p')
+        # Not all the p elements contain useful information. Screen them using
+        # os_relevant_p_tag
+        for e in elements:
+            if self.is_relevant_p_tag(e):
+
+                title_tag = e.find('a', href=True)
+                title = title_tag.text.strip() if title_tag else "Title not found"
+                print(title)
+
+
+        
         # Initialize `data`
         data = []
         for h3 in h3_tags:
@@ -125,7 +134,22 @@ class FedDallasScraper(GenericScraper):
 
         return data
 
-    # Private method used to extract date from parsed pdf content   
+    # Check whether a given element contains working paper data like 
+    # title, abstract, and author.
+    def is_relevant_p_tag(self, element):
+        # Find all <a> tags with an href attribute within the given element
+        a_tags = element.find_all('a', href=True)
+        
+        # Check if any <a> tags contain links to a PDF
+        for a in a_tags:
+            if a['href'].endswith('.pdf'):
+                return True
+
+        # If no PDF link is found, the element is not relevant
+        return False
+
+
+    # Extract date from parsed pdf content   
     def extract_date(self, text):
         # Remove line breaks
         cleaned_text = text.replace('\n', ' ')
