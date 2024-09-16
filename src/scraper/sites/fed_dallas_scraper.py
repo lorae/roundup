@@ -48,6 +48,14 @@ class FedDallasScraper(GenericScraper):
                 title_tag = e.find('a', href=True)
                 title = title_tag.text.strip() if title_tag else "Title not found"
                 print(title)
+                print("")
+
+                number = self.extract_paper_number(e)
+                print(number)
+                
+
+                print("...")
+                print("")
 
 
         
@@ -145,10 +153,46 @@ class FedDallasScraper(GenericScraper):
             if a['href'].endswith('.pdf'):
                 return True
 
-        # If no PDF link is found, the element is not relevant
+        # If no PDF link is found, the element is not relevantS
         return False
 
+    def extract_paper_number(self, element):
+        """
+        Extracts the paper number from a <strong> element within the given element.
+        The paper number starts with either "Globalization Institute No." or "No."
+        and is followed by a number.
+        
+        :param element: BeautifulSoup object representing a tag containing a <strong> tag with the paper number.
+        :return: The extracted paper number or "Number not found" if the pattern is not matched.
+        """
+        # Find the <strong> tag that contains the number
+        strong_tag = element.find('strong')
+        
+        if not strong_tag:
+            return "Number not found"
 
+        # Get the text content from the <strong> tag
+        strong_text = strong_tag.text.strip()
+
+        # Define the pattern to match "Globalization Institute No." or "No." followed by the number
+        pattern = r"^(Globalization Institute No\. \d+|No\. \d+)"
+
+        # Search for the pattern in the text
+        match = re.match(pattern, strong_text)
+
+        if match:
+            # If found, return the matched text (the paper number)
+            number = match.group()
+            if 'Globalization Institute' in number:
+                number = number.replace('Globalization Institute No. ', 'GI')
+            if 'No.' in number:
+                number = number.replace('No.', '').strip()
+
+        else:
+            number = "Number not found"
+
+        return(number)
+    
     # Extract date from parsed pdf content   
     def extract_date(self, text):
         # Remove line breaks
