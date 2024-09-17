@@ -39,7 +39,6 @@ class FedDallasScraper(GenericScraper):
         # Initialize `data`
         data = []
 
-        # Find the table containing working paper metadata
         # Get the current year and the previous year
         current_year = datetime.now().year
         previous_year = current_year - 1
