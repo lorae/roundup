@@ -57,14 +57,11 @@ class FedDallasScraper(GenericScraper):
                     if self.is_relevant_p_tag(e):
                         title_tag = e.find('a', href=True)
                         title = title_tag.text.strip() if title_tag else "Title not found"
-                        print(title)
 
                         # The title tag also contains an href link pointing to the paper PDF
                         link = "https://www.dallasfed.org" + title_tag['href']
-                        print(link)
 
                         number = self.extract_paper_number(e)
-                        print(number)
                         
                         # Get the entire text content of the paragraph
                         e_text = e.get_text(separator="\n")
@@ -73,11 +70,9 @@ class FedDallasScraper(GenericScraper):
                         author_text = e_text.split(title)[1].split("Abstract:")[0]
                         # Remove the word "Codes" if it appears in the string
                         author = author_text.replace("Codes", "").strip()
-                        print(author)
 
                         # Use the entire paragraph text to get the abstract
                         abstract = e_text.split("Abstract:")[1].strip()
-                        print(abstract)
 
                         # Get the date from PDF file. Complicated.
                         pdf_content = requests.get(link).content
@@ -86,7 +81,6 @@ class FedDallasScraper(GenericScraper):
                         # Extract the text from the second page
                         text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
                         date = self.extract_date(text)
-                        print(date)
 
                         # Append number, title, link, author, abstract, and date to the
                         # `data` dictionary list
