@@ -1,10 +1,10 @@
 from ..generic_scraper import GenericScraper
 from src.scraper.external_requests import request_soup
 import requests
-from bs4 import BeautifulSoup
 import re
 import PyPDF2
 import io
+from datetime import datetime
 
 class FedDallasScraper(GenericScraper):
     def __init__(self):
@@ -36,96 +36,117 @@ class FedDallasScraper(GenericScraper):
         # Send request and get soup
         soup = request_soup(session_arguments)
 
-        # Find all the h3 tags. These act as signposts that definitively separate working
-        # paper entries. We limit ourselves to only the first 20 h3 tags since they entries
-        # go all the way back to the 1980s.
-        h3_tags = soup.find_all('h3')[:20]
-        count = 0
-
         # Initialize `data`
         data = []
-        for h3 in h3_tags:
+
+        # Get the current year and the previous year
+        current_year = datetime.now().year
+        previous_year = current_year - 1
+
+        # Extract data for the current and previous year
+        for year_id in [str(current_year), str(previous_year)]:
+            # Find the table containing working paper metadata
+            table = soup.find('div', {'class': 'dal-tab__pane', 'id': year_id})
             
-            # Get the number from the h3 tag.
-            number = h3.text
-            # Check if 'Globalization Institute' is in the number string. Replace with "GI"
-            if 'Globalization Institute' in number:
-                number = number.replace('Globalization Institute No. ', 'GI')
+            if table:
+                # Within the table, extract the <p> elements
+                elements = table.find_all('p')
+                for e in elements:
+                    # Not all the p elements contain useful information. Screen them using
+                    # is_relevant_p_tag
+                    if self.is_relevant_p_tag(e):
+                        title_tag = e.find('a', href=True)
+                        title = title_tag.text.strip() if title_tag else "Title not found"
 
-            # Get the title from the first p tag that follows the h3 tag.
-            next_p = h3.find_next_sibling('p')
-            title = next_p.find('strong').text if next_p.find('strong') else None
+                        # The title tag also contains an href link pointing to the paper PDF
+                        link = "https://www.dallasfed.org" + title_tag['href']
 
-            # Get the link from the first p tag that follows the h3 tag. Note that this is a link to a pdf, NOT 
-            # a landing page. Some working papers have landing pages, but it is inconsistent.
-            link = "https://www.dallasfed.org" + next_p.find('a')['href']
+                        number = self.extract_paper_number(e)
+                        
+                        # Get the entire text content of the paragraph
+                        e_text = e.get_text(separator="\n")
+                        # The authors appear after the title and before the text
+                        # "Abstract"
+                        author_text = e_text.split(title)[1].split("Abstract:")[0]
+                        # Remove the word "Codes" if it appears in the string
+                        author = author_text.replace("Codes", "").strip()
 
-            # The author also comes from the first p tag that follows the h3 tag. But it is 
-            # complicated to extract since it doesn't have its own element. The cleanest way to extract
-            # the data is to parse the element as text and then convert back to a beautiful soup to then
-            # once again extract the clean text.
-            # 1. Convert the p tag's contents to a string and find the location where "Abstract:" appears.
-            abstract_location = str(next_p).find('Abstract:')
-            # 2. Extract the substring that precedes "Abstract:".
-            html_before_abstract = str(next_p)[:abstract_location]
-            # 3. Parse the extracted substring using BeautifulSoup.
-            soup_fragment = BeautifulSoup(html_before_abstract, 'html.parser')
-            # 4. Find the last a tag within this fragment.
-            last_a_tag = soup_fragment.find_all('a')[-1]
-            # 5. In the original p tag, find the <br> tag right after the last a tag.
-            br_tag_after_last_a = last_a_tag.find_next('br')
-            # 6. Find the <strong> tag right after the <br> tag.
-            author_tag = br_tag_after_last_a.find_next('strong')
-            # 7. Extract the text.
-            author = author_tag.text
+                        # Use the entire paragraph text to get the abstract
+                        abstract = e_text.split("Abstract:")[1].strip()
 
-            # Get the abstract. Methodology similar to author above.
-            # There's room for improvement in this code, and perhaps a better solution is using the PDF,
-            # as is done for the paper date.
-            # 1. Find the position where "Abstract:" appears in next_p's contents.
-            abstract_start = str(next_p).find('Abstract:') + len('Abstract:')
-            # 2. Get the substring starting from "Abstract:".
-            substring_after_abstract = str(next_p)[abstract_start:]
-            # 3. Find the position of the first line break (either <br>, <br/>, or </br>) after "Abstract:" in the substring.
-            match = re.search(r'<br ?/?>|</br>', substring_after_abstract)
-            if match:
-                abstract_end = match.start()
-            else:
-                abstract_end = len(substring_after_abstract)  # if no match found, use the full length
-            # 4. Extract the desired abstract text by converting back to a soup, and then again to text. This removes unneeded 
-            # <p> and <br> tags and the like.
-            abstract_html = substring_after_abstract[:abstract_end].strip()
-            abstract_soup = BeautifulSoup(abstract_html, 'html.parser')
-            abstract = abstract_soup.get_text()
+                        # Get the date from PDF file. Complicated.
+                        pdf_content = requests.get(link).content
+                        pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
+                    
+                        # Extract the text from the second page
+                        text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
+                        date = self.extract_date(text)
 
-            # Get the date from PDF file. Complicated.
-            # Link = ["https://www.dallasfed.org/-/media/documents/research/papers/2023/wp2305.pdf"]
-            # The extract_date function doesn't always work because sometimes the text has spaces and line breaks
-            # that mess up the regex (e.g. "M ay 5, 2023" instead of "May 5, 2023"). I'd like to also extract the abstract
-            # from the PDF but I need to learn how to remove the unnecessary line breaks and spaces first. The above link
-            # is an example of a PDF that produces this error. Most work, however.
-            # Get the PDF content for the current row
-            pdf_content = requests.get(link).content
-            pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
-        
-            # Extract the text from the second page
-            text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
-            date = self.extract_date(text)
-
-            # Append number, title, link, author, abstract, and date to the
-            # `data` dictionary list
-            data.append({
-                'Number': number,
-                'Title': title,
-                'Link': link,
-                'Author': author,
-                'Abstract': abstract,
-                'Date': date
-            })
+                        # Append number, title, link, author, abstract, and date to the
+                        # `data` dictionary list
+                        data.append({
+                            'Number': number,
+                            'Title': title,
+                            'Link': link,
+                            'Author': author,
+                            'Abstract': abstract,
+                            'Date': date
+                        })
 
         return data
 
-    # Private method used to extract date from parsed pdf content   
+    # Check whether a given element contains working paper data like 
+    # title, abstract, and author.
+    def is_relevant_p_tag(self, element):
+        # Find all <a> tags with an href attribute within the given element
+        a_tags = element.find_all('a', href=True)
+        
+        # Check if any <a> tags contain links to a PDF
+        for a in a_tags:
+            if a['href'].endswith('.pdf'):
+                return True
+
+        # If no PDF link is found, the element is not relevantS
+        return False
+
+    def extract_paper_number(self, element):
+        """
+        Extracts the paper number from a <strong> element within the given element.
+        The paper number starts with either "Globalization Institute No." or "No."
+        and is followed by a number.
+        
+        :param element: BeautifulSoup object representing a tag containing a <strong> tag with the paper number.
+        :return: The extracted paper number or "Number not found" if the pattern is not matched.
+        """
+        # Find the <strong> tag that contains the number
+        strong_tag = element.find('strong')
+        
+        if not strong_tag:
+            return "Number not found"
+
+        # Get the text content from the <strong> tag
+        strong_text = strong_tag.text.strip()
+
+        # Define the pattern to match "Globalization Institute No." or "No." followed by the number
+        pattern = r"^(Globalization Institute No\. \d+|No\. \d+)"
+
+        # Search for the pattern in the text
+        match = re.match(pattern, strong_text)
+
+        if match:
+            # If found, return the matched text (the paper number)
+            number = match.group()
+            if 'Globalization Institute' in number:
+                number = number.replace('Globalization Institute No. ', 'GI')
+            if 'No.' in number:
+                number = number.replace('No.', '').strip()
+
+        else:
+            number = "Number not found"
+
+        return(number)
+    
+    # Extract date from parsed pdf content   
     def extract_date(self, text):
         # Remove line breaks
         cleaned_text = text.replace('\n', ' ')
