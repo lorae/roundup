@@ -1,7 +1,6 @@
 from ..generic_scraper import GenericScraper
 from src.scraper.external_requests import request_soup
 import requests
-from bs4 import BeautifulSoup
 import re
 import PyPDF2
 import io
