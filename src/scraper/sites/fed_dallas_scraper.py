@@ -4,6 +4,7 @@ import requests
 import re
 import PyPDF2
 import io
+from datetime import datetime
 
 class FedDallasScraper(GenericScraper):
     def __init__(self):
@@ -39,64 +40,65 @@ class FedDallasScraper(GenericScraper):
         data = []
 
         # Find the table containing working paper metadata
-        table = soup.find('div', {'class': 'dal-tab__pane'})
+        # Get the current year and the previous year
+        current_year = datetime.now().year
+        previous_year = current_year - 1
 
-        # Within the table, extract the <p> elements
-        elements = table.find_all('p')
-        for e in elements:
-            # Not all the p elements contain useful information. Screen them using
-            # is_relevant_p_tag
-            if self.is_relevant_p_tag(e):
-
-                title_tag = e.find('a', href=True)
-                title = title_tag.text.strip() if title_tag else "Title not found"
-                print(title)
-
-                # The title tag also contains an href link pointing to the paper PDF
-                link = "https://www.dallasfed.org" + title_tag['href']
-                print(link)
-
-                number = self.extract_paper_number(e)
-                print(number)
-                
-                # Get the entire text content of the paragraph
-                e_text = e.get_text(separator="\n")
-                # The authors appear after the title and before the text
-                # "Abstract"
-                author_text = e_text.split(title)[1].split("Abstract:")[0]
-                # Remove the word "Codes" if it appears in the string
-                author = author_text.replace("Codes", "").strip()
-                print(author)
-
-                # Use the entire paragraph text to get the abstract
-                abstract = e_text.split("Abstract:")[1].strip()
-                print(abstract)
-
-                # Get the date from PDF file. Complicated.
-                # Link = ["https://www.dallasfed.org/-/media/documents/research/papers/2023/wp2305.pdf"]
-                # The extract_date function doesn't always work because sometimes the text has spaces and line breaks
-                # that mess up the regex (e.g. "M ay 5, 2023" instead of "May 5, 2023"). I'd like to also extract the abstract
-                # from the PDF but I need to learn how to remove the unnecessary line breaks and spaces first. The above link
-                # is an example of a PDF that produces this error. Most work, however.
-                # Get the PDF content for the current row
-                pdf_content = requests.get(link).content
-                pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
+        # Extract data for the current and previous year
+        for year_id in [str(current_year), str(previous_year)]:
+            # Find the table containing working paper metadata
+            table = soup.find('div', {'class': 'dal-tab__pane', 'id': year_id})
             
-                # Extract the text from the second page
-                text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
-                date = self.extract_date(text)
-                print(date)
+            if table:
+                # Within the table, extract the <p> elements
+                elements = table.find_all('p')
+                for e in elements:
+                    # Not all the p elements contain useful information. Screen them using
+                    # is_relevant_p_tag
+                    if self.is_relevant_p_tag(e):
+                        title_tag = e.find('a', href=True)
+                        title = title_tag.text.strip() if title_tag else "Title not found"
+                        print(title)
 
-                # Append number, title, link, author, abstract, and date to the
-                # `data` dictionary list
-                data.append({
-                    'Number': number,
-                    'Title': title,
-                    'Link': link,
-                    'Author': author,
-                    'Abstract': abstract,
-                    'Date': date
-                })
+                        # The title tag also contains an href link pointing to the paper PDF
+                        link = "https://www.dallasfed.org" + title_tag['href']
+                        print(link)
+
+                        number = self.extract_paper_number(e)
+                        print(number)
+                        
+                        # Get the entire text content of the paragraph
+                        e_text = e.get_text(separator="\n")
+                        # The authors appear after the title and before the text
+                        # "Abstract"
+                        author_text = e_text.split(title)[1].split("Abstract:")[0]
+                        # Remove the word "Codes" if it appears in the string
+                        author = author_text.replace("Codes", "").strip()
+                        print(author)
+
+                        # Use the entire paragraph text to get the abstract
+                        abstract = e_text.split("Abstract:")[1].strip()
+                        print(abstract)
+
+                        # Get the date from PDF file. Complicated.
+                        pdf_content = requests.get(link).content
+                        pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
+                    
+                        # Extract the text from the second page
+                        text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
+                        date = self.extract_date(text)
+                        print(date)
+
+                        # Append number, title, link, author, abstract, and date to the
+                        # `data` dictionary list
+                        data.append({
+                            'Number': number,
+                            'Title': title,
+                            'Link': link,
+                            'Author': author,
+                            'Abstract': abstract,
+                            'Date': date
+                        })
 
         return data
 
