@@ -55,18 +55,14 @@ class FedDallasScraper(GenericScraper):
                 # Number
                 number_text = el.select_one('p.dal-tagline').text.strip()
                 number = self.extract_paper_number(number_text)
-                print(number)
 
                 # Title and link
                 title_tag = el.select_one('p.dal-headline > a')
                 title = title_tag.text.strip()
                 link = "https://www.dallasfed.org" + title_tag['href']
-                print(title)
-                print(link)
 
                 # Authors
                 authors = el.select_one('p.dal-author').text.strip()
-                print(authors)
 
                 # Abstract
                 abstract_tag = el.select_one('div.dal-abstract > p')
@@ -75,7 +71,6 @@ class FedDallasScraper(GenericScraper):
                 # PDF link
                 pdf_link_tag = el.select_one('div.dal-abstract a[href$=".pdf"]')
                 pdf_link = "https://www.dallasfed.org" + pdf_link_tag['href'] if pdf_link_tag else ""
-                print(pdf_link)
 
                 # Get the date from PDF file. Complicated.
                 pdf_content = requests.get(pdf_link).content
@@ -84,9 +79,6 @@ class FedDallasScraper(GenericScraper):
                 # Extract the text from the second page
                 text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
                 date = self.extract_date(text)
-                print(date)
-                print("whew, that was hard! But I got the date")
-                print("")
 
                 # Append number, title, link, author, abstract, and date to the
                 # `data` dictionary list
@@ -100,20 +92,6 @@ class FedDallasScraper(GenericScraper):
                 })
 
         return data
-
-    # Check whether a given element contains working paper data like 
-    # title, abstract, and author.
-    def is_relevant_p_tag(self, element):
-        # Find all <a> tags with an href attribute within the given element
-        a_tags = element.find_all('a', href=True)
-        
-        # Check if any <a> tags contain links to a PDF
-        for a in a_tags:
-            if a['href'].endswith('.pdf'):
-                return True
-
-        # If no PDF link is found, the element is not relevantS
-        return False
 
     def extract_paper_number(self, text):
         """
