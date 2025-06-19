@@ -36,21 +36,11 @@ class FedBoardScraper(GenericScraper):
         data = []
         for el in elements:
             title = el.select_one('h5 > a').text.strip()
-            print(title)
             link = "https://www.federalreserve.gov" + el.select_one('h5 > a')['href']
-            print(link)
             number = el.select_one('span.badge').text.strip().replace('FEDS ', '')
-            print(number)
             authors = el.select_one('div.authors').text.strip()
-            print(authors)
             abstract = el.select_one('div.collapse > p').text.strip().replace('Abstract: ', '')
-            print("Here we go...")
-            print(abstract)
             date = el.select_one('time')['datetime'] 
-            print(date)
-            print("yee haw")
-            print(" ")
-            print("......")
 
             data.append({
             'Title': title,
