@@ -45,53 +45,59 @@ class FedDallasScraper(GenericScraper):
 
         # Extract data for the current and previous year
         for year_id in [str(current_year), str(previous_year)]:
-            # Find the table containing working paper metadata
-            table = soup.find('div', {'class': 'dal-tab__pane', 'id': year_id})
+            # Find the container containing working paper metadata
+            container = soup.find('div', {'class': 'dal-tab__pane', 'id': year_id})
+            table = container.find('div', {'class': 'dal-citations__inline--wp-index'})
+            elements = table.find_all('div', class_='dal-index-item')
+            #print(elements)
+
+            for el in elements:
+                # Number
+                number_text = el.select_one('p.dal-tagline').text.strip()
+                number = self.extract_paper_number(number_text)
+                print(number)
+
+                # Title and link
+                title_tag = el.select_one('p.dal-headline > a')
+                title = title_tag.text.strip()
+                link = "https://www.dallasfed.org" + title_tag['href']
+                print(title)
+                print(link)
+
+                # Authors
+                authors = el.select_one('p.dal-author').text.strip()
+                print(authors)
+
+                # Abstract
+                abstract_tag = el.select_one('div.dal-abstract > p')
+                abstract = abstract_tag.text.strip().replace("Abstract: ", "") if abstract_tag else ""
+
+                # PDF link
+                pdf_link_tag = el.select_one('div.dal-abstract a[href$=".pdf"]')
+                pdf_link = "https://www.dallasfed.org" + pdf_link_tag['href'] if pdf_link_tag else ""
+                print(pdf_link)
+
+                # Get the date from PDF file. Complicated.
+                pdf_content = requests.get(pdf_link).content
+                pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
             
-            if table:
-                # Within the table, extract the <p> elements
-                elements = table.find_all('p')
-                for e in elements:
-                    # Not all the p elements contain useful information. Screen them using
-                    # is_relevant_p_tag
-                    if self.is_relevant_p_tag(e):
-                        title_tag = e.find('a', href=True)
-                        title = title_tag.text.strip() if title_tag else "Title not found"
+                # Extract the text from the second page
+                text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
+                date = self.extract_date(text)
+                print(date)
+                print("whew, that was hard! But I got the date")
+                print("")
 
-                        # The title tag also contains an href link pointing to the paper PDF
-                        link = "https://www.dallasfed.org" + title_tag['href']
-
-                        number = self.extract_paper_number(e)
-                        
-                        # Get the entire text content of the paragraph
-                        e_text = e.get_text(separator="\n")
-                        # The authors appear after the title and before the text
-                        # "Abstract"
-                        author_text = e_text.split(title)[1].split("Abstract:")[0]
-                        # Remove the word "Codes" if it appears in the string
-                        author = author_text.replace("Codes", "").strip()
-
-                        # Use the entire paragraph text to get the abstract
-                        abstract = e_text.split("Abstract:")[1].strip()
-
-                        # Get the date from PDF file. Complicated.
-                        pdf_content = requests.get(link).content
-                        pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
-                    
-                        # Extract the text from the second page
-                        text = pdf_reader.pages[1].extract_text().replace('\n', ' ')
-                        date = self.extract_date(text)
-
-                        # Append number, title, link, author, abstract, and date to the
-                        # `data` dictionary list
-                        data.append({
-                            'Number': number,
-                            'Title': title,
-                            'Link': link,
-                            'Author': author,
-                            'Abstract': abstract,
-                            'Date': date
-                        })
+                # Append number, title, link, author, abstract, and date to the
+                # `data` dictionary list
+                data.append({
+                    'Number': number,
+                    'Title': title,
+                    'Link': link,
+                    'Author': authors,
+                    'Abstract': abstract,
+                    'Date': date
+                })
 
         return data
 
@@ -109,7 +115,7 @@ class FedDallasScraper(GenericScraper):
         # If no PDF link is found, the element is not relevantS
         return False
 
-    def extract_paper_number(self, element):
+    def extract_paper_number(self, text):
         """
         Extracts the paper number from a <strong> element within the given element.
         The paper number starts with either "Globalization Institute No." or "No."
@@ -118,20 +124,11 @@ class FedDallasScraper(GenericScraper):
         :param element: BeautifulSoup object representing a tag containing a <strong> tag with the paper number.
         :return: The extracted paper number or "Number not found" if the pattern is not matched.
         """
-        # Find the <strong> tag that contains the number
-        strong_tag = element.find('strong')
-        
-        if not strong_tag:
-            return "Number not found"
-
-        # Get the text content from the <strong> tag
-        strong_text = strong_tag.text.strip()
-
         # Define the pattern to match "Globalization Institute No." or "No." followed by the number
         pattern = r"^(Globalization Institute No\. \d+|No\. \d+)"
 
         # Search for the pattern in the text
-        match = re.match(pattern, strong_text)
+        match = re.match(pattern, text)
 
         if match:
             # If found, return the matched text (the paper number)
