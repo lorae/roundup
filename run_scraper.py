@@ -27,13 +27,13 @@ from src.scraper.sites.nber_scraper import NBERScraper
 
 # List of scraper classes
 scrapers = [
-            # BEAScraper, 
-            # BFIScraper,
-            # BISScraper,
-            # BOEScraper,
-            # ECBScraper,
-            # FedAtlantaScraper,
-            # FedBoardNotesScraper,
+            BEAScraper, 
+            BFIScraper,
+            BISScraper,
+            BOEScraper,
+            ECBScraper,
+            FedAtlantaScraper,
+            FedBoardNotesScraper,
             FedBoardScraper#,
             # FedBostonScraper,
             # FedChicagoScraper,
