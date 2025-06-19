@@ -27,27 +27,27 @@ from src.scraper.sites.nber_scraper import NBERScraper
 
 # List of scraper classes
 scrapers = [
-            BEAScraper, 
-            BFIScraper,
-            BISScraper,
-            BOEScraper,
-            ECBScraper,
-            FedAtlantaScraper,
-            FedBoardNotesScraper,
-            FedBoardScraper,
-            FedBostonScraper,
-            FedChicagoScraper,
-            FedClevelandScraper,
-            FedDallasScraper,
-            FedKansasCityScraper,
-            FedMinneapolisScraper,
-            FedNewYorkScraper,
-            FedSanFranciscoScraper,
-            FedPhiladelphiaScraper,
-            FedRichmondScraper,
-            FedStLouisScraper,
-            IMFScraper,
-            NBERScraper
+            # BEAScraper, 
+            # BFIScraper,
+            # BISScraper,
+            # BOEScraper,
+            # ECBScraper,
+            # FedAtlantaScraper,
+            # FedBoardNotesScraper,
+            FedBoardScraper#,
+            # FedBostonScraper,
+            # FedChicagoScraper,
+            # FedClevelandScraper,
+            # FedDallasScraper,
+            # FedKansasCityScraper,
+            # FedMinneapolisScraper,
+            # FedNewYorkScraper,
+            # FedSanFranciscoScraper,
+            # FedPhiladelphiaScraper,
+            # FedRichmondScraper,
+            # FedStLouisScraper,
+            # IMFScraper,
+            # NBERScraper
             ]
 
 ########## Part 1: Scraping Data ##########

@@ -33,15 +33,43 @@ class FedBoardScraper(GenericScraper):
         # element on the page which has the "style" attribute.
         elements = soup.select('div.col-xs-12.col-md-9.heading:not([style])')
 
+        data = []
+        for el in elements:
+            title = el.select_one('h5 > a').text.strip()
+            print(title)
+            link = "https://www.federalreserve.gov" + el.select_one('h5 > a')['href']
+            print(link)
+            number = el.select_one('span.badge').text.strip().replace('FEDS ', '')
+            print(number)
+            authors = el.select_one('div.authors').text.strip()
+            print(authors)
+            abstract = el.select_one('div.collapse > p').text.strip().replace('Abstract: ', '')
+            print("Here we go...")
+            print(abstract)
+            date = el.select_one('time')['datetime'] 
+            print(date)
+            print("yee haw")
+            print(" ")
+            print("......")
+
+            data.append({
+            'Title': title,
+            'Link': link,
+            'Number': number,
+            'Author': authors,
+            'Abstract': abstract,
+            'Date': date
+            })
+
         # Get titles, links, dates, and authors from the main website. Format them as a dictionary.
         # TODO: refactor this as one for loop to avoid redundant computation.
-        data = {
-            'Title': [el.select_one('h5 > a').text.strip() for el in elements],
-            'Link': ["https://www.federalreserve.gov" + el.select_one('h5 > a')['href'] for el in elements],
-            'Number': [el.select_one('span.badge').text.strip().replace('FEDS ', '') for el in elements],
-            'Author': [el.select_one('div.authors').text.strip() for el in elements],
-            'Abstract': [el.select_one('div.collapse > p').text.strip().replace('Abstract: ', '') for el in elements],
-            'Date': [el.select_one('time')['datetime'] for el in elements]
-        }
+        # data = {
+        #     'Title': title,
+        #     'Link': link,
+        #     'Number': number,
+        #     'Author': authors,
+        #     'Abstract': abstract,
+        #     'Date': date
+        # }
 
         return data
